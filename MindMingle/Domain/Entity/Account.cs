@@ -9,6 +9,9 @@ namespace Domain.Entity
 		required public string Email { get; set; }
 		public string? Avatar { get; set; }
 		public DateTime LastLogin { get; set; }
+
+
+		public Role Role { get; set; } = null!;
 	}
 }
 
