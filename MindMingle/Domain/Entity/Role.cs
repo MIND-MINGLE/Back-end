@@ -1,11 +1,9 @@
 ﻿using System;
 namespace Domain.Entity
 {
-	public class Role
+	public class Role : Norms
 	{
-		public Role()
-		{
-		}
+		required public string RoleName { get; set; }
 	}
 }
 
