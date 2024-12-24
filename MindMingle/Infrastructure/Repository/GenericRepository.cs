@@ -5,6 +5,7 @@ namespace Infrastructure.Repository
 	{
 		public GenericRepository()
 		{
+
 		}
 	}
 }

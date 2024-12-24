@@ -9,4 +9,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Request\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Request\" />
+  </ItemGroup>
 </Project>
