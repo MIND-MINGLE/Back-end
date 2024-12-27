@@ -5,6 +5,8 @@ namespace Domain.Entity
 {
 	public class CoWorkingSpace:Norms
 	{
+        [Key]
+        required public string CoWorkingSpaceId { get; set; }
         public required string AccountId { get; set; } // FK
         [Required]
         public required string AgentName { get; set; }

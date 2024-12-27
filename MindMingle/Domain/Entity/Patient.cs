@@ -5,6 +5,8 @@ namespace Domain.Entity
 {
     public class Patient : Norms
     {
+        [Key]
+        required public string PatientId { get; set; }
         public required string AccountId { get; set; } // FK
         [Required]
         public required string PatientName { get; set; }
