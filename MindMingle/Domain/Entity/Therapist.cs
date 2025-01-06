@@ -9,7 +9,9 @@ namespace Domain.Entity
         required public string TherapistId { get; set; }
         public required string AccountId { get; set; } // Fk
         [Required]
-        public required string TherapistName { get; set; }
+        public required string FirstName { get; set; }
+        [Required]
+        public required string LastName { get; set; }
         [Required]
         public required string PhoneNumber { get; set; }
         [Required]

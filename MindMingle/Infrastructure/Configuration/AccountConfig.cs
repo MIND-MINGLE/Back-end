@@ -15,10 +15,19 @@ namespace Infrastructure.Configuration
         {
             // Primary key
             builder.HasKey(a => a.AccountId);
+            builder.Property(a=>a.AccountName).IsRequired();
+            builder.Property(a => a.Password).IsRequired();
+            builder.Property(a => a.Avatar);
+            builder.Property(a => a.CreatedAt).IsRequired();
+            builder.Property(a => a.UpdatedAt).IsRequired();
+            builder.Property(a => a.IsDisabled);
+            builder.Property(a => a.LastLogin);
+      
             // One-to-one relationship
             builder.HasOne(a => a.Role)
                 .WithOne(r => r.Account)
-                .HasForeignKey<Account>(a => a.RoleId);
+                .HasForeignKey<Account>(a => a.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

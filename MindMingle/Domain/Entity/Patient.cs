@@ -9,8 +9,9 @@ namespace Domain.Entity
         required public string PatientId { get; set; }
         public required string AccountId { get; set; } // FK
         [Required]
-        public required string PatientName { get; set; }
-
+        public required string FirstName { get; set; }
+        [Required]
+        public required string LastName { get; set; }
         [Required]
         public required DateOnly Dob { get; set; }
 

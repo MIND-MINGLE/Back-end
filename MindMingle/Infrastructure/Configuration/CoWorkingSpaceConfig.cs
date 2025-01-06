@@ -14,6 +14,9 @@ namespace Infrastructure.Configuration
         {
             // Primary key
             builder.HasKey(a => a.CoWorkingSpaceId);
+            builder.Property(c => c.AgentName).IsRequired();
+            builder.Property(c => c.PhoneNumber).IsRequired();
+            builder.Property(c => c.IsDisabled);
             // One-to-one relationship
             builder.HasOne(a => a.Account)
                 .WithOne(r => r.CoWorkingSpace)
