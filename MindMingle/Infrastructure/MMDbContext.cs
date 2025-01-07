@@ -19,6 +19,9 @@ namespace Infrastructure
         public DbSet<Therapist> Therapists { get; set; }
         public DbSet<CoWorkingSpace> CoWorkingSpaces { get; set; }
 		public DbSet<Credentials> Credentials { get; set; }
+        public DbSet<ChatGroup> ChatGroups { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<UsersInGroup> UsersInGroups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +31,9 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new CoWorkingSpaceConfig());
             modelBuilder.ApplyConfiguration(new CredentialsConfig());
             modelBuilder.ApplyConfiguration(new PatientConfig());
+            modelBuilder.ApplyConfiguration(new ChatGroupConfig());
+            modelBuilder.ApplyConfiguration(new ChatMessageConfig());
+            modelBuilder.ApplyConfiguration(new UsersInGroupConfig());
 
         }
         public MMDbContext(DbContextOptions<MMDbContext> options) : base(options)
