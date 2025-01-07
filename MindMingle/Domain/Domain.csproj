@@ -11,4 +11,10 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Entity\Enum\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entity\Enum\" />
+  </ItemGroup>
 </Project>

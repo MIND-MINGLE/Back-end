@@ -19,5 +19,8 @@ namespace Domain.Entity
 		public Patient? Patient { get; set; }
         public Therapist? Therapist { get; set; }
         public CoWorkingSpace? CoWorkingSpace { get; set; }
+        public ICollection<ChatMessage>? ChatMessages { get; set; }
+        public ICollection<UsersInGroup>?  UsersInGroups{ get; set; } // As Client
+        public ICollection<ChatGroup>? ChatGroups { get; set; } // As Admin
     }
 }
