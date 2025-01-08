@@ -74,6 +74,7 @@ namespace Infrastructure.Repository
                 if (entity != null)
                 {
                     db.Remove(entity);
+                
                     await mMDbContext.SaveChangesAsync();
                     return entity;
                 }
