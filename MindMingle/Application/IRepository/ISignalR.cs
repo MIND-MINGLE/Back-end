@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.SignalR;
 namespace Infrastructure.Repository
 {
-	public class SignalR
+	public interface ISignalR
 	{
-		public SignalR()
-		{
-		}
+
 	}
 }
 
