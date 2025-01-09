@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class fixRoles : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -184,11 +184,125 @@ namespace Infrastructure.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "ChatGroups",
+                columns: table => new
+                {
+                    ChatGroupId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UsersInGroupId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AdminId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UsersInGroupId1 = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsDisabled = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatGroups", x => x.ChatGroupId);
+                    table.ForeignKey(
+                        name: "FK_ChatGroups_Accounts_AdminId",
+                        column: x => x.AdminId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ChatMessages",
+                columns: table => new
+                {
+                    ChatMessageId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClientId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ChatGroupId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Content = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MessageStatus = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsDisabled = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatMessages", x => x.ChatMessageId);
+                    table.ForeignKey(
+                        name: "FK_ChatMessages_Accounts_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChatMessages_ChatGroups_ChatGroupId",
+                        column: x => x.ChatGroupId,
+                        principalTable: "ChatGroups",
+                        principalColumn: "ChatGroupId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "UsersInGroups",
+                columns: table => new
+                {
+                    UsersInGroupId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClientId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ChatGroupId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsDisabled = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UsersInGroups", x => x.UsersInGroupId);
+                    table.ForeignKey(
+                        name: "FK_UsersInGroups_Accounts_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UsersInGroups_ChatGroups_ChatGroupId",
+                        column: x => x.ChatGroupId,
+                        principalTable: "ChatGroups",
+                        principalColumn: "ChatGroupId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_RoleId",
                 table: "Accounts",
-                column: "RoleId",
-                unique: true);
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatGroups_AdminId",
+                table: "ChatGroups",
+                column: "AdminId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatGroups_UsersInGroupId1",
+                table: "ChatGroups",
+                column: "UsersInGroupId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatMessages_ChatGroupId",
+                table: "ChatMessages",
+                column: "ChatGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatMessages_ClientId",
+                table: "ChatMessages",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CoWorkingSpaces_AccountId",
@@ -212,11 +326,48 @@ namespace Infrastructure.Migrations
                 table: "Therapists",
                 column: "AccountId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersInGroups_ChatGroupId",
+                table: "UsersInGroups",
+                column: "ChatGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersInGroups_ClientId",
+                table: "UsersInGroups",
+                column: "ClientId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ChatGroups_UsersInGroups_UsersInGroupId1",
+                table: "ChatGroups",
+                column: "UsersInGroupId1",
+                principalTable: "UsersInGroups",
+                principalColumn: "UsersInGroupId",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Accounts_Roles_RoleId",
+                table: "Accounts");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_ChatGroups_Accounts_AdminId",
+                table: "ChatGroups");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_UsersInGroups_Accounts_ClientId",
+                table: "UsersInGroups");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_ChatGroups_UsersInGroups_UsersInGroupId1",
+                table: "ChatGroups");
+
+            migrationBuilder.DropTable(
+                name: "ChatMessages");
+
             migrationBuilder.DropTable(
                 name: "CoWorkingSpaces");
 
@@ -230,10 +381,16 @@ namespace Infrastructure.Migrations
                 name: "Therapists");
 
             migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
                 name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "UsersInGroups");
+
+            migrationBuilder.DropTable(
+                name: "ChatGroups");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entity
+namespace Application.Response
 {
 	public class Norms
 	{

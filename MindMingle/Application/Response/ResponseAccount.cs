@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Application.Response
 {
-	public class ResponseAccount
+	public class ResponseAccount : Norms
 	{
         required public string AccountName { get; set; }
         required public string Password { get; set; }

@@ -25,8 +25,8 @@ namespace Infrastructure.Configuration
       
             // One-to-one relationship
             builder.HasOne(a => a.Role)
-                .WithOne(r => r.Account)
-                .HasForeignKey<Account>(a => a.RoleId)
+                .WithMany(r => r.Account)
+                .HasForeignKey(a => a.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

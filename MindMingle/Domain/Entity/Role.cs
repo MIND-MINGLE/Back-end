@@ -9,7 +9,7 @@ namespace Domain.Entity
         required public string RoleId { get; set; }
         required public string RoleName { get; set; }
 
-        public Account Account { get; set; } = null!;
+        public ICollection<Account> Account { get; set; } = null!;
 	}
 }
 

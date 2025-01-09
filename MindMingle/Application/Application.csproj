@@ -11,8 +11,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Request\" />
+    <None Remove="Services\" />
+    <None Remove="Request\Account\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Request\" />
+    <Folder Include="Services\" />
+    <Folder Include="Request\Account\" />
   </ItemGroup>
 </Project>

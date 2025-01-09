@@ -4,16 +4,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
+using Application.Services;
+using Application.Response;
+
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API.Controllers
 {
+    [Route("api/[Controller]")]
     public class AccountController : Controller
     {
-        // GET: /<controller>/
-        public IActionResult Index()
+        private readonly AccountService accountService;
+  
+        public AccountController(AccountService accountService)
         {
-            return View();
+            this.accountService = accountService;
+        }
+
+     
+        [HttpGet("GetAllAccount")]
+        public async Task<IActionResult> GetAllAccount()
+        {
+            var response = await accountService.GetAllAccounts();
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }
 }

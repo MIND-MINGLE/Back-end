@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MMDbContext))]
-    [Migration("20250106124807_init")]
-    partial class init
+    [Migration("20250108162430_fixRoles")]
+    partial class fixRoles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,10 +63,82 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("AccountId");
 
-                    b.HasIndex("RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ChatGroup", b =>
+                {
+                    b.Property<string>("ChatGroupId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("AdminId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UsersInGroupId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UsersInGroupId1")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("ChatGroupId");
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("UsersInGroupId1");
+
+                    b.ToTable("ChatGroups");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ChatMessage", b =>
+                {
+                    b.Property<string>("ChatMessageId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ChatGroupId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("MessageStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("ChatMessageId");
+
+                    b.HasIndex("ChatGroupId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("Domain.Entity.CoWorkingSpace", b =>
@@ -240,15 +312,84 @@ namespace Infrastructure.Migrations
                     b.ToTable("Therapists");
                 });
 
+            modelBuilder.Entity("Domain.Entity.UsersInGroup", b =>
+                {
+                    b.Property<string>("UsersInGroupId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ChatGroupId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("UsersInGroupId");
+
+                    b.HasIndex("ChatGroupId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("UsersInGroups");
+                });
+
             modelBuilder.Entity("Domain.Entity.Account", b =>
                 {
                     b.HasOne("Domain.Entity.Role", "Role")
-                        .WithOne("Account")
-                        .HasForeignKey("Domain.Entity.Account", "RoleId")
+                        .WithMany("Account")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ChatGroup", b =>
+                {
+                    b.HasOne("Domain.Entity.Account", "Account")
+                        .WithMany("ChatGroups")
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entity.UsersInGroup", "UsersInGroup")
+                        .WithMany()
+                        .HasForeignKey("UsersInGroupId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("UsersInGroup");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ChatMessage", b =>
+                {
+                    b.HasOne("Domain.Entity.ChatGroup", "ChatGroup")
+                        .WithMany("ChatMessages")
+                        .HasForeignKey("ChatGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entity.Account", "Account")
+                        .WithMany("ChatMessages")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("ChatGroup");
                 });
 
             modelBuilder.Entity("Domain.Entity.CoWorkingSpace", b =>
@@ -295,19 +436,50 @@ namespace Infrastructure.Migrations
                     b.Navigation("Account");
                 });
 
+            modelBuilder.Entity("Domain.Entity.UsersInGroup", b =>
+                {
+                    b.HasOne("Domain.Entity.ChatGroup", "ChatGroup")
+                        .WithMany("UsersInGroups")
+                        .HasForeignKey("ChatGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entity.Account", "Account")
+                        .WithMany("UsersInGroups")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("ChatGroup");
+                });
+
             modelBuilder.Entity("Domain.Entity.Account", b =>
                 {
+                    b.Navigation("ChatGroups");
+
+                    b.Navigation("ChatMessages");
+
                     b.Navigation("CoWorkingSpace");
 
                     b.Navigation("Patient");
 
                     b.Navigation("Therapist");
+
+                    b.Navigation("UsersInGroups");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ChatGroup", b =>
+                {
+                    b.Navigation("ChatMessages");
+
+                    b.Navigation("UsersInGroups");
                 });
 
             modelBuilder.Entity("Domain.Entity.Role", b =>
                 {
-                    b.Navigation("Account")
-                        .IsRequired();
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("Domain.Entity.Therapist", b =>

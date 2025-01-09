@@ -11,10 +11,10 @@ namespace Application.Response
     {
         public HttpStatusCode StatusCode { get; private set; }
         public bool IsSuccess { get; private set; }
-        public string ErrorMessage { get; private set; }
-        public object Result { get; private set; }
+        public string ErrorMessage { get; private set; } = null!;
+        public object Result { get; private set; } = null!;
 
-        public ApiResponse SetOk(object result = null)
+        public ApiResponse SetOk(object result = null!)
         {
             IsSuccess = true;
             StatusCode = HttpStatusCode.OK;

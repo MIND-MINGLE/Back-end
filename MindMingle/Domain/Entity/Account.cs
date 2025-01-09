@@ -12,7 +12,7 @@ namespace Domain.Entity
 		required public string RoleId { get; set; }
 		required public string Email { get; set; }
 		public string? Avatar { get; set; }
-		public DateTime LastLogin { get; set; }
+        public DateTime LastLogin { get; set; } = DateTime.Now;
 
 
 		public Role Role { get; set; } = null!;
