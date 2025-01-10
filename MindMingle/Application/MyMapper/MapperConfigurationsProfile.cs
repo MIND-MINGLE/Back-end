@@ -16,8 +16,9 @@ namespace Application.MyMapper
         public MapperConfigurationsProfile()
         {
             //Account
-            CreateMap<Account, ResponseAccount>().ReverseMap();
-            CreateMap<Account, RequestAccount>().ReverseMap();
+            CreateMap<Account, ResponseAccount>();
+
+            CreateMap<Account, RequestAccount>();
             //
         }
     }

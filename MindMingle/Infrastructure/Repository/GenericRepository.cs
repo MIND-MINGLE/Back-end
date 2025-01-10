@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Application.IRepository;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,14 +11,15 @@ namespace Infrastructure.Repository
         private readonly MMDbContext mMDbContext;
         private readonly DbSet<T> db;
 
-        public GenericRepository(MMDbContext mMDbContext, DbSet<T> db)
+        public GenericRepository(MMDbContext mMDbContext)
         {
             this.mMDbContext = mMDbContext;
-            this.db = db;
+            db = mMDbContext.Set<T>();
         }
 
         public async Task AddAsync(T entity)
         {
+            
             if (entity != null)
                 await db.AddAsync(entity);
             else
@@ -27,40 +29,53 @@ namespace Infrastructure.Repository
        public async Task AddRangeAsync(List<T> entities)
         {
             if (entities.Count > 0)
-                await db.AddRangeAsync(entities);
+                await mMDbContext.Set<T>().AddRangeAsync(entities);
             else
                 throw new Exception(); 
         }
 
         public async Task<int> CountAsync()
         {
-            return await db.CountAsync();
+            return await mMDbContext.Set<T>().CountAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(System.Linq.Expressions.Expression<Func<T, bool>>? filter)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter)
         {
-            List<T> entity;
-            if (filter != null)
-            entity = await db.Where(filter).ToListAsync();
-            else
-            entity = await db.ToListAsync();
-            return entity;
+            try
+            {
+                if (filter != null)
+                {
+                    Console.WriteLine("Getting Data with filter...");
+                    return await db.Where(filter).ToListAsync();
+                }
+                else
+                {
+                    Console.WriteLine("Getting Data...");
+                   
+                    return await db.ToListAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetAllAsync: {ex.Message}");
+                return new List<T>();
+            }
         }
+
 
         public async Task<List<T>> GetAllAsync(System.Linq.Expressions.Expression<Func<T, bool>>? filter, Func<IQueryable<T>, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<T, object>>? include, int pageIndex = 1, int pageSize = 10) // Pagination 1-10
         {
-            List<T> entity;
+            IQueryable<T> query = db;
+            
             if (filter != null)
-                entity = await db.Where(filter).ToListAsync();
+                return await query.Where(filter).ToListAsync();
             else
-                entity = await db.ToListAsync();
-            return entity;
+                return await query.ToListAsync();
         }
 
         public async Task<T> GetAsync(System.Linq.Expressions.Expression<Func<T, bool>> filter)
         {
-            var entity = await db.FirstOrDefaultAsync(filter);
-            return entity!;
+            return await db.FirstOrDefaultAsync(filter);
         }
 
         Task<T> IGenericRepository<T>.GetAsync(System.Linq.Expressions.Expression<Func<T, bool>> filter, Func<IQueryable<T>, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<T, object>>? include)
@@ -74,7 +89,6 @@ namespace Infrastructure.Repository
                 if (entity != null)
                 {
                     db.Remove(entity);
-                
                     await mMDbContext.SaveChangesAsync();
                     return entity;
                 }

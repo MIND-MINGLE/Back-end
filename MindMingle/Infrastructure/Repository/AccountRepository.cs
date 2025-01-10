@@ -9,7 +9,7 @@ namespace Infrastructure.Repository
 {
     public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
-        public AccountRepository(MMDbContext mMDbContext, DbSet<Account> db) : base(mMDbContext, db)
+        public AccountRepository(MMDbContext mMDbContext) : base(mMDbContext)
         {
         }
     }
