@@ -5,6 +5,7 @@ namespace Application
 	public interface IUnitOfWorks
 	{
 		public IAccountRepository AccountRepo { get; }
+        public IRoleRepository RoleRepo { get; }
         //TODO
 
         //public Task<T> ExecuteScalarAsync<T>(string sql);

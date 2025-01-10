@@ -11,13 +11,14 @@ namespace Infrastructure
 	{
         private MMDbContext _mMDbContext;
         public IAccountRepository AccountRepo { get; }
-
+        public IRoleRepository RoleRepo { get; }
        
 
         public UnitOfWorks(MMDbContext mMDbContext)
         {
             _mMDbContext = mMDbContext;
             AccountRepo = new AccountRepository(mMDbContext);
+            RoleRepo = new RoleRespository(mMDbContext);
         }
 
        

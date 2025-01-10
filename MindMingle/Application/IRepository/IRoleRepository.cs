@@ -1,7 +1,9 @@
 ﻿using System;
+using Domain.Entity;
+
 namespace Application.IRepository
 {
-	public interface IRoleRepository
+	public interface IRoleRepository : IGenericRepository<Role>
 	{
 	}
 }

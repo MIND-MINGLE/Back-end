@@ -17,9 +17,9 @@ namespace Application.MyMapper
         {
             //Account
             CreateMap<Account, ResponseAccount>();
-
             CreateMap<Account, RequestAccount>();
-            //
+            //Role
+            CreateMap<Role, ResponseRole>();
         }
     }
 }
