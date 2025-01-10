@@ -27,14 +27,15 @@ namespace Application.Services
             {
                 var accountModel = await unitOfWorks.AccountRepo.GetAllAsync(null);
                  var resAccount = mapper.Map<List<ResponseAccount>>(accountModel); // Error Here
-               // Testing Without Mapper
-               //var resAccount = accountModel.Select(account => new ResponseAccount
-               //{
-               //    // Manually map properties here
-               //    AccountName = account.AccountName,
-               //    AccountId = account.AccountId
-               //    // Add other properties
-               //}).ToList(); // WORK!!!
+                // Testing Without Mapper
+                //var resAccount = accountModel.Select(account => new ResponseAccount
+                //{
+                //    // Manually map properties here
+                //    AccountName = account.AccountName,
+                //    AccountId = account.AccountId,
+                //    RoleId = account.RoleId,
+                //    // Add other properties
+                //}).ToList(); // WORK!!!
                 Console.WriteLine($"Fetch data complete: {resAccount.Count}");
                 return apiResponse.SetOk(resAccount);
             }catch(Exception ex)
