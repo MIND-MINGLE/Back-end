@@ -13,11 +13,13 @@
     <None Remove="Request\" />
     <None Remove="Services\" />
     <None Remove="Request\Account\" />
+    <None Remove="Request\Role\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Request\" />
     <Folder Include="Services\" />
     <Folder Include="Request\Account\" />
+    <Folder Include="Request\Role\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
