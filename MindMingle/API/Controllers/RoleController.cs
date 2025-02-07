@@ -13,17 +13,25 @@ namespace API.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleService roleService;
+        private readonly ISignalRService signalRService;
 
-        public RoleController(IRoleService roleService)
+        public RoleController(IRoleService roleService, ISignalRService signalRService)
         {
             this.roleService = roleService;
+            this.signalRService = signalRService;
         }
 
 
-        [HttpGet("GetAllAccount")]
+        [HttpGet("GetAllRole")]
         public async Task<IActionResult> GetAllRole()
         {
             var response = await roleService.GetAllRoles();
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [HttpGet("CallChatRoom")]
+        public async Task<IActionResult> JoinchatRoom()
+        {
+            var response = await signalRService.JoinCallRoom();
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }
