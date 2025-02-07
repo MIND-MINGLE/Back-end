@@ -13,12 +13,11 @@ namespace API.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleService roleService;
-        private readonly ISignalRService signalRService;
 
-        public RoleController(IRoleService roleService, ISignalRService signalRService)
+        public RoleController(IRoleService roleService )
         {
             this.roleService = roleService;
-            this.signalRService = signalRService;
+          
         }
 
 

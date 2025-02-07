@@ -4,6 +4,7 @@ using Application;
 using Application.Interface;
 using Application.Services;
 using Application.MyMapper;
+using Application.Library;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,8 @@ builder.Services.AddSignalR();
 builder.Services.AddDbContext<MMDbContext>(options =>
   options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 30))));
-
+//Add twilio "secret keys" from Appsetting
+builder.Services.Configure<TwilioOptions>(builder.Configuration.GetSection("Twilio"));
 // Add Automapper
 builder.Services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
 // Inject the Repository
@@ -22,7 +24,10 @@ builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ITwilioService, TwilioService>();
 //builder.Services.AddScoped<ISignalRService, SignalRService>();
+
+
 //
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
