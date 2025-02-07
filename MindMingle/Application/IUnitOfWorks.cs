@@ -7,7 +7,6 @@ namespace Application
 	{
 		public IAccountRepository AccountRepo { get; }
         public IRoleRepository RoleRepo { get; }
-        public ISignalRRepository SignalR { get; }
         //TODO
 
         //public Task<T> ExecuteScalarAsync<T>(string sql);

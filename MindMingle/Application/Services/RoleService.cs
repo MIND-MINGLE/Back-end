@@ -10,7 +10,6 @@ namespace Application.Services
         private readonly IMapper mapper;
         private readonly IUnitOfWorks unitOfWorks;
 
-
         public RoleService(IMapper mapper, IUnitOfWorks unitOfWorks)
         {
             this.mapper = mapper;

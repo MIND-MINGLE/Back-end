@@ -28,12 +28,7 @@ namespace API.Controllers
             var response = await roleService.GetAllRoles();
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
-        [HttpGet("CallChatRoom")]
-        public async Task<IActionResult> JoinchatRoom()
-        {
-            var response = await signalRService.JoinCallRoom();
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
-        }
+       
     }
 }
 

@@ -2,39 +2,28 @@
 using Application.Interface;
 using Application.Response;
 using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Application.Services
 {
-	public class SignalRService : ISignalRService
+	public class SignalRService : Hub, ISignalRService
 	{
-        private readonly IMapper mapper;
-        private readonly IUnitOfWorks unitOfWork;
 
-        public SignalRService(IMapper mapper, IUnitOfWorks unitOfWork)
+        public async Task JoinCallRoom()
         {
-            this.mapper = mapper;
-            this.unitOfWork = unitOfWork;
+            await Clients.User("1").SendAsync("JoinCallRoom","Some Message...");
         }
 
-        public async Task<ApiResponse> JoinCallRoom()
+        public async Task ReceiveTextMessage()
         {
-            ApiResponse apiResponse = new ApiResponse();
-
-            return apiResponse.SetBadRequest("JoinCallRoom Not Implimented");
+            await Clients.User("1").SendAsync("ReceiveTextMessage", "Some Message...");
+            
         }
 
-        public async Task<ApiResponse> ReceiveTextMessage()
+        public async Task SendTextMessage()
         {
-            ApiResponse apiResponse = new ApiResponse();
-
-            return apiResponse.SetBadRequest("ReceiveTextMessage not Implimented");
-        }
-
-        public async Task<ApiResponse> SendTextMessage()
-        {
-            ApiResponse apiResponse = new ApiResponse();
-
-            return apiResponse.SetBadRequest("SendTextMessage Not Implimented");
+            await Clients.User("1").SendAsync("SendTextMessage", "Some Message...");
+           
         }
     }
 }
