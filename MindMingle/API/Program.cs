@@ -15,6 +15,16 @@ builder.Services.AddSignalR();
 builder.Services.AddDbContext<MMDbContext>(options =>
   options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 30))));
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("*")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 //Add twilio "secret keys" from Appsetting
 builder.Services.Configure<TwilioOptions>(builder.Configuration.GetSection("Twilio"));
 // Add Automapper
@@ -43,6 +53,7 @@ if (app.Environment.IsDevelopment())
 }
 app.MapHub<SignalRService>("/chathub");
 
+app.UseCors();
 
 app.UseHttpsRedirection();
 
