@@ -8,12 +8,9 @@ namespace Application.Request.Account
 {
 	public class UserRegisterRequest
 	{
-		public string AccountName { get; set; }
-		public string Password { get; set; }
-		public string ConfirmPassword { get; set; }	
-		public string RoleId { get; set; }
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
-		public string Email { get; set; }
+		required public string Email { get; set; }
+		required public string AccountName { get; set; }
+		required public string Password { get; set; }
+		required public string ConfirmPassword { get; set; }	
 	}
 }

@@ -23,8 +23,21 @@ namespace Infrastructure
             RoleRepo = new RoleRespository(mMDbContext);
             TwilioRepo = new TwilioRepository(options);
         }
+		public async Task SaveChangeAsync()
+		{
+			try
+			{
+				await _mMDbContext.SaveChangesAsync();
 
-       
-    }
+			}
+			catch (Exception ex)
+			{
+
+				throw new Exception(ex.Message);
+			}
+		}
+
+
+	}
 }
 

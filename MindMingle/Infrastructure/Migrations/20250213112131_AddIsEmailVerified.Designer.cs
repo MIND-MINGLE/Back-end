@@ -4,6 +4,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MMDbContext))]
-    partial class MMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250213112131_AddIsEmailVerified")]
+    partial class AddIsEmailVerified
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,7 +68,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Accounts", (string)null);
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("Domain.Entity.ChatGroup", b =>
@@ -100,7 +103,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UsersInGroupId1");
 
-                    b.ToTable("ChatGroups", (string)null);
+                    b.ToTable("ChatGroups");
                 });
 
             modelBuilder.Entity("Domain.Entity.ChatMessage", b =>
@@ -138,7 +141,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("ChatMessages", (string)null);
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("Domain.Entity.CoWorkingSpace", b =>
@@ -176,7 +179,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("CoWorkingSpaces", (string)null);
+                    b.ToTable("CoWorkingSpaces");
                 });
 
             modelBuilder.Entity("Domain.Entity.Credentials", b =>
@@ -205,7 +208,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("Credentials", (string)null);
+                    b.ToTable("Credentials");
                 });
 
             modelBuilder.Entity("Domain.Entity.Patient", b =>
@@ -250,7 +253,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("Patients", (string)null);
+                    b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("Domain.Entity.Role", b =>
@@ -264,7 +267,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Domain.Entity.Therapist", b =>
@@ -309,7 +312,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("Therapists", (string)null);
+                    b.ToTable("Therapists");
                 });
 
             modelBuilder.Entity("Domain.Entity.UsersInGroup", b =>
@@ -340,7 +343,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("UsersInGroups", (string)null);
+                    b.ToTable("UsersInGroups");
                 });
 
             modelBuilder.Entity("Domain.Entity.Account", b =>

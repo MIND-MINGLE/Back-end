@@ -57,16 +57,71 @@ namespace Application.Services
 			return response;
 		}
 
-		public Task<ApiResponse> LoginForDriverAsync(LoginRequest request)
+		public async Task<ApiResponse> LoginForDriverAsync(LoginRequest request)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<ApiResponse> RegisterAsync(UserRegisterRequest userRequest)
+		public async Task<ApiResponse> RegisterAsync(UserRegisterRequest userRequest)
 		{
-			throw new NotImplementedException();
-		}
+			ApiResponse response = new ApiResponse();
+			try
+			{
+				var checkPassword = CheckUserPassword(userRequest);
+				if (!checkPassword){
+					response.SetBadRequest(message: "Confirm password is wrong !");
+					return response;
+				}
+				var existedUser = await _unitOfWorks.AccountRepo.GetAsync(x => x.Email == userRequest.Email || x.AccountName == userRequest.AccountName);
+				if(existedUser != null)
+				{
+					response.SetBadRequest(message: "The Email/Account Name is already existed !");
+					return response;
+				}
 
+				Account newAccount = new Account()
+				{
+					RoleId = "New",
+					AccountId = new Guid().ToString(),
+					Email = userRequest.Email,
+					AccountName = userRequest.AccountName,
+					Password = userRequest.Password,
+				};
+
+				//Hash the password
+				var hashedPassword = _passwordHasher.HashPassword(newAccount, userRequest.Password);
+				newAccount.Password = hashedPassword;
+
+				await _unitOfWorks.AccountRepo.AddAsync(newAccount);
+				await _unitOfWorks.SaveChangeAsync();
+
+				//Generate verification code 
+				var verificationCode = GenerateVerificationCode();
+				//EmailVerification emailVerification = new EmailVerification()
+				//{
+				//	AccountId = newAccount.AccountId.ToString,
+
+				//}
+
+
+				response.SetOk();
+				return response;
+			}
+			catch (Exception ex)
+			{
+				return response.SetBadRequest($"Error: {ex.Message}. Details: {ex.InnerException?.Message}");
+			}
+		}
+		private string GenerateVerificationCode()
+		{
+			Random random = new Random();
+			return random.Next(100000, 999999).ToString(); // Generate a 6-digit code
+		}
+		private bool CheckUserPassword(UserRegisterRequest user)
+		{
+			if (user.Password is null) return false;
+			return (user.Password.Equals(user.ConfirmPassword));
+		}
 		private string CreateToken(Account user)
 		{
 			List<Claim> claims = new List<Claim>
