@@ -20,6 +20,7 @@ namespace Domain.Entity
 		public Patient? Patient { get; set; }
         public Therapist? Therapist { get;  set; }
         public CoWorkingSpace? CoWorkingSpace { get; set; }
+        public EmailVerification? EmailVerification { get; set; }
 
         public ICollection<ChatMessage>? ChatMessages { get; set; }
         

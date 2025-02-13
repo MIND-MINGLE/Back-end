@@ -22,6 +22,7 @@ namespace Infrastructure
         public DbSet<ChatGroup> ChatGroups { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<UsersInGroup> UsersInGroups { get; set; }
+        public DbSet<EmailVerification> EmailVerifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +35,7 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new ChatGroupConfig());
             modelBuilder.ApplyConfiguration(new ChatMessageConfig());
             modelBuilder.ApplyConfiguration(new UsersInGroupConfig());
+            modelBuilder.ApplyConfiguration(new EmailVerificationConfig());
 
         }
         public MMDbContext(DbContextOptions<MMDbContext> options) : base(options)
