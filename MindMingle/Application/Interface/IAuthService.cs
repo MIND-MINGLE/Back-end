@@ -1,4 +1,5 @@
-﻿using Application.Response;
+﻿using Application.Request.Account;
+using Application.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace Application.Interface
 {
     public interface IAuthService
     {
-        //Task<ApiResponse> RegisterAsync(UserRegisterRequest userRequest);
-        //Task<ApiResponse> LoginAsync(LoginRequest request);
+        Task<ApiResponse> RegisterAsync(UserRegisterRequest userRequest);
+        Task<ApiResponse> LoginAsync(LoginRequest request);
         //Task<ApiResponse> VerifyEmailAsync(int userId, string verificationCode);
 
-        //Task<ApiResponse> LoginForDriverAsync(LoginRequest request);
+        Task<ApiResponse> LoginForDriverAsync(LoginRequest request);
     }
 }

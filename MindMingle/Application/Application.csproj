@@ -16,13 +16,13 @@
     <None Remove="Request\Role\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Request\" />
-    <Folder Include="Services\" />
-    <Folder Include="Request\Account\" />
     <Folder Include="Request\Role\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Twilio" Version="7.8.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />

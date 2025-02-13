@@ -5,9 +5,18 @@ using Application.Interface;
 using Application.Services;
 using Application.MyMapper;
 using Application.Library;
+using Microsoft.OpenApi.Models;
+using Domain;
+using Microsoft.AspNetCore.Mvc;
+using Domain.Entity;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var configuration = builder.Configuration.Get<AppSetting>();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+	options.SuppressModelStateInvalidFilter = true;
+});
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
@@ -27,21 +36,47 @@ builder.Services.AddCors(options =>
 });
 //Add twilio "secret keys" from Appsetting
 builder.Services.Configure<TwilioOptions>(builder.Configuration.GetSection("Twilio"));
+
 // Add Automapper
 builder.Services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
 // Inject the Repository
 builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
-
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ITwilioService, TwilioService>();
 //builder.Services.AddScoped<ISignalRService, SignalRService>();
 
+builder.Services.AddSingleton(configuration!);
 
 //
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IPasswordHasher<Account>, PasswordHasher<Account>>();
+builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+builder.Services.AddSwaggerGen(options =>
+{
+	options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		Name = "Authorization",
+		Type = SecuritySchemeType.Http,
+		Scheme = "Bearer",
+		BearerFormat = "JWT",
+		In = ParameterLocation.Header,
+		Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+	});
+	options.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+			},
+			new string[] { }
+		}
+	});
+});
+
 
 var app = builder.Build();
 
@@ -56,6 +91,7 @@ app.MapHub<SignalRService>("/chathub");
 app.UseCors();
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
