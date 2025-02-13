@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("*")
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "https://mindmingle202.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
