@@ -86,6 +86,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseSwagger();
+app.UseSwaggerUI();
 app.MapHub<SignalRService>("/chathub");
 
 app.UseCors();
