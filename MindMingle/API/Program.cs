@@ -42,6 +42,7 @@ builder.Services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
 // Inject the Repository
 builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ITwilioService, TwilioService>();

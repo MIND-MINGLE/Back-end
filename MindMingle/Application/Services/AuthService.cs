@@ -21,13 +21,15 @@ namespace Application.Services
 		private IUnitOfWorks _unitOfWorks;
 		private AppSetting _appSettings;
 		//private IClaimService _claimService;
+		private IEmailService _emailService;
 		private IPasswordHasher<Account> _passwordHasher;
 
-		public AuthService(IUnitOfWorks unitOfWorks, AppSetting appSettings, IPasswordHasher<Account> passwordHasher)
+		public AuthService(IUnitOfWorks unitOfWorks, AppSetting appSettings, IPasswordHasher<Account> passwordHasher, IEmailService emailService)
 		{
 			_unitOfWorks = unitOfWorks;
 			_appSettings = appSettings;
 			_passwordHasher = passwordHasher;
+			_emailService = emailService;	
 		}
 
 		public async Task<ApiResponse> LoginAsync(LoginRequest request)
@@ -57,9 +59,44 @@ namespace Application.Services
 			return response;
 		}
 
-		public async Task<ApiResponse> LoginForDriverAsync(LoginRequest request)
+		public async Task<ApiResponse> VerifyEmailAsync(string accountId, string verificationCode)
 		{
-			throw new NotImplementedException();
+			ApiResponse response = new ApiResponse();
+
+			//Retrieve the verification code 
+			var verified = await _unitOfWorks.EmailVerificationRepo.GetAsync(x => x.AccountId == accountId && x.VerificationCode == verificationCode && x.IsUsed == false);
+
+			//Verification record not found
+			if(verified == null)
+			{
+				response.SetBadRequest(message: "Invalid Code !!");
+				return response;
+			}
+
+			//Check if the code has expired
+			if(verified.ExpiresAt < DateTime.Now)
+			{
+				response.SetBadRequest(message: "The verification code has expired !!");
+				return response; 
+			}
+
+			//Mark the verification code as verified
+			verified.IsUsed = true;
+			await _unitOfWorks.SaveChangeAsync();
+
+			//Mark the user's email as verified 
+			var user = await _unitOfWorks.AccountRepo.GetAsync(x => x.AccountId == accountId);
+			if(user == null)
+			{
+				response.SetBadRequest(message: "User not found !!");
+				return response;
+			}
+
+			user.IsEmailVerified = true;
+			await _unitOfWorks.SaveChangeAsync();
+
+			response.SetOk("Email verified successfully !!");
+			return response;
 		}
 
 		public async Task<ApiResponse> RegisterAsync(UserRegisterRequest userRequest)
@@ -81,8 +118,8 @@ namespace Application.Services
 
 				Account newAccount = new Account()
 				{
-					RoleId = "New",
-					AccountId = new Guid().ToString(),
+					RoleId = "abc",
+					AccountId = Guid.NewGuid().ToString(),
 					Email = userRequest.Email,
 					AccountName = userRequest.AccountName,
 					Password = userRequest.Password,
@@ -97,14 +134,31 @@ namespace Application.Services
 
 				//Generate verification code 
 				var verificationCode = GenerateVerificationCode();
-				//EmailVerification emailVerification = new EmailVerification()
-				//{
-				//	AccountId = newAccount.AccountId.ToString,
+				EmailVerification emailVerification = new EmailVerification()
+				{
+					VerificationId = Guid.NewGuid().ToString(),
+					AccountId = newAccount.AccountId,
+					VerificationCode = verificationCode,
+					ExpiresAt = DateTime.Now.AddMinutes(10), //code valid for 10 minutes
+					IsUsed = false
+				};
 
-				//}
+				await _unitOfWorks.EmailVerificationRepo.AddAsync(emailVerification);
+				await _unitOfWorks.SaveChangeAsync();
+
+				//Prepare email content
+				string emailContent = $"Dear {newAccount.AccountName},<br/>Please use the following verification code to validate your email: <strong>{verificationCode}</strong>.<br/>The code will expire in 10 minutes.";
 
 
-				response.SetOk();
+				//Send validation email
+				var emailResponse = await _emailService.SendValidationEmail(newAccount.Email, emailContent);
+				if (!emailResponse.IsSuccess)
+				{
+					response.SetBadRequest(message: "Failed to send verification email !!");
+					return response;
+				}
+
+				response.SetOk(newAccount.AccountId);
 				return response;
 			}
 			catch (Exception ex)
@@ -112,6 +166,8 @@ namespace Application.Services
 				return response.SetBadRequest($"Error: {ex.Message}. Details: {ex.InnerException?.Message}");
 			}
 		}
+
+
 		private string GenerateVerificationCode()
 		{
 			Random random = new Random();

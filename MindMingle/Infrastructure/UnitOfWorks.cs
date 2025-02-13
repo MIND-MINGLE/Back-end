@@ -15,11 +15,13 @@ namespace Infrastructure
         public IAccountRepository AccountRepo { get; }
         public IRoleRepository RoleRepo { get; }
         public ITwilioRepository TwilioRepo { get; }
+		public IEmailVerificationRepository EmailVerificationRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
             _mMDbContext = mMDbContext;
-            AccountRepo = new AccountRepository(mMDbContext);
+			EmailVerificationRepo = new EmailVerificationRepository(mMDbContext);
+			AccountRepo = new AccountRepository(mMDbContext);
             RoleRepo = new RoleRespository(mMDbContext);
             TwilioRepo = new TwilioRepository(options);
         }
