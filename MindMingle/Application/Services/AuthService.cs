@@ -41,18 +41,13 @@ namespace Application.Services
 				response.SetBadRequest(message: "Invalid AccountName/Email or Password");
 				return response;
 			}
-			//var password = _passwordHasher.VerifyHashedPassword(user, user.Password, request.Password);
-			//if (password != PasswordVerificationResult.Success)
-			//{
-			//	response.SetBadRequest(message: "Invalid Password");
-			//	return response;
-			//}
-
-			if(user.Password != request.Password)
+			var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, request.Password);
+			if (passwordVerificationResult != PasswordVerificationResult.Success)
 			{
 				response.SetBadRequest(message: "Invalid Password");
 				return response;
 			}
+
 			//var claims =  _claimService.GetClaim();
 			var token = CreateToken(user);
 			response.SetOk(token);
