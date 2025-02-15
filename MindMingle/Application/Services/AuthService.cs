@@ -38,7 +38,7 @@ namespace Application.Services
 			var user = await _unitOfWorks.AccountRepo.GetAsync(x => x.Email == request.Email || x.AccountName == request.AccountName);
 			if (user == null)
 			{
-				response.SetBadRequest(message: "Invalid AccountName/Email or Password");
+				response.SetBadRequest(message: "Invalid AccountName, Email or Password");
 				return response;
 			}
 			var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, request.Password);
@@ -64,14 +64,14 @@ namespace Application.Services
 			//Verification record not found
 			if(verified == null)
 			{
-				response.SetBadRequest(message: "Invalid Code !!");
+				response.SetBadRequest(message: "Invalid Code!!");
 				return response;
 			}
 
 			//Check if the code has expired
 			if(verified.ExpiresAt < DateTime.Now)
 			{
-				response.SetBadRequest(message: "The verification code has expired !!");
+				response.SetBadRequest(message: "The verification code has expired!!");
 				return response; 
 			}
 
@@ -83,14 +83,14 @@ namespace Application.Services
 			var user = await _unitOfWorks.AccountRepo.GetAsync(x => x.AccountId == accountId);
 			if(user == null)
 			{
-				response.SetBadRequest(message: "User not found !!");
+				response.SetBadRequest(message: "User not found!!");
 				return response;
 			}
 
 			user.IsEmailVerified = true;
 			await _unitOfWorks.SaveChangeAsync();
 
-			response.SetOk("Email verified successfully !!");
+			response.SetOk("Email verified successfully!!");
 			return response;
 		}
 
