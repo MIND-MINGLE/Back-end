@@ -178,13 +178,13 @@ namespace Application.Services
 			List<Claim> claims = new List<Claim>
 			{
 				new Claim("UserId", user.AccountId.ToString()),
-				new Claim(ClaimTypes.NameIdentifier, user.AccountId.ToString()),
+				//new Claim(ClaimTypes.NameIdentifier, user.AccountId.ToString()),
 				new Claim("Role", user.RoleId.ToString()),
-				new Claim(ClaimTypes.Role, user.RoleId.ToString()),
+				//new Claim(ClaimTypes.Role, user.RoleId.ToString()),
 				new Claim( "Email" , user.Email ?? string.Empty),
-				new Claim(ClaimTypes.Email, user.Email),
+				//new Claim(ClaimTypes.Email, user.Email),
 				new Claim("Username", user.AccountName ?? string.Empty),
-				new Claim(ClaimTypes.Name, user.AccountName),
+				//new Claim(ClaimTypes.Name, user.AccountName),
 			};
 
 			var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
