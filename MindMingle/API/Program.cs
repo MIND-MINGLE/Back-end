@@ -46,6 +46,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ITwilioService, TwilioService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
 //builder.Services.AddScoped<ISignalRService, SignalRService>();
 
 builder.Services.AddSingleton(configuration!);

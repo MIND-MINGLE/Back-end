@@ -50,6 +50,5 @@ namespace API.Controllers
 			var result = await _service.VerifyEmailAsync(request.AccountId, request.VerificationCode);
 			return result.IsSuccess ? Ok(result) : BadRequest(result);
 		}
-
 	}
 }

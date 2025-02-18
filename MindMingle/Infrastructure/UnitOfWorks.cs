@@ -16,6 +16,7 @@ namespace Infrastructure
         public IRoleRepository RoleRepo { get; }
         public ITwilioRepository TwilioRepo { get; }
 		public IEmailVerificationRepository EmailVerificationRepo { get; }
+		public IPatientRepository PatientRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
@@ -24,7 +25,8 @@ namespace Infrastructure
 			AccountRepo = new AccountRepository(mMDbContext);
             RoleRepo = new RoleRespository(mMDbContext);
             TwilioRepo = new TwilioRepository(options);
-        }
+			PatientRepo = new PatientRepository(mMDbContext);
+		}
 		public async Task SaveChangeAsync()
 		{
 			try

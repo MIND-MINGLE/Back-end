@@ -9,6 +9,7 @@ namespace Application
         public IRoleRepository RoleRepo { get; }
         public ITwilioRepository TwilioRepo { get; }
 		public IEmailVerificationRepository EmailVerificationRepo { get; }
+		public IPatientRepository PatientRepo { get; }
 		//TODO
 
 		//public Task<T> ExecuteScalarAsync<T>(string sql);

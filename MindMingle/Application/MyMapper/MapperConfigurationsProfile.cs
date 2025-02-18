@@ -8,6 +8,7 @@ using Application.Response;
 using Application.Request;
 using Domain.Entity;
 using Application.Request.Account;
+using Application.Request.Patient;
 
 namespace Application.MyMapper
 {
@@ -20,6 +21,13 @@ namespace Application.MyMapper
             CreateMap<Account, RequestAccount>();
             //Role
             CreateMap<Role, ResponseRole>();
-        }
-    }
+
+			//Patient
+			CreateMap<CreateNewPatientRequest, Patient>()
+			.ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid())); // Tạo GUID mới
+			CreateMap<Patient, ResponsePatient>();
+
+
+		}
+	}
 }
