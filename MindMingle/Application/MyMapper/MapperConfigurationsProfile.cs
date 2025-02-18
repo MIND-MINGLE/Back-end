@@ -22,9 +22,10 @@ namespace Application.MyMapper
             //Role
             CreateMap<Role, ResponseRole>();
 
-			//Patient
-			CreateMap<CreateNewPatientRequest, Patient>()
-			.ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid())); // Tạo GUID mới
+            //Patient
+            CreateMap<CreateNewPatientRequest, Patient>()
+			.ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+            // Tạo GUID mới
 			CreateMap<Patient, ResponsePatient>();
 
 

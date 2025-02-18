@@ -11,7 +11,7 @@ namespace Application.Request.Patient
 		public required string AccountId { get; set; }
 		public required string FirstName { get; set; }
 		public required string LastName { get; set; }
-		public required DateOnly Dob { get; set; }
+		public required DateTime Dob { get; set; }
 		public required string Gender { get; set; }
 		public required string PhoneNumber { get; set; }
 	}

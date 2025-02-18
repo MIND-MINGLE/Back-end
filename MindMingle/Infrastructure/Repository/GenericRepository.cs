@@ -19,7 +19,6 @@ namespace Infrastructure.Repository
 
         public async Task AddAsync(T entity)
         {
-
             if (entity != null)
             {
                 await db.AddAsync(entity);

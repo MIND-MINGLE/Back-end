@@ -27,21 +27,20 @@ namespace Application.Services
 			ApiResponse response = new ApiResponse();
 
 			//Check if account was create
-			var patientAccount = _unitOfWorks.AccountRepo.GetAsync(x => x.AccountId == newPatient.AccountId);
-			if(patientAccount == null )
+			var patientAccount = await _unitOfWorks.PatientRepo.GetAsync(x => x.AccountId == newPatient.AccountId);
+			if(patientAccount != null )
 			{
-				response.SetBadRequest(message: "Account not found or created !");
+				response.SetBadRequest(message: "Account not found or created!");
 				return response;
 			}
 
-			//Create new patient
-			var patient = _mapper.Map<Patient>(patientAccount);
-
+            //Create new patient
+            var patient = _mapper.Map<Patient>(newPatient);
 			await _unitOfWorks.PatientRepo.AddAsync(patient);
-			await _unitOfWorks.SaveChangeAsync();
 
-			response.SetOk(patient);
-			return response;
+			response.SetOk(newPatient);
+            //Console.WriteLine("Fixing Bug");
+            return response;
 		}
 
 		public async Task<ApiResponse> GetPatientByAccountIdAsync(string accountId)

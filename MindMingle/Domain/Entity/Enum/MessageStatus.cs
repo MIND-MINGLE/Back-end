@@ -1,12 +1,11 @@
 ﻿using System;
-using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json.Converters;
 
 namespace Domain.Entity
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))] 
     public enum MessageStatus
     {
         [EnumMember(Value = "Sent")]
