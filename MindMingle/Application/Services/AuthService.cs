@@ -35,7 +35,7 @@ namespace Application.Services
 		public async Task<ApiResponse> LoginAsync(LoginRequest request)
 		{
 			ApiResponse response = new ApiResponse();
-			var user = await _unitOfWorks.AccountRepo.GetAsync(x => x.Email == request.Email || x.AccountName == request.AccountName);
+			var user = await _unitOfWorks.AccountRepo.GetAsync(x => x.Email == request.EmailOrAccountName || x.AccountName == request.EmailOrAccountName);
 			if (user == null)
 			{
 				response.SetBadRequest(message: "Invalid AccountName, Email or Password");
