@@ -94,7 +94,7 @@ namespace Application.Services
 			return response;
 		}
 
-		public async Task<ApiResponse> RegisterAsync(UserRegisterRequest userRequest)
+		public async Task<ApiResponse> RegisterAsync(UserRegisterRequest userRequest,string roleId)
 		{
 			ApiResponse response = new ApiResponse();
 			try
@@ -113,7 +113,7 @@ namespace Application.Services
 
 				Account newAccount = new Account()
 				{
-					RoleId = "abc",
+					RoleId = roleId,
 					AccountId = Guid.NewGuid().ToString(),
 					Email = userRequest.Email,
 					AccountName = userRequest.AccountName,

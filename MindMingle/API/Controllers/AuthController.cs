@@ -23,7 +23,7 @@ namespace API.Controllers
 		}
 
 		[HttpPost("register")]
-		public async Task<IActionResult> Register(UserRegisterRequest user)
+		public async Task<IActionResult> Register(UserRegisterRequest user, [FromQuery] string roleId)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -40,7 +40,7 @@ namespace API.Controllers
 					result = (object)null
 				});
 			}
-			var result = await _service.RegisterAsync(user);
+			var result = await _service.RegisterAsync(user, roleId);
 			return result.IsSuccess ? Ok(result) : BadRequest(result);
 		}
 		[HttpPost("verification")]
