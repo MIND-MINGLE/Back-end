@@ -28,13 +28,13 @@ namespace Application.Services
 
 			//Check if account was create
 			var patientAccount = await _unitOfWorks.PatientRepo.GetAsync(x => x.AccountId == newPatient.AccountId);
-			if(patientAccount != null )
+			if(patientAccount == null )
 			{
-				response.SetBadRequest(message: "Account not found or created!");
+				response.SetBadRequest(message: "Account not found nor created!");
 				return response;
 			}
 
-            //Create new patient
+			//Create new patient
             var patient = _mapper.Map<Patient>(newPatient);
 			await _unitOfWorks.PatientRepo.AddAsync(patient);
 
@@ -47,14 +47,16 @@ namespace Application.Services
 		{
 			ApiResponse response = new ApiResponse();
 
-			var patient = await _unitOfWorks.PatientRepo.GetAsync(x => x.PatientId == accountId);
+			var patient = await _unitOfWorks.PatientRepo.GetAsync(x => x.AccountId == accountId);
 			if (patient == null)
 			{
 				response.SetBadRequest("Patient profile not found.");
 				return response;
 			}
-
-			response.SetOk(patient);
+			var formattedDob = patient.Dob.Date.ToString("dd/MM/yyyy");
+			var responsePatient = _mapper.Map<ResponsePatient>(patient);
+			responsePatient.Dob = formattedDob;
+            response.SetOk(responsePatient);
 			return response;
 		}
 	}

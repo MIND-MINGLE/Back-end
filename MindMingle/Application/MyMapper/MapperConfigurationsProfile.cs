@@ -24,9 +24,11 @@ namespace Application.MyMapper
 
             //Patient
             CreateMap<CreateNewPatientRequest, Patient>()
-			.ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
-            // Tạo GUID mới
-			CreateMap<Patient, ResponsePatient>();
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));  // Tạo GUID mới
+
+            CreateMap<Patient, ResponsePatient>()
+                .ForMember(dest => dest.Dob, opt => opt.Ignore()) // ignore, we custom Date
+                ;
 
 
 		}
