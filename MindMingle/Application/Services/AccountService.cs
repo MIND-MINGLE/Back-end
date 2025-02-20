@@ -33,7 +33,6 @@ namespace Application.Services
                 return response.SetBadRequest(ex.Message);
 
 			}
-
 		}
 
 		public async Task<ApiResponse> GetAllAccounts()
