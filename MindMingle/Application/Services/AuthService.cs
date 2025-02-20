@@ -15,21 +15,23 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Services
-{
+{ 
 	public class AuthService : IAuthService
 	{
 		private IUnitOfWorks _unitOfWorks;
 		private AppSetting _appSettings;
 		//private IClaimService _claimService;
 		private IEmailService _emailService;
+		private ITokenService _tokenService;
 		private IPasswordHasher<Account> _passwordHasher;
 
-		public AuthService(IUnitOfWorks unitOfWorks, AppSetting appSettings, IPasswordHasher<Account> passwordHasher, IEmailService emailService)
+		public AuthService(IUnitOfWorks unitOfWorks, AppSetting appSettings, IPasswordHasher<Account> passwordHasher, IEmailService emailService, ITokenService tokenService)
 		{
 			_unitOfWorks = unitOfWorks;
 			_appSettings = appSettings;
 			_passwordHasher = passwordHasher;
 			_emailService = emailService;	
+			_tokenService = tokenService;
 		}
 
 		public async Task<ApiResponse> LoginAsync(LoginRequest request)
@@ -49,7 +51,7 @@ namespace Application.Services
 			}
 
 			//var claims =  _claimService.GetClaim();
-			var token = CreateToken(user);
+			var token = _tokenService.CreateToken(user);
 			response.SetOk(token);
 			return response;
 		}
@@ -173,34 +175,6 @@ namespace Application.Services
 			if (user.Password is null) return false;
 			return (user.Password.Equals(user.ConfirmPassword));
 		}
-		private string CreateToken(Account user)
-		{
-			List<Claim> claims = new List<Claim>
-			{
-				new Claim("UserId", user.AccountId.ToString()),
-				//new Claim(ClaimTypes.NameIdentifier, user.AccountId.ToString()),
-				new Claim("Role", user.RoleId.ToString()),
-				//new Claim(ClaimTypes.Role, user.RoleId.ToString()),
-				new Claim( "Email" , user.Email ?? string.Empty),
-				//new Claim(ClaimTypes.Email, user.Email),
-				new Claim("Username", user.AccountName ?? string.Empty),
-				//new Claim(ClaimTypes.Name, user.AccountName),
-			};
-
-			var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-				 _appSettings!.SecretToken.Value));
-
-			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-			var token = new JwtSecurityToken(
-				claims: claims,
-				expires: DateTime.Now.AddDays(1),
-				signingCredentials: creds);
-
-			var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-			return jwt;
-		}
-
 	}
 
 }

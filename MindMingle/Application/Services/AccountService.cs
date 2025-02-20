@@ -19,7 +19,24 @@ namespace Application.Services
             this.unitOfWorks = unitOfWorks;
         }
 
-        public async Task<ApiResponse> GetAllAccounts()
+		public async Task<ApiResponse> GetAccountById(string accountId)
+		{
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                var account = await unitOfWorks.AccountRepo.GetAsync(x => x.AccountId == accountId);
+                var resAccount = mapper.Map<Account>(account);  
+                return response.SetOk(resAccount);
+
+			} catch (Exception ex)
+            {
+                return response.SetBadRequest(ex.Message);
+
+			}
+
+		}
+
+		public async Task<ApiResponse> GetAllAccounts()
         {
             // Create a new API Response everytime the api route is called
             ApiResponse apiResponse = new ApiResponse();

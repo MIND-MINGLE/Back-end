@@ -10,6 +10,7 @@ using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Entity;
 using Microsoft.AspNetCore.Identity;
+using API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration.Get<AppSetting>();
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ITwilioService, TwilioService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 //builder.Services.AddScoped<ISignalRService, SignalRService>();
 
 builder.Services.AddSingleton(configuration!);
@@ -94,6 +96,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseMiddleware<TokenValidationMiddleware>();
 app.MapControllers();
 
 app.Run();

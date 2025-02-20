@@ -20,7 +20,13 @@ namespace API.Controllers
             this.accountService = accountService;
         }
 
-     
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAccountById([FromRoute] string id)
+        {
+            var response = await accountService.GetAccountById(id);
+			return response.IsSuccess ? Ok(response) : BadRequest(response);
+		}    
+        
         [HttpGet("GetAllAccount")]
         public async Task<IActionResult> GetAllAccount()
         {
