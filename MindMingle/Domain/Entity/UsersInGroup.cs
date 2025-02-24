@@ -9,6 +9,7 @@ namespace Domain.Entity
 
         public ChatGroup ChatGroup { get; set; } = null!;
         public Account Account { get; set; } = null!;
+        public ICollection<ChatMessage> ChatMessages { get; set; } = null!;
     }
 }
 

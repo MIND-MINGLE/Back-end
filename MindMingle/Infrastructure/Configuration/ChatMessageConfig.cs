@@ -19,7 +19,8 @@ namespace Infrastructure.Configuration
             // One-to-Many relationship
             builder.HasOne(a => a.Account)
                 .WithMany(r => r.ChatMessages)
-                .HasForeignKey(a => a.ClientId);
+                .HasForeignKey(a => a.AccountId);
+            
         }
     }
 }

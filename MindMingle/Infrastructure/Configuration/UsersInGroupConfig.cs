@@ -26,7 +26,12 @@ namespace Infrastructure.Configuration
               .WithMany(r => r.UsersInGroups)
               .HasForeignKey(a => a.ChatGroupId)
               .OnDelete(DeleteBehavior.Cascade);
+            //M-to-One
+            builder.HasMany(a => a.ChatMessages)
+                .WithOne(cm => cm.UsersInGroup)
+                 .HasForeignKey(cm => cm.UsersInGroupId);
         }
+                   
     }
 }
 
