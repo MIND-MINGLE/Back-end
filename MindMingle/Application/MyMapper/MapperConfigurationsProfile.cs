@@ -9,6 +9,9 @@ using Application.Request;
 using Domain.Entity;
 using Application.Request.Account;
 using Application.Request.Patient;
+using Application.Request.ChatGroupRequest;
+using Application.Response.UsersInGroup;
+using Application.Request.UsersInGroup;
 
 namespace Application.MyMapper
 {
@@ -27,10 +30,20 @@ namespace Application.MyMapper
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));  // Tạo GUID mới
 
             CreateMap<Patient, ResponsePatient>()
-                .ForMember(dest => dest.Dob, opt => opt.Ignore()) // ignore, we custom Date
-                ;
+                .ForMember(dest => dest.Dob, opt => opt.Ignore()); // ignore, we custom Date
 
+            // ChatGroup Mapper
+            CreateMap<AddChatGroupRequest, ChatGroup>()
+            .ForMember(dest => dest.ChatGroupId, opt => opt.MapFrom(src =>
+               Guid.NewGuid().ToString()
+            ));
+            // UsersInGroup
+            CreateMap<UsersInGroup, GetAllUserInGroupResponse>();
+            CreateMap<UsersInGroupRequest, UsersInGroup>()
+            .ForMember(dest => dest.UsersInGroupId, opt => opt.MapFrom(src =>
+               Guid.NewGuid().ToString()
+            ));
 
-		}
-	}
+        }
+    }
 }

@@ -9,6 +9,7 @@ namespace Domain.Entity
         public Account Account { get; set; } = null!;
         public UsersInGroup UsersInGroup { get; set; } = null!;
         public ICollection<UsersInGroup>? UsersInGroups { get; set; } // As Client
+       
     }
 
 }

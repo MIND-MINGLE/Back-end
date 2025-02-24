@@ -5,6 +5,7 @@ namespace Application.IRepository
 {
 	public interface IUsersInGroupRepository : IGenericRepository<UsersInGroup>
 	{
+
 	}
 }
 

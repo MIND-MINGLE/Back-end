@@ -14,9 +14,15 @@
     <None Remove="Services\" />
     <None Remove="Request\Account\" />
     <None Remove="Request\Role\" />
+    <None Remove="Request\ChatGroupRequest\" />
+    <None Remove="Request\UsersInGroup\" />
+    <None Remove="Response\UsersInGroup\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Request\Role\" />
+    <Folder Include="Request\ChatGroupRequest\" />
+    <Folder Include="Request\UsersInGroup\" />
+    <Folder Include="Response\UsersInGroup\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
