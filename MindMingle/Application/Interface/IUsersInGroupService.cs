@@ -6,6 +6,7 @@ namespace Application.Interface
 {
 	public interface IUsersInGroupService
 	{
+        public Task<ApiResponse> GetAllGroupChatWithUser();  
         public Task<ApiResponse> GetAllUserInGroup(string groupId);
         public Task<ApiResponse> AddUsersIntoGroup(UsersInGroupRequest usersInGroupRequest);
         public Task<ApiResponse> GetGroupByClientId(string clientId);

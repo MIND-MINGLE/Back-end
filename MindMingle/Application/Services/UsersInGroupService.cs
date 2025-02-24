@@ -21,6 +21,14 @@ namespace Application.Services
             this.mapper = mapper;
         }
 
+        public async Task<ApiResponse> GetAllGroupChatWithUser()
+        {
+            ApiResponse response = new ApiResponse();
+            var data = await unitOfWorks.UsersInGroupRepo.GetAllAsync(null);
+            return response.SetOk(data);
+        }
+
+
        public async Task<ApiResponse> AddUsersIntoGroup(UsersInGroupRequest usersInGroupRequest)
         {
             ApiResponse response = new ApiResponse();

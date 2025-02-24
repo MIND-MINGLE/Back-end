@@ -29,7 +29,6 @@ namespace Application.Services
                 var chatGroupModel = mapper.Map<ChatGroup>(addChatGroupRequest);
                 chatGroupModel.ChatGroupId = Guid.NewGuid().ToString();
                 await unitOfWorks.ChatGroupRepo.AddAsync(chatGroupModel);
-                await unitOfWorks.SaveChangeAsync();
                 // Multi-task that when a new group is created, the admin got joined in too. Saving the time have to call another API in FE
                 UsersInGroupRequest newUser = new UsersInGroupRequest()
                 {
@@ -37,6 +36,7 @@ namespace Application.Services
                     GroupId = chatGroupModel.ChatGroupId
                 };
                 var addUserInGroup = usersInGroupService.AddUsersIntoGroup(newUser);
+                await unitOfWorks.SaveChangeAsync();
                 return response.SetOk(chatGroupModel);
             }catch (Exception ex)
             {
@@ -51,7 +51,9 @@ namespace Application.Services
 
         public async Task<ApiResponse> GetAllChatGroup()
         {
-            throw new NotImplementedException();
+            ApiResponse response = new ApiResponse();
+            var data = await unitOfWorks.ChatGroupRepo.GetAllAsync(null);
+            return response.SetOk(data);
         }
 
         public async Task<ApiResponse> GetAllChatGroupByAdminId(string adminId)

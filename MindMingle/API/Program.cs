@@ -97,10 +97,12 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+// This middleware must be AFTER UseAuthentication and BEFORE UseAuthorization
+app.UseMiddleware<TokenValidationMiddleware>();
 
 app.UseAuthorization();
 
-app.UseMiddleware<TokenValidationMiddleware>();
+
 app.MapControllers();
 
 app.Run();
