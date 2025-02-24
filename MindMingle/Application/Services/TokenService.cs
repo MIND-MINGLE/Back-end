@@ -1,4 +1,5 @@
-﻿using Application.Response;
+﻿using Application.Interface;
+using Application.Response;
 using Domain;
 using Domain.Entity;
 using Microsoft.IdentityModel.Tokens;
@@ -12,12 +13,6 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-	public interface ITokenService
-	{
-		string GetToken(string token);
-		string CreateToken(Account account);
-	}
-
 	public class TokenService : ITokenService
 	{
 		private AppSetting _appSettings;
