@@ -12,6 +12,8 @@ using Application.Request.Patient;
 using Application.Request.ChatGroupRequest;
 using Application.Response.UsersInGroup;
 using Application.Request.UsersInGroup;
+using Application.Request.ChatMessage;
+using Application.Response.ChatMessage;
 
 namespace Application.MyMapper
 {
@@ -43,6 +45,11 @@ namespace Application.MyMapper
             .ForMember(dest => dest.UsersInGroupId, opt => opt.MapFrom(src =>
                Guid.NewGuid().ToString()
             ));
+            //Chat Message
+            CreateMap<ChatMessageRequest, ChatMessage>()
+            .ForMember(dest => dest.ChatMessageId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
+            .ForMember(dest => dest.MessageStatus, opt => opt.MapFrom(src => src.MessageStatus));
+            CreateMap<ChatMessage, ChatMessageResponse>();
 
         }
     }

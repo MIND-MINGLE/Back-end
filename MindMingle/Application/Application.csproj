@@ -17,12 +17,16 @@
     <None Remove="Request\ChatGroupRequest\" />
     <None Remove="Request\UsersInGroup\" />
     <None Remove="Response\UsersInGroup\" />
+    <None Remove="Request\ChatMessage\" />
+    <None Remove="Response\ChatMessage\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Request\Role\" />
     <Folder Include="Request\ChatGroupRequest\" />
     <Folder Include="Request\UsersInGroup\" />
     <Folder Include="Response\UsersInGroup\" />
+    <Folder Include="Request\ChatMessage\" />
+    <Folder Include="Response\ChatMessage\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />

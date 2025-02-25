@@ -53,8 +53,6 @@ builder.Services.AddScoped<IUsersInGroupService, UsersInGroupService>();
 builder.Services.AddScoped<IChatMessageService, ChatMessageService>();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
-//builder.Services.AddScoped<ISignalRService, SignalRService>();
-
 builder.Services.AddSingleton(configuration!);
 
 //

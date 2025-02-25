@@ -1,13 +1,13 @@
 ﻿using System;
+using Application.Request.ChatMessage;
 using Application.Response;
 
 namespace Application.Interface
 {
-	public interface ISignalRService
-	{
-		public Task SendTextMessage();
-		public Task ReceiveTextMessage();
-		public Task JoinCallRoom();
+    public interface ISignalRService
+    {
+		public Task ReceiveTextMessage(ChatMessageRequest chatMessageRequest);
+		public Task JoinCallRoom(string accountId);
 	}
 }
 
