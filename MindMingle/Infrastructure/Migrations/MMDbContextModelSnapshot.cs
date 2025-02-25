@@ -70,7 +70,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.ChatGroup", b =>
                 {
-                    b.Property<string>("ChatGroupId")
+                    b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("AdminId")
@@ -86,7 +86,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("ChatGroupId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AdminId");
 
@@ -338,9 +338,6 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("ChatGroupId1")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("ClientId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
@@ -357,9 +354,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("UsersInGroupId");
 
                     b.HasIndex("ChatGroupId");
-
-                    b.HasIndex("ChatGroupId1")
-                        .IsUnique();
 
                     b.HasIndex("ClientId");
 
@@ -470,10 +464,6 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entity.ChatGroup", null)
-                        .WithOne("UsersInGroup")
-                        .HasForeignKey("Domain.Entity.UsersInGroup", "ChatGroupId1");
-
                     b.HasOne("Domain.Entity.Account", "Account")
                         .WithMany("UsersInGroups")
                         .HasForeignKey("ClientId")
@@ -504,9 +494,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.ChatGroup", b =>
                 {
-                    b.Navigation("UsersInGroup")
-                        .IsRequired();
-
                     b.Navigation("UsersInGroups");
                 });
 

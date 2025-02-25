@@ -35,7 +35,16 @@ namespace Application.Services
             try
             {
                 var userInGroupModel = mapper.Map<UsersInGroup>(usersInGroupRequest);
+                var userExist = await unitOfWorks.UsersInGroupRepo.GetAllAsync(
+                    g => g.ClientId == userInGroupModel.ClientId && g.ChatGroupId == userInGroupModel.ChatGroupId
+                    );
+                Console.WriteLine($"User Model: {userInGroupModel.ChatGroupId} + {userInGroupModel.ClientId}");
+                if (userExist.Count!=0)
+                {
+                    return response.SetBadRequest("User Is Already In The Group Chat");
+                }
                 userInGroupModel.UsersInGroupId = Guid.NewGuid().ToString();
+                Console.WriteLine($"User Model: {userInGroupModel.ChatGroupId} + {userInGroupModel.ClientId}");
                 await unitOfWorks.UsersInGroupRepo.AddAsync(userInGroupModel);
                 await unitOfWorks.SaveChangeAsync();
                 return response.SetOk(userInGroupModel);

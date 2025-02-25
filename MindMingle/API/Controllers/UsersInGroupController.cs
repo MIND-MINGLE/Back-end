@@ -33,7 +33,7 @@ namespace API.Controllers
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         [HttpPost("addclient")]
-        public async Task<IActionResult> AddUsersIntoGroup(UsersInGroupRequest usersInGroupRequest)
+        public async Task<IActionResult> AddUsersIntoGroup([FromBody]UsersInGroupRequest usersInGroupRequest)
         {
             var response = await usersInGroupService.AddUsersIntoGroup(usersInGroupRequest);
             return response.IsSuccess ? Ok(response) : BadRequest(response);

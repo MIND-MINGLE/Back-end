@@ -34,7 +34,7 @@ namespace Application.MyMapper
 
             // ChatGroup Mapper
             CreateMap<AddChatGroupRequest, ChatGroup>()
-            .ForMember(dest => dest.ChatGroupId, opt => opt.MapFrom(src =>
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src =>
                Guid.NewGuid().ToString()
             ));
             // UsersInGroup

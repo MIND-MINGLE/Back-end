@@ -13,8 +13,6 @@ namespace Infrastructure.Configuration
         {
             // Primary key
             builder.HasKey(a => a.UsersInGroupId);
-            builder.Property(a => a.ChatGroupId).IsRequired();
-            builder.Property(a => a.ClientId).IsRequired();
             builder.Property(a => a.IsDisabled);
 
             // One-to-M relationship
@@ -22,6 +20,7 @@ namespace Infrastructure.Configuration
               .WithMany(r => r.UsersInGroups)
               .HasForeignKey(a => a.ClientId)
               .OnDelete(DeleteBehavior.Cascade);
+            //
             builder.HasOne(a => a.ChatGroup)
               .WithMany(r => r.UsersInGroups)
               .HasForeignKey(a => a.ChatGroupId)
