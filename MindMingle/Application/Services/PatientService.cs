@@ -37,8 +37,8 @@ namespace Application.Services
 			//Create new patient
             var patient = _mapper.Map<Patient>(newPatient);
 			await _unitOfWorks.PatientRepo.AddAsync(patient);
-
-			response.SetOk(newPatient);
+			await _unitOfWorks.SaveChangeAsync();
+            response.SetOk(newPatient);
             //Console.WriteLine("Fixing Bug");
             return response;
 		}

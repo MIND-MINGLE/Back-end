@@ -7,9 +7,11 @@ namespace Application
 	{
         public IAccountRepository AccountRepo { get; }
         public IRoleRepository RoleRepo { get; }
+
         public ITwilioRepository TwilioRepo { get; }
         public IEmailVerificationRepository EmailVerificationRepo { get; }
         public IPatientRepository PatientRepo { get; }
+        public ITherapistRepository TherapistRepo { get; }
         public IChatGroupRepository ChatGroupRepo { get; }
         public IChatMessageRepository ChatMessageRepo { get; }
         public IUsersInGroupRepository UsersInGroupRepo { get; }

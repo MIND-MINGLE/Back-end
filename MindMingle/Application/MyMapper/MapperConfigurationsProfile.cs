@@ -14,6 +14,8 @@ using Application.Response.UsersInGroup;
 using Application.Request.UsersInGroup;
 using Application.Request.ChatMessage;
 using Application.Response.ChatMessage;
+using Application.Response.ChatGroup;
+using Application.Request.Therapist;
 
 namespace Application.MyMapper
 {
@@ -30,15 +32,20 @@ namespace Application.MyMapper
             //Patient
             CreateMap<CreateNewPatientRequest, Patient>()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));  // Tạo GUID mới
-
             CreateMap<Patient, ResponsePatient>()
                 .ForMember(dest => dest.Dob, opt => opt.Ignore()); // ignore, we custom Date
-
+            //Therapist
+            CreateMap<AddNewTherapistRequest, Therapist>()
+                .ForMember(t => t.TherapistId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+            CreateMap<Therapist, ResponseTherapist>()
+               .ForMember(dest => dest.Dob, opt => opt.Ignore()); // ignore, we custom Date
             // ChatGroup Mapper
             CreateMap<AddChatGroupRequest, ChatGroup>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src =>
                Guid.NewGuid().ToString()
             ));
+            CreateMap<ChatGroup, ChatGroupResponse>()
+                .ForMember(dest => dest.AdminName, opt=>opt.Ignore());
             // UsersInGroup
             CreateMap<UsersInGroup, GetAllUserInGroupResponse>();
             CreateMap<UsersInGroupRequest, UsersInGroup>()

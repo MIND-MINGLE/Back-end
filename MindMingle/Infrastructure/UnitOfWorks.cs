@@ -13,6 +13,7 @@ namespace Infrastructure
 	{
         private MMDbContext _mMDbContext;
         public IAccountRepository AccountRepo { get; }
+		public ITherapistRepository TherapistRepo { get; }
         public IRoleRepository RoleRepo { get; }
         public ITwilioRepository TwilioRepo { get; }
 		public IEmailVerificationRepository EmailVerificationRepo { get; }
@@ -29,7 +30,8 @@ namespace Infrastructure
             RoleRepo = new RoleRespository(mMDbContext);
             TwilioRepo = new TwilioRepository(options);
 			PatientRepo = new PatientRepository(mMDbContext);
-			ChatGroupRepo = new ChatGroupRepository(mMDbContext);
+			TherapistRepo = new TherapistRepository(mMDbContext);
+            ChatGroupRepo = new ChatGroupRepository(mMDbContext);
 			ChatMessageRepo = new ChatMessageRepository(mMDbContext);
 			UsersInGroupRepo = new UsersInGroupRepository(mMDbContext);
 

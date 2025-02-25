@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Application.Interface;
 using Application.Request.UsersInGroup;
 using Application.Response;
+using Application.Response.ChatGroup;
 using Application.Response.UsersInGroup;
 using AutoMapper;
 using Domain.Entity;
@@ -72,9 +74,40 @@ namespace Application.Services
             }
         }
 
-        public async Task<ApiResponse> GetGroupByClientId(string clientId)
+        public async Task<ApiResponse> GetGroupChatListByClientId(string AccountId)
         {
-            throw new NotImplementedException();
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                var userInGroupModel = await unitOfWorks.UsersInGroupRepo.GetAllAsync(ug => ug.ClientId == AccountId);
+                if (userInGroupModel.Count == 0)
+                {
+                    return response.SetNotFound("Empty Group Chat");
+                }
+                else
+                {
+                    // There is no way I am doing 3 repos DB calling just to fetch a NAME for therapist admin. I'm gonna use LINQ - Language-Integrated Query of EFCore
+                    var chatgroupList = userInGroupModel.Select(cg => cg.ChatGroupId).ToList();
+                    var chatGroupResponses = await unitOfWorks.ChatGroupRepo.GetAllAsync(cg => chatgroupList.Contains(cg.Id));
+
+                    var chatGroupWithAdmins = from cg in chatGroupResponses
+                                              join t in unitOfWorks.TherapistRepo.GetAllAsync(null) on cg.AdminId equals t.AccountId
+                                              select new ChatGroupResponse
+                                              {
+                                                  Id = cg.Id,
+                                                  AdminId = cg.AdminId,
+                                                  AdminName = t.FirstName + " " + t.LastName
+                                              };
+
+                    var result = chatGroupWithAdmins.ToList();
+
+                }
+                return response.SetOk();
+            }
+            catch (Exception ex)
+            {
+                return response.SetBadRequest($"Error: {ex.Message}. Details: {ex.InnerException?.Message}");
+            }
         }
     }
 }

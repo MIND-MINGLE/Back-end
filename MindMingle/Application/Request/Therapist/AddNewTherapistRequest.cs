@@ -1,12 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Response
+namespace Application.Request.Therapist
 {
-	public class ResponseTherapist
+	public class AddNewTherapistRequest
 	{
-        [Key]
-        required public string TherapistId { get; set; }
         public required string AccountId { get; set; } // Fk
         [Required]
         public required string FirstName { get; set; }
@@ -15,7 +13,7 @@ namespace Application.Response
         [Required]
         public required string PhoneNumber { get; set; }
         [Required]
-        public required string Dob { get; set; }
+        public required DateTime Dob { get; set; }
         [Required]
         public required string Gender { get; set; }
     }
