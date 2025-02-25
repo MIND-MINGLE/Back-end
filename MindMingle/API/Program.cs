@@ -97,7 +97,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 // This middleware must be AFTER UseAuthentication and BEFORE UseAuthorization
 app.UseMiddleware<TokenValidationMiddleware>();
-
 app.UseAuthorization();
 
 

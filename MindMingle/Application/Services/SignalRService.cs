@@ -17,12 +17,27 @@ namespace Application.Services
         {
             this.chatMessageService = chatMessageService;
         }
-        public override Task OnConnectedAsync()
+        public override async Task OnConnectedAsync()
         {
-            // Debug: Log the Connection - For testing and stuff... I do NOT know how this work YOLO
-            Console.WriteLine($"You Should See This Line if Connected");
-            Console.WriteLine($"User Connected: {Context.ConnectionId}");
-            return base.OnConnectedAsync();
+            try
+            {
+                Console.WriteLine("🔥🔥🔥 SignalR Connected! 🔥🔥🔥");  // This should appear
+                Console.WriteLine($"User Connected: {Context.ConnectionId}");
+
+                await Clients.Caller.SendAsync("TestConnection", "Connected to SignalR!");
+
+                await base.OnConnectedAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error in OnConnectedAsync: {ex.Message}");
+            }
+        }
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            Console.WriteLine($"❌ User Disconnected: {Context.ConnectionId}");
+            await Clients.All.SendAsync("DebugMessage", $"User {Context.ConnectionId} disconnected.");
+            await base.OnDisconnectedAsync(exception);
         }
         public async Task JoinGroup(string groupId)
         {

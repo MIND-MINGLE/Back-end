@@ -42,9 +42,33 @@ namespace Application.Services
             }
         }
 
-        public async Task<ApiResponse> GetAllChatMessage()
+        public async Task<ApiResponse> GetAllChatMessageByGroupChatId(string chatGroupId)
         {
-            throw new NotImplementedException();
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                var groupChatExist = await unitOfWorks.ChatGroupRepo.GetAllAsync(g => g.Id == chatGroupId);
+                if (groupChatExist.Count == 0)
+                {
+                    return response.SetNotFound("No Group Chat Exist");
+                }
+                // Get all UsersInGroup records that belong to the given ChatGroupId
+                var usersInGroup = await unitOfWorks.UsersInGroupRepo
+                    .GetAllAsync(ug => ug.ChatGroupId == chatGroupId);
+
+                // Extract UsersInGroup IDs
+                var usersInGroupIds = usersInGroup.Select(ug => ug.UsersInGroupId).ToList();
+
+                // Find all chat messages where UsersInGroupId matches
+                var chatMessageModel = await unitOfWorks.ChatMessageRepo
+                    .GetAllAsync(cm => usersInGroupIds.Contains(cm.UsersInGroupId));
+                var chatMessageResponse = mapper.Map<ChatMessageResponse[]>(chatMessageModel);
+                return response.SetOk(chatMessageResponse);
+            }
+            catch (Exception ex)
+            {
+                return response.SetBadRequest($"Error: {ex.Message}. Details: {ex.InnerException?.Message}");
+            }
         }
 
         public async Task<ApiResponse> GetAllChatMessageByGroupId(string usersInGroupId)

@@ -30,10 +30,16 @@ namespace API.Controllers
             var response = await chatMessageService.AddChatMessageByAccountId(chatMessageRequest);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
-        [HttpGet("getchatlog/{usersInGroupId}")]
+        [HttpGet("getuserlog/{usersInGroupId}")]
         public async Task<IActionResult> GetChatMessage([FromRoute]string usersInGroupId)
         {
             var response = await chatMessageService.GetAllChatMessageByGroupId(usersInGroupId);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [HttpGet("getgrouplog/{chatGroupId}")]
+        public async Task<IActionResult> GetChatGroupMessage([FromRoute] string chatGroupId)
+        {
+            var response = await chatMessageService.GetAllChatMessageByGroupChatId(chatGroupId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         [HttpGet("test-connection")]
