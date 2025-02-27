@@ -89,9 +89,9 @@ namespace Application.Services
                     // There is no way I am doing 3 repos DB calling just to fetch a NAME for therapist admin. I'm gonna use LINQ - Language-Integrated Query of EFCore
                     var chatgroupList = userInGroupModel.Select(cg => cg.ChatGroupId).ToList();
                     var chatGroupResponses = await unitOfWorks.ChatGroupRepo.GetAllAsync(cg => chatgroupList.Contains(cg.Id));
-
+                    var therapistList = await unitOfWorks.TherapistRepo.GetAllAsync(null); // Await this before using
                     var chatGroupWithAdmins = from cg in chatGroupResponses
-                                              join t in unitOfWorks.TherapistRepo.GetAllAsync(null) on cg.AdminId equals t.AccountId
+                                              join t in therapistList on cg.AdminId equals t.AccountId
                                               select new ChatGroupResponse
                                               {
                                                   Id = cg.Id,
@@ -100,6 +100,7 @@ namespace Application.Services
                                               };
 
                     var result = chatGroupWithAdmins.ToList();
+
 
                 }
                 return response.SetOk();
