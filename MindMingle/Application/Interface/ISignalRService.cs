@@ -7,7 +7,6 @@ namespace Application.Interface
     public interface ISignalRService
     {
 		public Task ReceiveTextMessage(ChatMessageRequest chatMessageRequest);
-		public Task JoinCallRoom(string accountId);
 	}
 }
 

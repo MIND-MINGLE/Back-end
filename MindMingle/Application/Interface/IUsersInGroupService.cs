@@ -9,6 +9,7 @@ namespace Application.Interface
         public Task<ApiResponse> GetAllGroupChatWithUser();
         public Task<ApiResponse> GetGroupChatListByClientId(string accountId);
         public Task<ApiResponse> GetAllUserInGroup(string groupId);
+        public Task<string> GetGroupChatByUsersInGroup(string userInGroupId);
         public Task<ApiResponse> AddUsersIntoGroup(UsersInGroupRequest usersInGroupRequest);
 
     }

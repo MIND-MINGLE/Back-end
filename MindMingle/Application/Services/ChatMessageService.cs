@@ -52,6 +52,7 @@ namespace Application.Services
                 {
                     return response.SetNotFound("No Group Chat Exist");
                 }
+
                 // Get all UsersInGroup records that belong to the given ChatGroupId
                 var usersInGroup = await unitOfWorks.UsersInGroupRepo
                     .GetAllAsync(ug => ug.ChatGroupId == chatGroupId);
@@ -59,10 +60,14 @@ namespace Application.Services
                 // Extract UsersInGroup IDs
                 var usersInGroupIds = usersInGroup.Select(ug => ug.UsersInGroupId).ToList();
 
-                // Find all chat messages where UsersInGroupId matches
+                // Find and sort chat messages where UsersInGroupId matches
                 var chatMessageModel = await unitOfWorks.ChatMessageRepo
                     .GetAllAsync(cm => usersInGroupIds.Contains(cm.UsersInGroupId));
-                var chatMessageResponse = mapper.Map<ChatMessageResponse[]>(chatMessageModel);
+
+                // Sort messages by CreatedAt (oldest to newest) - consistent data loading
+                var sortedChatMessages = chatMessageModel.OrderBy(cm => cm.CreatedAt).ToList();
+
+                var chatMessageResponse = mapper.Map<ChatMessageResponse[]>(sortedChatMessages);
                 return response.SetOk(chatMessageResponse);
             }
             catch (Exception ex)
@@ -70,6 +75,7 @@ namespace Application.Services
                 return response.SetBadRequest($"Error: {ex.Message}. Details: {ex.InnerException?.Message}");
             }
         }
+
 
         public async Task<ApiResponse> GetAllChatMessageByGroupId(string usersInGroupId)
         {
