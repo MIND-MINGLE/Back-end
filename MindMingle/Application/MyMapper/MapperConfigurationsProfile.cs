@@ -45,9 +45,11 @@ namespace Application.MyMapper
                Guid.NewGuid().ToString()
             ));
             CreateMap<ChatGroup, ChatGroupResponse>()
-                .ForMember(dest => dest.AdminName, opt=>opt.Ignore());
+                .ForMember(dest => dest.AdminName, opt => opt.Ignore())
+                .ForMember(dest => dest.ChatGroudId, opt => opt.MapFrom(cg => cg.Id));
             // UsersInGroup
-            CreateMap<UsersInGroup, GetAllUserInGroupResponse>();
+            CreateMap<UsersInGroup, GetAllUserInGroupResponse>()
+                .ForMember(des=>des.AccountName, opt=>opt.MapFrom(us=>us.Accounts.AccountName));
             CreateMap<UsersInGroupRequest, UsersInGroup>()
             .ForMember(dest => dest.UsersInGroupId, opt => opt.MapFrom(src =>
                Guid.NewGuid().ToString()

@@ -63,10 +63,14 @@ namespace Application.Services
             try
             {
                 var userInGroupModel = await unitOfWorks.UsersInGroupRepo.GetAllAsync(u => u.ChatGroupId == groupId,
-                   include: query => query.Include(a => a.Account) // This is a custom JOIN operation to get the account Name of all user in group
+                   include: query => query.Include(a => a.Accounts) // This is a custom JOIN operation to get the account Name of all user in group
                    );
-                var userInGroupResponse = mapper.Map<GetAllUserInGroupResponse>(userInGroupModel);
-                return response.SetOk(userInGroupModel);
+                var userInGroupResponse = mapper.Map<GetAllUserInGroupResponse[]>(userInGroupModel);
+                foreach (var user in userInGroupModel)
+                {
+                    Console.WriteLine($"User ID: {user.Accounts?.AccountId}, Account: {user.Accounts?.AccountName}");
+                }
+                return response.SetOk(userInGroupResponse);
             }
             catch(Exception ex)
             {
@@ -89,21 +93,21 @@ namespace Application.Services
                     // There is no way I am doing 3 repos DB calling just to fetch a NAME for therapist admin. I'm gonna use LINQ - Language-Integrated Query of EFCore
                     var chatgroupList = userInGroupModel.Select(cg => cg.ChatGroupId).ToList();
                     var chatGroupResponses = await unitOfWorks.ChatGroupRepo.GetAllAsync(cg => chatgroupList.Contains(cg.Id));
+                    //Console.WriteLine("chatGroupResponses: ", chatGroupResponses);
                     var therapistList = await unitOfWorks.TherapistRepo.GetAllAsync(null); // Await this before using
                     var chatGroupWithAdmins = from cg in chatGroupResponses
                                               join t in therapistList on cg.AdminId equals t.AccountId
                                               select new ChatGroupResponse
                                               {
-                                                  Id = cg.Id,
+                                                  ChatGroudId = cg.Id,
                                                   AdminId = cg.AdminId,
                                                   AdminName = t.FirstName + " " + t.LastName
                                               };
 
                     var result = chatGroupWithAdmins.ToList();
-
-
+                    return response.SetOk(result.Count==0?"No Therapy Exist": result);
                 }
-                return response.SetOk();
+              
             }
             catch (Exception ex)
             {

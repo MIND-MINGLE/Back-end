@@ -26,7 +26,13 @@ namespace API.Controllers
             var response = await usersInGroupService.GetAllGroupChatWithUser();
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
-        [HttpGet("getallclient")]
+        [HttpGet("getGroupChatByAccountId/{accountId}")]
+        public async Task<IActionResult> GetGroupChatByAccountId([FromRoute] string accountId)
+        {
+            var response = await usersInGroupService.GetGroupChatListByClientId(accountId);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [HttpGet("getallclient/{groupId}")]
         public async Task<IActionResult> GetAllUserInGroup([FromRoute]string groupId)
         {
             var response = await usersInGroupService.GetAllUserInGroup(groupId);

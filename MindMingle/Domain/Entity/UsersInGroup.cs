@@ -8,7 +8,7 @@ namespace Domain.Entity
         required public string ChatGroupId { get; set; }
         //
         public ChatGroup ChatGroup { get; set; } = null!; //Navigation property
-        public Account Account { get; set; } = null!;
+        public Account Accounts { get; set; } = null!;
         public ICollection<ChatMessage> ChatMessages { get; set; } = null!;
     }
 }

@@ -16,9 +16,9 @@ namespace Infrastructure.Configuration
             builder.Property(a => a.IsDisabled);
 
             // One-to-M relationship
-            builder.HasOne(a => a.Account)
+            builder.HasOne(a => a.Accounts)
               .WithMany(r => r.UsersInGroups)
-              .HasForeignKey(a => a.ClientId)
+              .HasForeignKey(r => r.ClientId)
               .OnDelete(DeleteBehavior.Cascade);
             //
             builder.HasOne(a => a.ChatGroup)

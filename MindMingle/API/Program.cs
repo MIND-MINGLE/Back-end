@@ -48,6 +48,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ITwilioService, TwilioService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<ITherapistService, TherapistService>();
 builder.Services.AddScoped<IChatGroupService, ChatGroupService>();
 builder.Services.AddScoped<IUsersInGroupService, UsersInGroupService>();
 builder.Services.AddScoped<IChatMessageService, ChatMessageService>();

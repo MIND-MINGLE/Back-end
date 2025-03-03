@@ -27,7 +27,7 @@ namespace Application.Services
 			ApiResponse response = new ApiResponse();
 
 			//Check if account was create
-			var patientAccount = await _unitOfWorks.PatientRepo.GetAsync(x => x.AccountId == newPatient.AccountId);
+			var patientAccount = await _unitOfWorks.AccountRepo.GetAsync(x => x.AccountId == newPatient.AccountId);
 			if(patientAccount == null )
 			{
 				response.SetBadRequest(message: "Account not found nor created!");
