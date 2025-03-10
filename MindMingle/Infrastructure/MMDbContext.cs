@@ -23,6 +23,17 @@ namespace Infrastructure
         public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<UsersInGroup> UsersInGroups { get; set; }
         public DbSet<EmailVerification> EmailVerifications { get; set; }
+        public DbSet<PatientSurvey> PatientSurveys { get; set; }
+        public DbSet<PatientResponse> PatientResponses { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<InCategory> InCategories { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Session> Sessions { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<EmergencyEnd> EmergencyEnds { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +47,15 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new ChatMessageConfig());
             modelBuilder.ApplyConfiguration(new UsersInGroupConfig());
             modelBuilder.ApplyConfiguration(new EmailVerificationConfig());
+            modelBuilder.ApplyConfiguration(new PatientSurveyConfig());
+            modelBuilder.ApplyConfiguration(new PatientResponseConfig());
+            modelBuilder.ApplyConfiguration(new QuestionConfig());
+            modelBuilder.ApplyConfiguration(new AnswerConfig());
+            modelBuilder.ApplyConfiguration(new InCategoryConfig());
+            modelBuilder.ApplyConfiguration(new CategoryConfig());
+            modelBuilder.ApplyConfiguration(new SessionConfig());
+            modelBuilder.ApplyConfiguration(new AppointmentConfig());
+            modelBuilder.ApplyConfiguration(new EmergencyEndConfig());
 
         }
         public MMDbContext(DbContextOptions<MMDbContext> options) : base(options)

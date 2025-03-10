@@ -18,10 +18,13 @@ namespace Domain.Entity
         public required DateTime Dob { get; set; }
         [Required]
         public required string Gender { get; set; }
+        public required double PricePerHour { get; set; }
 
         // Link between Account and Therapist
         public Account Account { get; set; } = null!;
         public ICollection<Credentials>? Credentials{get;set;}
+        public ICollection<Session>? Sessions { get; set; } // one-many
+        public ICollection<Appointment>? Appointment { get; set; } // one-many
     }
 }
 

@@ -7,6 +7,7 @@ namespace Application.Response.ChatGroup
         required public string AdminId { get; set; }
         required public string AdminName { get; set; }
         required public string UserInGroupId { get; set; }
+
     }
 }
 

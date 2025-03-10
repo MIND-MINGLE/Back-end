@@ -9,7 +9,6 @@ namespace Infrastructure.Configuration
 		public PatientConfig()
 		{
 		}
-
         public void Configure(EntityTypeBuilder<Patient> builder)
         {
             builder.HasKey(c => c.PatientId);

@@ -17,6 +17,7 @@ namespace Domain.Entity
 
         // Link between Account and RentalService
         public Account Account { get; set; } = null!;
+        public ICollection<Appointment>? Appointment { get; set; }
     }
 }
 
