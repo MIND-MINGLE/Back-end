@@ -12,6 +12,6 @@ namespace Application.Interface
 	{
 		Task<ApiResponse> AddNewPatient(CreateNewPatientRequest newPatient);
 		Task<ApiResponse> GetPatientByAccountIdAsync(string accountId);
-
-	}
+		Task<ApiResponse> GetAllPatientsAsync();
+    }
 }

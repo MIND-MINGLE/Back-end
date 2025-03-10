@@ -43,7 +43,26 @@ namespace Application.Services
             return response;
 		}
 
-		public async Task<ApiResponse> GetPatientByAccountIdAsync(string accountId)
+		public async Task<ApiResponse> GetAllPatientsAsync()
+		{
+			ApiResponse response = new ApiResponse();
+			try
+			{
+				var patientsModel = await _unitOfWorks.PatientRepo.GetAllAsync(null);
+				var resPatients = _mapper.Map<List<ResponsePatient>>(patientsModel);
+				if (resPatients.Count == 0)
+				{
+					return response.SetNotFound("No patient profile found.");
+				}
+				return response.SetOk(resPatients);
+			}
+			catch (Exception ex)
+			{
+				return response.SetBadRequest(ex);
+			}
+		}
+
+        public async Task<ApiResponse> GetPatientByAccountIdAsync(string accountId)
 		{
 			ApiResponse response = new ApiResponse();
 
