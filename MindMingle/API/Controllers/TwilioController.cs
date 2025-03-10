@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Interface;
+using Application.Request;
 using Application.Response;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +25,10 @@ namespace API.Controllers
             this.twilioService = twilioService;
         }
 
-        [HttpGet("CallRoomToken")]
-        public async Task<IActionResult> SendCallRoomToken(string identity, string room)
+        [HttpPost("CallRoomToken")]
+        public async Task<IActionResult> SendCallRoomToken([FromBody]TwilioRequest twilioRequest)
         {
-            var response = await twilioService.GetCallRoomToken(identity, room);
+            var response = await twilioService.GetCallRoomToken(twilioRequest.Identity, twilioRequest.Room);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }

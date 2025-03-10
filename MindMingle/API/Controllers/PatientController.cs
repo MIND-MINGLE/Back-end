@@ -36,5 +36,16 @@ namespace API.Controllers
 			}
 			return Ok(result);
 		}
-	}
+
+        [HttpGet("patient")]
+        public async Task<IActionResult> GetAllPatients()
+        {
+            var result = await _patientService.GetAllPatientsAsync();
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+    }
 }

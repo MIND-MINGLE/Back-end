@@ -15,7 +15,7 @@ namespace Domain.Entity
         [Required]
         public required string PhoneNumber { get; set; }
         [Required]
-        public required DateOnly Dob { get; set; }
+        public required DateTime Dob { get; set; }
         [Required]
         public required string Gender { get; set; }
 

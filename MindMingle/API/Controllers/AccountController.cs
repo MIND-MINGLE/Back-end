@@ -27,7 +27,7 @@ namespace API.Controllers
 			return response.IsSuccess ? Ok(response) : BadRequest(response);
 		}    
         
-        [HttpGet("GetAllAccount")]
+        [HttpGet("getall")]
         public async Task<IActionResult> GetAllAccount()
         {
             var response = await accountService.GetAllAccounts();

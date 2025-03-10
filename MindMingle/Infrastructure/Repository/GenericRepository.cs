@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Application.IRepository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Infrastructure.Repository
 {
@@ -65,15 +66,23 @@ namespace Infrastructure.Repository
         }
 
 
-        public async Task<List<T>> GetAllAsync(System.Linq.Expressions.Expression<Func<T, bool>>? filter, Func<IQueryable<T>, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<T, object>>? include, int pageIndex = 1, int pageSize = 10) // Pagination 1-10
+        public async Task<List<T>> GetAllAsync(
+                Expression<Func<T, bool>>? filter = null,
+                Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+                int pageIndex = 1, int pageSize = 10)
         {
             IQueryable<T> query = db;
-            
+
             if (filter != null)
-                return await query.Where(filter).ToListAsync();
-            else
-                return await query.ToListAsync();
+                query = query.Where(filter);
+
+            if (include != null)
+                query = include(query); // ✅ Apply Include()
+
+            return await query.ToListAsync(); // ✅ Ensure execution
+            // I do not know how to fix this. thank you chat
         }
+
 
         public async Task<T> GetAsync(System.Linq.Expressions.Expression<Func<T, bool>> filter)
         {

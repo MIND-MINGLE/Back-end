@@ -9,6 +9,13 @@ using Application.Request;
 using Domain.Entity;
 using Application.Request.Account;
 using Application.Request.Patient;
+using Application.Request.ChatGroupRequest;
+using Application.Response.UsersInGroup;
+using Application.Request.UsersInGroup;
+using Application.Request.ChatMessage;
+using Application.Response.ChatMessage;
+using Application.Response.ChatGroup;
+using Application.Request.Therapist;
 
 namespace Application.MyMapper
 {
@@ -25,12 +32,36 @@ namespace Application.MyMapper
             //Patient
             CreateMap<CreateNewPatientRequest, Patient>()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));  // Tạo GUID mới
-
             CreateMap<Patient, ResponsePatient>()
-                .ForMember(dest => dest.Dob, opt => opt.Ignore()) // ignore, we custom Date
+                .ForMember(dest => dest.Dob, opt => opt.Ignore()); // ignore, we custom Date
+            //Therapist
+            CreateMap<AddNewTherapistRequest, Therapist>()
+                .ForMember(t => t.TherapistId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+            CreateMap<Therapist, ResponseTherapist>()
+               .ForMember(dest => dest.Dob, opt => opt.Ignore()); // ignore, we custom Date
+            // ChatGroup Mapper
+            CreateMap<AddChatGroupRequest, ChatGroup>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src =>
+               Guid.NewGuid().ToString()
+            ));
+            CreateMap<ChatGroup, ChatGroupResponse>()
+                .ForMember(dest => dest.AdminName, opt => opt.Ignore())
+                .ForMember(dest => dest.ChatGroudId, opt => opt.MapFrom(cg => cg.Id));
+            // UsersInGroup
+            CreateMap<UsersInGroup, GetAllUserInGroupResponse>()
+                .ForMember(des=>des.AccountName, opt=>opt.MapFrom(us=>us.Accounts.AccountName))
+                .ForMember(des=>des.UserInGroupId, opt=>opt.MapFrom(us=>us.UsersInGroupId))
                 ;
+            CreateMap<UsersInGroupRequest, UsersInGroup>()
+            .ForMember(dest => dest.UsersInGroupId, opt => opt.MapFrom(src =>
+               Guid.NewGuid().ToString()
+            ));
+            //Chat Message
+            CreateMap<ChatMessageRequest, ChatMessage>()
+            .ForMember(dest => dest.ChatMessageId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
+            .ForMember(dest => dest.MessageStatus, opt => opt.MapFrom(src => src.MessageStatus));
+            CreateMap<ChatMessage, ChatMessageResponse>();
 
-
-		}
-	}
+        }
+    }
 }

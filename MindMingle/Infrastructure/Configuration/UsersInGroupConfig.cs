@@ -13,20 +13,24 @@ namespace Infrastructure.Configuration
         {
             // Primary key
             builder.HasKey(a => a.UsersInGroupId);
-            builder.Property(a => a.ChatGroupId).IsRequired();
-            builder.Property(a => a.ClientId).IsRequired();
             builder.Property(a => a.IsDisabled);
 
             // One-to-M relationship
-            builder.HasOne(a => a.Account)
+            builder.HasOne(a => a.Accounts)
               .WithMany(r => r.UsersInGroups)
-              .HasForeignKey(a => a.ClientId)
+              .HasForeignKey(r => r.ClientId)
               .OnDelete(DeleteBehavior.Cascade);
+            //
             builder.HasOne(a => a.ChatGroup)
               .WithMany(r => r.UsersInGroups)
               .HasForeignKey(a => a.ChatGroupId)
               .OnDelete(DeleteBehavior.Cascade);
+            //M-to-One
+            builder.HasMany(a => a.ChatMessages)
+                .WithOne(cm => cm.UsersInGroup)
+                 .HasForeignKey(cm => cm.UsersInGroupId);
         }
+                   
     }
 }
 

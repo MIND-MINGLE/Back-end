@@ -70,7 +70,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.ChatGroup", b =>
                 {
-                    b.Property<string>("ChatGroupId")
+                    b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("AdminId")
@@ -86,19 +86,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("UsersInGroupId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("UsersInGroupId1")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("ChatGroupId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AdminId");
-
-                    b.HasIndex("UsersInGroupId1");
 
                     b.ToTable("ChatGroups");
                 });
@@ -108,11 +98,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("ChatMessageId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("ChatGroupId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ClientId")
+                    b.Property<string>("AccountId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
@@ -132,11 +118,15 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("UsersInGroupId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("ChatMessageId");
 
-                    b.HasIndex("ChatGroupId");
+                    b.HasIndex("AccountId");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("UsersInGroupId");
 
                     b.ToTable("ChatMessages");
                 });
@@ -247,8 +237,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateOnly>("Dob")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -389,34 +379,26 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ChatMessage", b =>
+                {
+                    b.HasOne("Domain.Entity.Account", "Account")
+                        .WithMany("ChatMessages")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entity.UsersInGroup", "UsersInGroup")
-                        .WithMany()
-                        .HasForeignKey("UsersInGroupId1")
+                        .WithMany("ChatMessages")
+                        .HasForeignKey("UsersInGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Account");
 
                     b.Navigation("UsersInGroup");
-                });
-
-            modelBuilder.Entity("Domain.Entity.ChatMessage", b =>
-                {
-                    b.HasOne("Domain.Entity.ChatGroup", "ChatGroup")
-                        .WithMany("ChatMessages")
-                        .HasForeignKey("ChatGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.Account", "Account")
-                        .WithMany("ChatMessages")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("ChatGroup");
                 });
 
             modelBuilder.Entity("Domain.Entity.CoWorkingSpace", b =>
@@ -512,8 +494,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.ChatGroup", b =>
                 {
-                    b.Navigation("ChatMessages");
-
                     b.Navigation("UsersInGroups");
                 });
 
@@ -525,6 +505,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entity.Therapist", b =>
                 {
                     b.Navigation("Credentials");
+                });
+
+            modelBuilder.Entity("Domain.Entity.UsersInGroup", b =>
+                {
+                    b.Navigation("ChatMessages");
                 });
 #pragma warning restore 612, 618
         }

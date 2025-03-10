@@ -13,10 +13,14 @@ namespace Infrastructure
 	{
         private MMDbContext _mMDbContext;
         public IAccountRepository AccountRepo { get; }
+		public ITherapistRepository TherapistRepo { get; }
         public IRoleRepository RoleRepo { get; }
         public ITwilioRepository TwilioRepo { get; }
 		public IEmailVerificationRepository EmailVerificationRepo { get; }
 		public IPatientRepository PatientRepo { get; }
+		public IChatGroupRepository ChatGroupRepo { get; }
+		public IChatMessageRepository ChatMessageRepo { get; }
+		public IUsersInGroupRepository UsersInGroupRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
@@ -26,7 +30,12 @@ namespace Infrastructure
             RoleRepo = new RoleRespository(mMDbContext);
             TwilioRepo = new TwilioRepository(options);
 			PatientRepo = new PatientRepository(mMDbContext);
-		}
+			TherapistRepo = new TherapistRepository(mMDbContext);
+            ChatGroupRepo = new ChatGroupRepository(mMDbContext);
+			ChatMessageRepo = new ChatMessageRepository(mMDbContext);
+			UsersInGroupRepo = new UsersInGroupRepository(mMDbContext);
+
+        }
 		public async Task SaveChangeAsync()
 		{
 			try

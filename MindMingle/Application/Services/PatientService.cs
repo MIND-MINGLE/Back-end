@@ -27,7 +27,7 @@ namespace Application.Services
 			ApiResponse response = new ApiResponse();
 
 			//Check if account was create
-			var patientAccount = await _unitOfWorks.PatientRepo.GetAsync(x => x.AccountId == newPatient.AccountId);
+			var patientAccount = await _unitOfWorks.AccountRepo.GetAsync(x => x.AccountId == newPatient.AccountId);
 			if(patientAccount == null )
 			{
 				response.SetBadRequest(message: "Account not found nor created!");
@@ -37,13 +37,32 @@ namespace Application.Services
 			//Create new patient
             var patient = _mapper.Map<Patient>(newPatient);
 			await _unitOfWorks.PatientRepo.AddAsync(patient);
-
-			response.SetOk(newPatient);
+			await _unitOfWorks.SaveChangeAsync();
+            response.SetOk(newPatient);
             //Console.WriteLine("Fixing Bug");
             return response;
 		}
 
-		public async Task<ApiResponse> GetPatientByAccountIdAsync(string accountId)
+		public async Task<ApiResponse> GetAllPatientsAsync()
+		{
+			ApiResponse response = new ApiResponse();
+			try
+			{
+				var patientsModel = await _unitOfWorks.PatientRepo.GetAllAsync(null);
+				var resPatients = _mapper.Map<List<ResponsePatient>>(patientsModel);
+				if (resPatients.Count == 0)
+				{
+					return response.SetNotFound("No patient profile found.");
+				}
+				return response.SetOk(resPatients);
+			}
+			catch (Exception ex)
+			{
+				return response.SetBadRequest(ex);
+			}
+		}
+
+        public async Task<ApiResponse> GetPatientByAccountIdAsync(string accountId)
 		{
 			ApiResponse response = new ApiResponse();
 
