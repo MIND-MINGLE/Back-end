@@ -109,9 +109,6 @@ namespace Infrastructure.Repository
                 {
                     throw new Exception();
                 }
-            
-            
-
         }
     }
 }

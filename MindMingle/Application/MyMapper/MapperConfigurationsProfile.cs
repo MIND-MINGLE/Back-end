@@ -16,6 +16,8 @@ using Application.Request.ChatMessage;
 using Application.Response.ChatMessage;
 using Application.Response.ChatGroup;
 using Application.Request.Therapist;
+using Application.Request.Question;
+using Application.Request.Category;
 using Application.Request.PatientResponse;
 using Application.Response.PatientResponse;
 
@@ -68,6 +70,13 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.PatientResponseId, opt => opt.MapFrom(src => Guid.NewGuid().ToString())) // Bỏ qua ResponseId vì sẽ được tạo tự động
                 .ForMember(dest => dest.Score, opt => opt.Ignore()); // Bỏ qua Score nếu không có trong request
 
+            CreateMap<Question, ResponseQuestion>();
+            CreateMap<QuestionRequest, Question>()
+                .ForMember(dest => dest.QuestionId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+
+            CreateMap<Category, ResponseCategory>();
+            CreateMap<CategoryRequest, Category>()
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
             // Ánh xạ từ PatientResponse sang PatientResResponse
             CreateMap<PatientResponse, PatientResResponse>();
         }

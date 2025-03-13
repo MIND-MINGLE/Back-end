@@ -21,6 +21,8 @@ namespace Infrastructure
 		public IChatGroupRepository ChatGroupRepo { get; }
 		public IChatMessageRepository ChatMessageRepo { get; }
 		public IUsersInGroupRepository UsersInGroupRepo { get; }
+		public IQuestionRepository QuestionRepo { get; }
+		public ICategoryRepository CategoryRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
@@ -34,7 +36,8 @@ namespace Infrastructure
             ChatGroupRepo = new ChatGroupRepository(mMDbContext);
 			ChatMessageRepo = new ChatMessageRepository(mMDbContext);
 			UsersInGroupRepo = new UsersInGroupRepository(mMDbContext);
-
+            QuestionRepo = new QuestionRepository(mMDbContext);
+            CategoryRepo = new CategoryRepository(mMDbContext);
         }
 		public async Task SaveChangeAsync()
 		{
