@@ -18,6 +18,8 @@ using Application.Response.ChatGroup;
 using Application.Request.Therapist;
 using Application.Request.Question;
 using Application.Request.Category;
+using Application.Request.PatientResponse;
+using Application.Response.PatientResponse;
 
 namespace Application.MyMapper
 {
@@ -63,6 +65,10 @@ namespace Application.MyMapper
             .ForMember(dest => dest.ChatMessageId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
             .ForMember(dest => dest.MessageStatus, opt => opt.MapFrom(src => src.MessageStatus));
             CreateMap<ChatMessage, ChatMessageResponse>();
+            // Ánh xạ từ PatientResRequest sang PatientResponse
+            CreateMap<PatientResRequest, PatientResponse>()
+                .ForMember(dest => dest.PatientResponseId, opt => opt.MapFrom(src => Guid.NewGuid().ToString())) // Bỏ qua ResponseId vì sẽ được tạo tự động
+                .ForMember(dest => dest.Score, opt => opt.Ignore()); // Bỏ qua Score nếu không có trong request
 
             CreateMap<Question, ResponseQuestion>();
             CreateMap<QuestionRequest, Question>()
@@ -71,6 +77,8 @@ namespace Application.MyMapper
             CreateMap<Category, ResponseCategory>();
             CreateMap<CategoryRequest, Category>()
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+            // Ánh xạ từ PatientResponse sang PatientResResponse
+            CreateMap<PatientResponse, PatientResResponse>();
         }
     }
 }
