@@ -13,11 +13,9 @@ namespace Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<Category> builder)
         {
             builder.HasKey(c => c.CategoryId);
-
-            builder.HasMany(p => p.InCategories)
+            builder.HasMany(p => p.Questions)
                 .WithOne(a => a.Category)
                 .HasForeignKey(a => a.CategoryId);
-          
         }
     }
 }

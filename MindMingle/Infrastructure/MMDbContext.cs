@@ -27,7 +27,7 @@ namespace Infrastructure
         public DbSet<PatientResponse> PatientResponses { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
-        public DbSet<InCategory> InCategories { get; set; }
+   
         public DbSet<Category> Categories { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
@@ -51,7 +51,6 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new PatientResponseConfig());
             modelBuilder.ApplyConfiguration(new QuestionConfig());
             modelBuilder.ApplyConfiguration(new AnswerConfig());
-            modelBuilder.ApplyConfiguration(new InCategoryConfig());
             modelBuilder.ApplyConfiguration(new CategoryConfig());
             modelBuilder.ApplyConfiguration(new SessionConfig());
             modelBuilder.ApplyConfiguration(new AppointmentConfig());

@@ -28,10 +28,6 @@ namespace Infrastructure.Configuration
                .WithOne(r => r.PatientSurvey)
                .HasForeignKey(a => a.PatientSurveyId)
                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasMany(a => a.InCategories)
-              .WithOne(r => r.PatientSurvey)
-              .HasForeignKey(a => a.PatientSurveyId)
-              .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
