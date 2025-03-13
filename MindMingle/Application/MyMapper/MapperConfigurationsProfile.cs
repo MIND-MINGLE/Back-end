@@ -21,6 +21,8 @@ using Application.Request.Category;
 using Application.Request.PatientResponse;
 using Application.Response.PatientResponse;
 using Application.Request.Answer;
+using Application.Request.PatientSurvey;
+using Application.Response.PatientSurvey;
 
 namespace Application.MyMapper
 {
@@ -66,11 +68,17 @@ namespace Application.MyMapper
             .ForMember(dest => dest.ChatMessageId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
             .ForMember(dest => dest.MessageStatus, opt => opt.MapFrom(src => src.MessageStatus));
             CreateMap<ChatMessage, ChatMessageResponse>();
-            // Ánh xạ từ PatientResRequest sang PatientResponse
+            //PatientResponse
             CreateMap<PatientResRequest, PatientResponse>()
                 .ForMember(dest => dest.PatientResponseId, opt => opt.MapFrom(src => Guid.NewGuid().ToString())) // Bỏ qua ResponseId vì sẽ được tạo tự động
                 .ForMember(dest => dest.Score, opt => opt.Ignore()); // Bỏ qua Score nếu không có trong request
-
+            CreateMap<PatientResponse, PatientResResponse>()
+                .ForMember(dest => dest.ResponseId, opt => opt.MapFrom(src => src.PatientResponseId))
+                .ForMember(dest => dest.SurveyId, opt => opt.MapFrom(src => src.PatientSurveyId))
+                .ForMember(dest => dest.QuestionId, opt => opt.MapFrom(src => src.QuestionId))
+                .ForMember(dest => dest.AnswerId, opt => opt.MapFrom(src => src.AnswerId))
+                .ForMember(dest => dest.CustomerAnswer, opt => opt.MapFrom(src => src.CustomerAnswer))
+                .ForMember(dest => dest.Score, opt => opt.MapFrom(src => src.Score));
             CreateMap<Question, ResponseQuestion>();
             CreateMap<QuestionRequest, Question>()
                 .ForMember(dest => dest.QuestionId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
@@ -84,6 +92,16 @@ namespace Application.MyMapper
             CreateMap<Answer, ResponseAnswer>();
             CreateMap<NewAnswerRequest, Answer>()
                 .ForMember(dest => dest.AnswerId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+          
+            //PatientSurvey
+            CreateMap<PatientSurveyRequest, PatientSurvey>()
+                .ForMember(dest => dest.PatientSurveyId, opt => opt.MapFrom(src => Guid.NewGuid().ToString())) // Bỏ qua vì sẽ được tạo tự động
+                .ForMember(dest => dest.PatientResponses, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt == default ? DateTime.UtcNow : src.CreatedAt));
+
+            // Ánh xạ từ PatientSurvey sang PatientSurveyResponse
+            CreateMap<PatientSurvey, PatientSurveyResponse>()
+                .ForMember(dest => dest.PatientResponses, opt => opt.MapFrom(src => src.PatientResponses));
         }
     }
 }
