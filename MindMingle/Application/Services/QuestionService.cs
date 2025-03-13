@@ -61,11 +61,27 @@ namespace Application.Services
             try
             {
                 var questions = await _unitOfWorks.QuestionRepo.GetAllAsync(null);
-                var resQuestions = _mapper.Map<List<ResponseQuestion>>(questions);
-                if (resQuestions.Count == 0)
+                if (questions.Count() == 0)
                 {
                     return response.SetNotFound("No question found!");
                 }
+
+                var questionIds = questions.Select(q => q.QuestionId).ToList();
+                var answers = await _unitOfWorks.AnswerRepo.GetAllAsync(a => questionIds.Contains(a.QuestionId));
+
+                var resQuestions = questions.Select(q => new ResponseQuestion
+                {
+                    QuestionId = q.QuestionId,
+                    QuestionContent = q.QuestionContent,
+                    CategoryId = q.CategoryId,
+                    CreatedAt = q.CreatedAt,
+                    Answers = answers.Where(a => a.QuestionId == q.QuestionId).Select(a => new ResponseAnswer
+                    {
+                        AnswerId = a.AnswerId,
+                        AnswerContent = a.AnswerContent
+                    }).ToList()
+                }).ToList();
+
                 return response.SetOk(resQuestions);
             }
             catch (Exception ex)
@@ -84,7 +100,23 @@ namespace Application.Services
                 {
                     return response.SetNotFound("Question not found!");
                 }
-                return response.SetOk(question);
+
+                var answers = await _unitOfWorks.AnswerRepo.GetAllAsync(a => a.QuestionId == questionId);
+
+                var resQuestion = new ResponseQuestion
+                {
+                    QuestionId = question.QuestionId,
+                    QuestionContent = question.QuestionContent,
+                    CategoryId = question.CategoryId,
+                    CreatedAt = question.CreatedAt,
+                    Answers = answers.Select(a => new ResponseAnswer
+                    {
+                        AnswerId = a.AnswerId,
+                        AnswerContent = a.AnswerContent
+                    }).ToList()
+                };
+
+                return response.SetOk(resQuestion);
             }
             catch (Exception ex)
             {
