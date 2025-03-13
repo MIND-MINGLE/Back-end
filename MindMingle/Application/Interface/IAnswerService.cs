@@ -1,4 +1,5 @@
-﻿using Application.Response;
+﻿using Application.Request.Answer;
+using Application.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Application.Interface
 {
     public interface IAnswerService
     {
+        Task<ApiResponse> AddNewAnswer(NewAnswerRequest newAnswer);
     }
 }
