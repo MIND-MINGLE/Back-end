@@ -17,6 +17,7 @@ using Application.Response.ChatMessage;
 using Application.Response.ChatGroup;
 using Application.Request.Therapist;
 using Application.Request.Question;
+using Application.Request.Category;
 
 namespace Application.MyMapper
 {
@@ -66,6 +67,10 @@ namespace Application.MyMapper
             CreateMap<Question, ResponseQuestion>();
             CreateMap<QuestionRequest, Question>()
                 .ForMember(dest => dest.QuestionId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+
+            CreateMap<Category, ResponseCategory>();
+            CreateMap<CategoryRequest, Category>()
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
         }
     }
 }

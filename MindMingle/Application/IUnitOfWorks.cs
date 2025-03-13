@@ -17,6 +17,8 @@ namespace Application
         public IUsersInGroupRepository UsersInGroupRepo { get; }
         public IQuestionRepository QuestionRepo { get; }
 
+        public ICategoryRepository CategoryRepo { get; }
+
         //TODO
 
         //public Task<T> ExecuteScalarAsync<T>(string sql);
