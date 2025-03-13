@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
@@ -48,14 +49,35 @@ namespace Application.Services
             try
             {
                 var categories = await _unitOfWorks.CategoryRepo.GetAllAsync(null);
-                var resCategory = _mapper.Map<List<ResponseCategory>>(categories);
-                var questions = await _unitOfWorks.QuestionRepo.GetAllAsync(null);
-                var resQuestions = _mapper.Map<List<ResponseQuestion>>(questions); 
-
-                if (resCategory.Count == 0)
+                if (categories.Count() == 0)
                 {
                     return response.SetNotFound("Category not found!");
                 }
+
+                var categoryIds = categories.Select(c => c.CategoryId).ToList();
+                var questions = await _unitOfWorks.QuestionRepo.GetAllAsync(q => categoryIds.Contains(q.CategoryId));
+                var questionIds = questions.Select(q => q.QuestionId).ToList();
+                var answers = await _unitOfWorks.AnswerRepo.GetAllAsync(a => questionIds.Contains(a.QuestionId));
+
+                var resCategory = categories.Select(c => new ResponseCategory
+                {
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.Name,
+                    Description = c.Description,
+                    Questions = questions.Where(q => q.CategoryId == c.CategoryId).Select(q => new ResponseQuestion
+                    {
+                        QuestionId = q.QuestionId,
+                        QuestionContent = q.QuestionContent,
+                        CategoryId = q.CategoryId,
+                        CreatedAt = q.CreatedAt,
+                        Answers = answers.Where(a => a.QuestionId == q.QuestionId).Select(a => new ResponseAnswer
+                        {
+                            AnswerId = a.AnswerId,
+                            AnswerContent = a.AnswerContent
+                        }).ToList()
+                    }).ToList(),
+                }).ToList();
+
                 return response.SetOk(resCategory);
             }
             catch (Exception ex)
@@ -64,9 +86,47 @@ namespace Application.Services
             }
         }
 
-        public Task<ApiResponse> GetCategoryById(string categoryId)
+        public async Task<ApiResponse> GetCategoryById(string categoryId)
         {
-            throw new NotImplementedException();
+            ApiResponse response = new ApiResponse();
+
+            try
+            {
+                var category = await _unitOfWorks.CategoryRepo.GetAllAsync(c => c.CategoryId == categoryId);
+                if (category == null || !category.Any())
+                {
+                    return response.SetNotFound("Category not found!");
+                }
+
+                var questions = await _unitOfWorks.QuestionRepo.GetAllAsync(q => q.CategoryId == categoryId);
+                var questionIds = questions.Select(q => q.QuestionId).ToList();
+                var answers = await _unitOfWorks.AnswerRepo.GetAllAsync(a => questionIds.Contains(a.QuestionId));
+
+                var resCategory = category.Select(c => new ResponseCategory
+                {
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.Name,
+                    Description = c.Description,
+                    Questions = questions.Where(q => q.CategoryId == c.CategoryId).Select(q => new ResponseQuestion
+                    {
+                        QuestionId = q.QuestionId,
+                        QuestionContent = q.QuestionContent,
+                        CategoryId = q.CategoryId,
+                        CreatedAt = q.CreatedAt,
+                        Answers = answers.Where(a => a.QuestionId == q.QuestionId).Select(a => new ResponseAnswer
+                        {
+                            AnswerId = a.AnswerId,
+                            AnswerContent = a.AnswerContent
+                        }).ToList()
+                    }).ToList(),
+                }).FirstOrDefault();
+
+                return response.SetOk(resCategory);
+            }
+            catch (Exception ex)
+            {
+                return response.SetBadRequest(ex);
+            }
         }
 
         public Task<ApiResponse> UpdateCategory(CategoryRequest categoryRequest, string categoryId)

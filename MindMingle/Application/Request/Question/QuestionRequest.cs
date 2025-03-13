@@ -9,7 +9,6 @@ namespace Application.Request.Question
     public class QuestionRequest
     {
         required public string QuestionContent { get; set; }
-        required public string Category { get; set; }
-        required public string QuestionType { get; set; }
+        required public string CategoryId { get; set; }
     }
 }

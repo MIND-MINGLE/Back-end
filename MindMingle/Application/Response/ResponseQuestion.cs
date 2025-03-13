@@ -8,10 +8,10 @@ namespace Application.Response
 {
     public class ResponseQuestion
     {
-        required public string QuestionId { get; set; }
-        required public string QuestionContent { get; set; }
-        required public string QuestionCategory { get; set; }
-        required public string QuestionType { get; set; }
-        required public DateTime CreatedAt { get; set; }
+        public required string QuestionId { get; set; }
+        public required string QuestionContent { get; set; }
+        public required string CategoryId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public List<ResponseAnswer> Answers { get; set; } // Add this property to fix CS0117
     }
 }
