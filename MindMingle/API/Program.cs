@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Infrastructure;
 using Application;
 using Application.Interface;
@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Domain.Entity;
 using Microsoft.AspNetCore.Identity;
 using API.Middleware;
+using Application.IRepository;
+using Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration.Get<AppSetting>();
@@ -41,6 +43,12 @@ builder.Services.Configure<TwilioOptions>(builder.Configuration.GetSection("Twil
 // Add Automapper
 builder.Services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
 // Inject the Repository
+
+// Đăng ký Repository 
+builder.Services.AddScoped<IPatientResponseRepository, PatientResponseRepository>();
+builder.Services.AddScoped<IPatientSurveyRepository, PatientSurveyRepository>();
+
+// Đăng ký Services 
 builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -53,7 +61,8 @@ builder.Services.AddScoped<IChatGroupService, ChatGroupService>();
 builder.Services.AddScoped<IUsersInGroupService, UsersInGroupService>();
 builder.Services.AddScoped<IChatMessageService, ChatMessageService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
-
+builder.Services.AddScoped<IPatientSurveyService, PatientSurveyService>();
+builder.Services.AddScoped<IPatientResponseService, PatientResponseService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton(configuration!);
 
