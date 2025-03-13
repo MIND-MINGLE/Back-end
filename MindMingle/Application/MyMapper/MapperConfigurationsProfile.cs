@@ -20,6 +20,7 @@ using Application.Request.Question;
 using Application.Request.Category;
 using Application.Request.PatientResponse;
 using Application.Response.PatientResponse;
+using Application.Request.Answer;
 
 namespace Application.MyMapper
 {
@@ -79,6 +80,10 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
             // Ánh xạ từ PatientResponse sang PatientResResponse
             CreateMap<PatientResponse, PatientResResponse>();
+
+            CreateMap<Answer, ResponseAnswer>();
+            CreateMap<NewAnswerRequest, Answer>()
+                .ForMember(dest => dest.AnswerId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
         }
     }
 }
