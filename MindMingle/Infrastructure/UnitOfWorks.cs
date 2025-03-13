@@ -23,6 +23,7 @@ namespace Infrastructure
 		public IUsersInGroupRepository UsersInGroupRepo { get; }
 		public IQuestionRepository QuestionRepo { get; }
 		public ICategoryRepository CategoryRepo { get; }
+		public IAnswerRepository AnswerRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
@@ -38,6 +39,7 @@ namespace Infrastructure
 			UsersInGroupRepo = new UsersInGroupRepository(mMDbContext);
             QuestionRepo = new QuestionRepository(mMDbContext);
             CategoryRepo = new CategoryRepository(mMDbContext);
+            AnswerRepo = new AnswerRepository(mMDbContext);
         }
 		public async Task SaveChangeAsync()
 		{

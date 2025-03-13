@@ -16,8 +16,8 @@ namespace Application
         public IChatMessageRepository ChatMessageRepo { get; }
         public IUsersInGroupRepository UsersInGroupRepo { get; }
         public IQuestionRepository QuestionRepo { get; }
-
         public ICategoryRepository CategoryRepo { get; }
+        public IAnswerRepository AnswerRepo { get; }
 
         //TODO
 
