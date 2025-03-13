@@ -78,6 +78,8 @@ namespace Infrastructure.Repository
 
             if (include != null)
                 query = include(query); // ✅ Apply Include()
+                                        // Áp dụng phân trang
+            query = query.Skip((pageIndex - 1) * pageSize).Take(pageSize);
 
             return await query.ToListAsync(); // ✅ Ensure execution
             // I do not know how to fix this. thank you chat
