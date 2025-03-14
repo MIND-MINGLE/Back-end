@@ -53,7 +53,7 @@ namespace Application.MyMapper
             ));
             CreateMap<ChatGroup, ChatGroupResponse>()
                 .ForMember(dest => dest.AdminName, opt => opt.Ignore())
-                .ForMember(dest => dest.ChatGroudId, opt => opt.MapFrom(cg => cg.Id));
+                .ForMember(dest => dest.ChatGroupId, opt => opt.MapFrom(cg => cg.Id));
             // UsersInGroup
             CreateMap<UsersInGroup, GetAllUserInGroupResponse>()
                 .ForMember(des=>des.AccountName, opt=>opt.MapFrom(us=>us.Accounts.AccountName))

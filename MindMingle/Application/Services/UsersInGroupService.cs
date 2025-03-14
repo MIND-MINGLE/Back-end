@@ -101,7 +101,7 @@ namespace Application.Services
                                               join ug in userInGroupModel on cg.Id equals ug.ChatGroupId
                                               select new ChatGroupResponse
                                               {
-                                                  ChatGroudId = cg.Id,
+                                                  ChatGroupId = cg.Id,
                                                   AdminId = cg.AdminId,
                                                   AdminName = "Test", //t.FirstName + " " + t.LastName,
                                                   UserInGroupId = ug.UsersInGroupId
