@@ -73,6 +73,7 @@ namespace Application.Services
                 {
                     QuestionId = q.QuestionId,
                     QuestionContent = q.QuestionContent,
+                    QuestionType = q.QuestionType,
                     CategoryId = q.CategoryId,
                     CreatedAt = q.CreatedAt,
                     Answers = answers.Where(a => a.QuestionId == q.QuestionId).Select(a => new ResponseAnswer
@@ -107,6 +108,7 @@ namespace Application.Services
                 {
                     QuestionId = question.QuestionId,
                     QuestionContent = question.QuestionContent,
+                    QuestionType = question.QuestionType,
                     CategoryId = question.CategoryId,
                     CreatedAt = question.CreatedAt,
                     Answers = answers.Select(a => new ResponseAnswer

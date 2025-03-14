@@ -11,6 +11,8 @@ namespace Domain.Entity
 
         [Required]
         public required string QuestionContent { get; set; }
+        [Required]
+        public required QType QuestionType { get; set; }
 
         [Required]
         public required string CategoryId { get; set; } // Enum field (e.g., "PHQ-9", "GAD-7")
@@ -23,6 +25,16 @@ namespace Domain.Entity
         public ICollection<PatientResponse>? PatientResponses { get; set; } // One-to-many
         public ICollection<Answer>? Answers { get; set; } // One-to-many
     }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum QType
+    {
+        [EnumMember(Value = "Single")]
+        SINGLE,
+        [EnumMember(Value = "Multiple")]
+        MULTIPLE,
+        [EnumMember(Value = "Rating")]
+        RATING,
+    }
 
- 
+
 }
