@@ -97,13 +97,13 @@ namespace Application.Services
                     //Console.WriteLine("chatGroupResponses: ", chatGroupResponses);
                     var therapistList = await unitOfWorks.TherapistRepo.GetAllAsync(null); // Await this before using
                     var chatGroupWithAdmins = from cg in chatGroupResponses
-                                              //join t in therapistList on cg.AdminId equals t.AccountId
+                                              join t in therapistList on cg.AdminId equals t.AccountId
                                               join ug in userInGroupModel on cg.Id equals ug.ChatGroupId
                                               select new ChatGroupResponse
                                               {
                                                   ChatGroupId = cg.Id,
                                                   AdminId = cg.AdminId,
-                                                  AdminName = "Test", //t.FirstName + " " + t.LastName,
+                                                  AdminName = t.FirstName!=null?t.FirstName + " " + t.LastName : "Test",
                                                   UserInGroupId = ug.UsersInGroupId
                                               };
 

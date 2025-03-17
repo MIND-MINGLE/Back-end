@@ -9,17 +9,15 @@ namespace Application.Request.Appointment
 {
 	public class AppointmentRequest
 	{
-        [Required]
         public required string PatientId { get; set; }
 
-        [Required]
         public required string TherapistId { get; set; }
 
-        public string? CoWorkingSpaceId { get; set; } // Nullable FK
+        //public string? CoWorkingSpaceId { get; set; } // Nullable FK
 
         public required string SessionId { get; set; }
 
-        public string EmergencyEndId { get; set; }
+        //public string? EmergencyEndId { get; set; }
 
         public AppointmentType AppointmentType { get; set; } // e.g., "Online", "Offline"
 

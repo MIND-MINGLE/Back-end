@@ -9,6 +9,7 @@ using Application.Request.Therapist;
 using Application.Response;
 using AutoMapper;
 using Domain.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services
 {
@@ -46,7 +47,10 @@ namespace Application.Services
         public async Task<ApiResponse> GetTherapistByAccountIdAsync(string accountId)
         {
             ApiResponse response = new ApiResponse();
-            var therapistModel = await unitOfWorks.TherapistRepo.GetAsync(t=>t.AccountId== accountId) ;
+            var therapistModel = await unitOfWorks.TherapistRepo.GetAsync(
+            t => t.AccountId == accountId,
+            q => q.Include(t => t.Account) // Assuming 'Account' is the navigation property
+        );
             if (therapistModel == null)
             {
                 return response.SetNotFound(accountId);
@@ -56,9 +60,31 @@ namespace Application.Services
                 var formattedDob = therapistModel.Dob.Date.ToString("dd/MM/yyyy");
                 var therapistResponse = mapper.Map<ResponseTherapist>(therapistModel);
                 therapistResponse.Dob = formattedDob;
+                return response.SetOk(therapistResponse);
             }
 
-            return response.SetOk(therapistModel);
+          
+        }
+        public async Task<ApiResponse> GetTherapistByTherapistIdAsync(string therapistId)
+        {
+            ApiResponse response = new ApiResponse();
+            var therapistModel = await unitOfWorks.TherapistRepo.GetAsync(
+            t => t.TherapistId == therapistId,
+            q => q.Include(t => t.Account) // Assuming 'Account' is the navigation property
+        );
+            if (therapistModel == null)
+            {
+                return response.SetNotFound(therapistId);
+            }
+            else
+            {
+                var formattedDob = therapistModel.Dob.Date.ToString("dd/MM/yyyy");
+                var therapistResponse = mapper.Map<ResponseTherapist>(therapistModel);
+                therapistResponse.Dob = formattedDob;
+                return response.SetOk(therapistResponse);
+            }
+
+
         }
 
         public async Task<ApiResponse> UpdateTherapistAsync(UpdatePersonRequest updateTherapist)

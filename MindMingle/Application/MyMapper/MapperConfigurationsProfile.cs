@@ -124,8 +124,8 @@ namespace Application.MyMapper
             // Ánh xạ từ AppointmentRequest sang Appointment (dùng cho Create)
             CreateMap<AppointmentRequest, Appointment>()
                 .ForMember(dest => dest.AppointmentId, opt => opt.Ignore()) // Tự sinh trong service
-                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())    // Tự đặt trong service
-                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // Chỉ ánh xạ nếu có giá trị
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());    // Tự đặt trong service
+                //.ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // Chỉ ánh xạ nếu có giá trị
 
             // Ánh xạ từ AppointmentUpdateRequest sang Appointment (dùng cho Update)
             CreateMap<AppointmentUpdateRequest, Appointment>()

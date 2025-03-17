@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Domain.Entity;
 
 namespace Application.Response
 {
-	public class ResponseTherapist
-	{
+    public class ResponseTherapist
+    {
         [Key]
         required public string TherapistId { get; set; }
         public required string AccountId { get; set; } // Fk
@@ -18,6 +19,8 @@ namespace Application.Response
         public required string Dob { get; set; }
         [Required]
         public required string Gender { get; set; }
+        public required double PricePerHour { get; set; }
+        public ResponseAccount? Account {get;set;}
     }
 }
 

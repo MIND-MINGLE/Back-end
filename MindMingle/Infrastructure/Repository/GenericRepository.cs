@@ -91,9 +91,15 @@ namespace Infrastructure.Repository
             return await db.FirstOrDefaultAsync(filter);
         }
 
-        Task<T> IGenericRepository<T>.GetAsync(System.Linq.Expressions.Expression<Func<T, bool>> filter, Func<IQueryable<T>, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<T, object>>? include)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> filter,
+        Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = db;
+            if (include != null)
+            {
+                query = include(query);
+            }
+            return await query.FirstOrDefaultAsync(filter);
         }
 
         public async Task<T> RemoveByIdAsync(object id)

@@ -12,27 +12,24 @@ namespace Application.Service
 {
     public class AppointmentService : IAppointmentService
     {
-        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IUnitOfWorks unitOfWorks;
         private readonly IMapper _mapper;
 
-        public AppointmentService(IAppointmentRepository appointmentRepository, IMapper mapper)
+        public AppointmentService(IUnitOfWorks unitOfWorks, IMapper mapper)
         {
-            _appointmentRepository = appointmentRepository;
+            this.unitOfWorks = unitOfWorks;
             _mapper = mapper;
         }
 
         public async Task<ApiResponse> CreateAppointmentAsync(AppointmentRequest request)
         {
-            if (request == null)
-                return new ApiResponse().SetBadRequest(message: "Request data is null");
-
             try
             {
                 var appointment = _mapper.Map<Appointment>(request);
                 appointment.AppointmentId = Guid.NewGuid().ToString(); // Tự sinh Guid cho AppointmentId
                 appointment.CreatedAt = DateTime.UtcNow;
-
-                await _appointmentRepository.AddAsync(appointment);
+                await unitOfWorks.AppointmentRepo.AddAsync(appointment);
+                await unitOfWorks.SaveChangeAsync();
                 var response = _mapper.Map<AppointmentResponse>(appointment);
                 return new ApiResponse().SetOk(response);
             }
@@ -49,7 +46,7 @@ namespace Application.Service
 
             try
             {
-                var appointment = await _appointmentRepository.GetAsync(a => a.AppointmentId == appointmentId);
+                var appointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
                 if (appointment == null)
                     return new ApiResponse().SetNotFound("Appointment not found");
 
@@ -69,7 +66,7 @@ namespace Application.Service
 
             try
             {
-                var appointments = await _appointmentRepository.GetAppointmentsByPatientIdAsync(patientId, pageIndex, pageSize);
+                var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.PatientId == patientId);
                 var response = _mapper.Map<List<AppointmentResponse>>(appointments);
                 return new ApiResponse().SetOk(response);
             }
@@ -86,7 +83,7 @@ namespace Application.Service
 
             try
             {
-                var appointments = await _appointmentRepository.GetAppointmentsByTherapistIdAsync(therapistId, pageIndex, pageSize);
+                var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.TherapistId == therapistId);
                 var response = _mapper.Map<List<AppointmentResponse>>(appointments);
                 return new ApiResponse().SetOk(response);
             }
@@ -103,28 +100,28 @@ namespace Application.Service
 
             try
             {
-                var appointment = await _appointmentRepository.GetAsync(a => a.AppointmentId == appointmentId);
+                var appointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
                 if (appointment == null)
                     return new ApiResponse().SetNotFound("Appointment not found");
 
                 // Cập nhật các field nếu có trong request
                 if (request.CoWorkingSpaceId != null)
-                    await _appointmentRepository.UpdateFieldAsync(appointmentId, a => a.CoWorkingSpaceId, request.CoWorkingSpaceId);
+                    await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.CoWorkingSpaceId, request.CoWorkingSpaceId);
                 if (request.SessionId != null)
-                    await _appointmentRepository.UpdateFieldAsync(appointmentId, a => a.SessionId, request.SessionId);
+                    await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.SessionId, request.SessionId);
                 if (request.EmergencyEndId != null)
-                    await _appointmentRepository.UpdateFieldAsync(appointmentId, a => a.EmergencyEndId, request.EmergencyEndId);
+                    await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.EmergencyEndId, request.EmergencyEndId);
                 if (request.AppointmentType.HasValue)
-                    await _appointmentRepository.UpdateFieldAsync(appointmentId, a => a.AppointmentType, request.AppointmentType.Value);
+                    await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.AppointmentType, request.AppointmentType.Value);
                 if (request.Status.HasValue)
-                    await _appointmentRepository.UpdateFieldAsync(appointmentId, a => a.Status, request.Status.Value);
+                    await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.Status, request.Status.Value);
                 if (request.TotalFee.HasValue)
-                    await _appointmentRepository.UpdateFieldAsync(appointmentId, a => a.TotalFee, request.TotalFee.Value);
+                    await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.TotalFee, request.TotalFee.Value);
                 if (request.PlatformFee.HasValue)
-                    await _appointmentRepository.UpdateFieldAsync(appointmentId, a => a.PlatformFee, request.PlatformFee.Value);
+                    await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.PlatformFee, request.PlatformFee.Value);
 
                 // Lấy lại entity đã cập nhật để trả về
-                var updatedAppointment = await _appointmentRepository.GetAsync(a => a.AppointmentId == appointmentId);
+                var updatedAppointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
                 var response = _mapper.Map<AppointmentResponse>(updatedAppointment);
                 return new ApiResponse().SetOk(response);
             }
@@ -141,7 +138,7 @@ namespace Application.Service
 
             try
             {
-                var appointment = await _appointmentRepository.RemoveByIdAsync(appointmentId);
+                var appointment = await unitOfWorks.AppointmentRepo.RemoveByIdAsync(appointmentId);
                 var response = _mapper.Map<AppointmentResponse>(appointment);
                 return new ApiResponse().SetOk(response);
             }

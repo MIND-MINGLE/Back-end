@@ -19,6 +19,7 @@ namespace Application
         public ICategoryRepository CategoryRepo { get; }
         public IAnswerRepository AnswerRepo { get; }
         public ISessionRepository SessionRepo { get; }
+        public IAppointmentRepository AppointmentRepo { get; }
 
         //TODO
 
