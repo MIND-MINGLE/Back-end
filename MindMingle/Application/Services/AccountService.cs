@@ -1,6 +1,7 @@
 ﻿using System;
 using Application.Interface;
 using Application.IRepository;
+using Application.Request.Account;
 using Application.Response;
 using AutoMapper;
 using Domain.Entity;
@@ -59,7 +60,26 @@ namespace Application.Services
                 return apiResponse.SetBadRequest(ex);
             }
         }
-	}
+
+        public async Task<ApiResponse> UpdateAvatarAsync(AvatarRequest newAvatar)
+        {
+            ApiResponse apiResponse = new ApiResponse();
+            try
+            {
+                var newAva = mapper.Map<Account>(newAvatar);
+                await unitOfWorks.AccountRepo.UpdateFieldAsync(newAvatar, c => c, newAva);
+                if (newAva == null)
+                {
+                    return apiResponse.SetNotFound("Account not found");
+                }
+                return apiResponse.SetOk("Avatar updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return apiResponse.SetBadRequest(ex);
+            }
+        }
+    }
 }
 
 // TOFIX

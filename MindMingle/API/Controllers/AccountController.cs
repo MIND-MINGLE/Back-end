@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application.Response;
 using Application.Interface;
+using Application.Request.Account;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,6 +32,13 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllAccount()
         {
             var response = await accountService.GetAllAccounts();
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPut("updateavatar")]
+        public async Task<IActionResult> UpdateAvatar([FromBody] AvatarRequest newAvatar)
+        {
+            var response = await accountService.UpdateAvatarAsync(newAvatar);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }

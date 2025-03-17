@@ -110,7 +110,10 @@ namespace Application.MyMapper
              .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
               .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true));
             CreateMap<Session, ResponseSession>();
-            
+
+            CreateMap<AvatarRequest, Account>()
+                .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))
+                .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => src.AccountId));
         }
     }
 }
