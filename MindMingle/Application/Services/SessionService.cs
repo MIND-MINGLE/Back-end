@@ -120,20 +120,20 @@ namespace Application.Services
             }
         }
 
-        async public Task<ApiResponse> UpdateSession(UpdateSessionRequest updateSessionRequest)
+        public async Task<ApiResponse> UpdateSession(UpdateSessionRequest updateSessionRequest)
         {
-            // Create a new API Response everytime the api route is called
             ApiResponse apiResponse = new ApiResponse();
             try
             {
-                var sessionModel = await unitOfWorks.SessionRepo.GetAsync(x => x.SessionId.Equals(updateSessionRequest.SessionId));
+                var sessionModel = await unitOfWorks.SessionRepo.GetAsync(x => x.SessionId == updateSessionRequest.SessionId);
                 if (sessionModel == null)
                 {
                     return apiResponse.SetNotFound("No Session Found");
                 }
-                sessionModel = mapper.Map<Session>(updateSessionRequest);
+
+                mapper.Map(updateSessionRequest, sessionModel); // Maps request onto existing entity
                 await unitOfWorks.SaveChangeAsync();
-                //Console.WriteLine($"Fetch data complete: {resSession.Count}");
+
                 return apiResponse.SetOk(sessionModel);
             }
             catch (Exception ex)

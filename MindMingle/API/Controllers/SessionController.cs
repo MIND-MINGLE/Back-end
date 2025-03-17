@@ -33,7 +33,7 @@ namespace API.Controllers
             }
             return Ok(result);
         }
-        [HttpPost("update")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateSession([FromBody] UpdateSessionRequest request)
         {
             var result = await sessionService.UpdateSession(request);
