@@ -63,6 +63,7 @@ builder.Services.AddScoped<IChatMessageService, ChatMessageService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
 
 builder.Services.AddScoped<IPatientSurveyService, PatientSurveyService>();
 builder.Services.AddScoped<IPatientResponseService, PatientResponseService>();

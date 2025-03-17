@@ -21,6 +21,8 @@
     <None Remove="Response\ChatMessage\" />
     <None Remove="Response\ChatGroup\" />
     <None Remove="Request\Therapist\" />
+    <None Remove="Request\Appointment\" />
+    <None Remove="Request\Session\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Request\Role\" />
@@ -31,6 +33,8 @@
     <Folder Include="Response\ChatMessage\" />
     <Folder Include="Response\ChatGroup\" />
     <Folder Include="Request\Therapist\" />
+    <Folder Include="Request\Appointment\" />
+    <Folder Include="Request\Session\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />

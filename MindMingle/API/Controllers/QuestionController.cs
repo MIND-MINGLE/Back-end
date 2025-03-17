@@ -49,7 +49,7 @@ namespace API.Controllers
         }
 
         [HttpGet("question/{questionId}")]
-        public async Task<IActionResult> GetQuestionById(string questionId)
+        public async Task<IActionResult> GetQuestionById([FromRoute]string questionId)
         {
             var result = await _questionService.GetQuestionById(questionId);
             if (!result.IsSuccess)

@@ -23,6 +23,7 @@ using Application.Response.PatientResponse;
 using Application.Request.Answer;
 using Application.Request.PatientSurvey;
 using Application.Response.PatientSurvey;
+using Application.Request.Session;
 
 namespace Application.MyMapper
 {
@@ -102,6 +103,14 @@ namespace Application.MyMapper
             // Ánh xạ từ PatientSurvey sang PatientSurveyResponse
             CreateMap<PatientSurvey, PatientSurveyResponse>()
                 .ForMember(dest => dest.PatientResponses, opt => opt.MapFrom(src => src.PatientResponses));
+            // Appointment
+
+            //Session
+            CreateMap<CreateSessionRequest, Session>()
+             .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
+              .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true));
+            CreateMap<Session, ResponseSession>();
+            
         }
     }
 }
