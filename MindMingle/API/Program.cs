@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using API.Middleware;
 using Application.IRepository;
 using Infrastructure.Repository;
+using Application.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration.Get<AppSetting>();
@@ -47,6 +48,8 @@ builder.Services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
 // Đăng ký Repository 
 builder.Services.AddScoped<IPatientResponseRepository, PatientResponseRepository>();
 builder.Services.AddScoped<IPatientSurveyRepository, PatientSurveyRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
 
 // Đăng ký Services 
 builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
@@ -64,6 +67,8 @@ builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+
 
 builder.Services.AddScoped<IPatientSurveyService, PatientSurveyService>();
 builder.Services.AddScoped<IPatientResponseService, PatientResponseService>();

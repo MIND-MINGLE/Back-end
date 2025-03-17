@@ -24,6 +24,8 @@ using Application.Request.Answer;
 using Application.Request.PatientSurvey;
 using Application.Response.PatientSurvey;
 using Application.Request.Session;
+using Application.Request.Appointment;
+using Application.Response.Appointment;
 
 namespace Application.MyMapper
 {
@@ -119,6 +121,33 @@ namespace Application.MyMapper
 
             CreateMap<UpdatePersonRequest, Therapist>()
                 .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.DateOfBirth));
+            // Ánh xạ từ AppointmentRequest sang Appointment (dùng cho Create)
+            CreateMap<AppointmentRequest, Appointment>()
+                .ForMember(dest => dest.AppointmentId, opt => opt.Ignore()) // Tự sinh trong service
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())    // Tự đặt trong service
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // Chỉ ánh xạ nếu có giá trị
+
+            // Ánh xạ từ AppointmentUpdateRequest sang Appointment (dùng cho Update)
+            CreateMap<AppointmentUpdateRequest, Appointment>()
+                .ForMember(dest => dest.AppointmentId, opt => opt.Ignore())
+                .ForMember(dest => dest.PatientId, opt => opt.Ignore())
+                .ForMember(dest => dest.TherapistId, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // Chỉ cập nhật các field có giá trị
+
+            // Ánh xạ từ Appointment sang AppointmentResponse (dùng cho Get)
+            CreateMap<Appointment, AppointmentResponse>()
+                .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.AppointmentId))
+                .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
+                .ForMember(dest => dest.TherapistId, opt => opt.MapFrom(src => src.TherapistId))
+                .ForMember(dest => dest.CoWorkingSpaceId, opt => opt.MapFrom(src => src.CoWorkingSpaceId))
+                .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => src.SessionId))
+                .ForMember(dest => dest.EmergencyEndId, opt => opt.MapFrom(src => src.EmergencyEndId))
+                .ForMember(dest => dest.AppointmentType, opt => opt.MapFrom(src => src.AppointmentType))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.TotalFee, opt => opt.MapFrom(src => src.TotalFee))
+                .ForMember(dest => dest.PlatformFee, opt => opt.MapFrom(src => src.PlatformFee))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
         }
     }
 }
