@@ -32,6 +32,12 @@ namespace API.Controllers
             var response = await therapistservice.GetTherapistByAccountIdAsync(accountId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+        [HttpGet("getall")]
+        public async Task<IActionResult> GetAllTherapist()
+        {
+            var response = await therapistservice.GetAllTherapistAsync();
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
 
 
         [HttpPut("update")]
