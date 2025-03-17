@@ -110,7 +110,11 @@ namespace Application.MyMapper
              .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
               .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true));
             CreateMap<Session, ResponseSession>();
-            
+            CreateMap<UpdateSessionRequest, Session>()
+                 .ForMember(dest => dest.SessionId, opt => opt.Ignore())
+                .ForMember(dest=>dest.TherapistId, opt => opt.Ignore())
+                .ForMember(dest => dest.DayOfWeek, opt => opt.Ignore());
+
         }
     }
 }

@@ -33,6 +33,16 @@ namespace API.Controllers
             }
             return Ok(result);
         }
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateSession([FromBody] UpdateSessionRequest request)
+        {
+            var result = await sessionService.UpdateSession(request);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
         [HttpDelete("delete/{sessionId}")]
         public async Task<IActionResult> DeleteQuestion([FromRoute] string sessionId)
         {

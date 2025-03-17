@@ -11,6 +11,7 @@ namespace Application.Interface
         Task<ApiResponse> DeleteSession(string sessionId);
         Task<ApiResponse> GetSessionByTherapistId(string therapistId);
         Task<ApiResponse> CreateSession(CreateSessionRequest createSessionRequest);
+        Task<ApiResponse> UpdateSession(UpdateSessionRequest updateSessionRequest);
     }
 }
 
