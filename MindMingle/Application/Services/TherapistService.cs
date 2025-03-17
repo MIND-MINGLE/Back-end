@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Interface;
+using Application.Request.Account;
 using Application.Request.Therapist;
 using Application.Response;
 using AutoMapper;
@@ -58,6 +59,36 @@ namespace Application.Services
             }
 
             return response.SetOk(therapistModel);
+        }
+
+        public async Task<ApiResponse> UpdateTherapistAsync(UpdatePersonRequest updateTherapist)
+        {
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                var therapist = await unitOfWorks.TherapistRepo.GetAsync(x => x.TherapistId == updateTherapist.Id);
+                if (therapist == null)
+                {
+                    response.SetBadRequest("Therapist profile not found.");
+                    return response;
+                }
+
+                mapper.Map(updateTherapist, therapist);
+                await unitOfWorks.TherapistRepo.UpdateFieldsAsync(therapist.TherapistId, new Dictionary<string, object>
+            {
+                { nameof(therapist.FirstName), therapist.FirstName },
+                { nameof(therapist.LastName), therapist.LastName },
+                { nameof(therapist.Dob), therapist.Dob },
+                { nameof(therapist.Gender), therapist.Gender },
+                { nameof(therapist.PhoneNumber), therapist.PhoneNumber }
+            });
+                await unitOfWorks.SaveChangeAsync();
+                return response.SetOk(updateTherapist);
+            }
+            catch (Exception ex)
+            {
+                return response.SetBadRequest(ex);
+            }
         }
     }   
 }

@@ -113,6 +113,12 @@ namespace Application.MyMapper
                  .ForMember(dest => dest.SessionId, opt => opt.Ignore())
                 .ForMember(dest=>dest.TherapistId, opt => opt.Ignore())
                 .ForMember(dest => dest.DayOfWeek, opt => opt.Ignore());
+
+            CreateMap<UpdatePersonRequest, Patient>()
+                .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.DateOfBirth));
+
+            CreateMap<UpdatePersonRequest, Therapist>()
+                .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.DateOfBirth));
         }
     }
 }

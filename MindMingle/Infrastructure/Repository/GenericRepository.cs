@@ -185,6 +185,74 @@ namespace Infrastructure.Repository
             }
             throw new ArgumentException("Invalid property expression", nameof(propertyExpression));
         }
+
+        public async Task UpdateFieldsAsync<TKey>(TKey id, Dictionary<string, object> fieldsToUpdate)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id), "ID cannot be null");
+            }
+
+            if (fieldsToUpdate == null || !fieldsToUpdate.Any())
+            {
+                throw new ArgumentNullException(nameof(fieldsToUpdate), "Fields to update cannot be null or empty");
+            }
+
+            try
+            {
+                // Find the entity by ID
+                var entity = await db.FindAsync(id);
+                if (entity == null)
+                {
+                    throw new Exception($"Entity with ID {id} not found");
+                }
+
+                // Get the entry for tracking changes
+                var entry = mMDbContext.Entry(entity);
+
+                // Update each field
+                foreach (var field in fieldsToUpdate)
+                {
+                    var propertyName = field.Key;
+                    var newValue = field.Value;
+
+                    // Verify the property exists
+                    var propertyInfo = typeof(T).GetProperty(propertyName);
+                    if (propertyInfo == null)
+                    {
+                        throw new Exception($"Property {propertyName} not found on type {typeof(T).Name}");
+                    }
+
+                    // Convert the value to the correct type
+                    try
+                    {
+                        var convertedValue = newValue == null
+                            ? null
+                            : Convert.ChangeType(newValue, propertyInfo.PropertyType);
+                        propertyInfo.SetValue(entity, convertedValue);
+
+                        // Mark the property as modified
+                        entry.Property(propertyName).IsModified = true;
+                    }
+                    catch (FormatException ex)
+                    {
+                        throw new Exception($"Failed to convert value for property {propertyName}: {ex.Message}");
+                    }
+                    catch (InvalidCastException ex)
+                    {
+                        throw new Exception($"Invalid cast for property {propertyName}: {ex.Message}");
+                    }
+                }
+
+                // Save changes to database
+                await mMDbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UpdateFieldsAsync: {ex.Message}");
+                throw;
+            }
+        }
     }
 }
 
