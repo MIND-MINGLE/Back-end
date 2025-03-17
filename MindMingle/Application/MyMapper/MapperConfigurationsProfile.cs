@@ -32,11 +32,9 @@ namespace Application.MyMapper
         public MapperConfigurationsProfile()
         {
             //Account
+           
             CreateMap<Account, ResponseAccount>();
             CreateMap<Account, RequestAccount>();
-            //Role
-            CreateMap<Role, ResponseRole>();
-
             //Patient
             CreateMap<CreateNewPatientRequest, Patient>()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));  // Tạo GUID mới

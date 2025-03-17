@@ -9,6 +9,6 @@ namespace Application.Request.Account
     public class AvatarRequest
     {
         required public string AccountId { get; set; }
-        required public string? NewAvatar { get; set; }
+        required public string? Avatar { get; set; }
     }
 }

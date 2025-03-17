@@ -38,6 +38,11 @@ namespace API.Controllers
         [HttpPut("updateavatar")]
         public async Task<IActionResult> UpdateAvatar([FromBody] AvatarRequest newAvatar)
         {
+            if (newAvatar == null)
+            {
+                return BadRequest(new ApiResponse().SetBadRequest("Request body is null"));
+            }
+            Console.WriteLine($"Received Request - AccountId: {newAvatar.AccountId}, NewAvatar: {newAvatar.Avatar}");
             var response = await accountService.UpdateAvatarAsync(newAvatar);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
