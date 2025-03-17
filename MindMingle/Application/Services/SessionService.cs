@@ -119,6 +119,28 @@ namespace Application.Services
                 return apiResponse.SetBadRequest(ex);
             }
         }
+
+        public async Task<ApiResponse> UpdateSession(UpdateSessionRequest updateSessionRequest)
+        {
+            ApiResponse apiResponse = new ApiResponse();
+            try
+            {
+                var sessionModel = await unitOfWorks.SessionRepo.GetAsync(x => x.SessionId == updateSessionRequest.SessionId);
+                if (sessionModel == null)
+                {
+                    return apiResponse.SetNotFound("No Session Found");
+                }
+
+                mapper.Map(updateSessionRequest, sessionModel); // Maps request onto existing entity
+                await unitOfWorks.SaveChangeAsync();
+
+                return apiResponse.SetOk(sessionModel);
+            }
+            catch (Exception ex)
+            {
+                return apiResponse.SetBadRequest(ex);
+            }
+        }
     }
 }
 

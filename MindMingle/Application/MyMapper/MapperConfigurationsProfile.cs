@@ -109,9 +109,10 @@ namespace Application.MyMapper
               .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true));
             CreateMap<Session, ResponseSession>();
 
-            CreateMap<AvatarRequest, Account>()
-                .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))
-                .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => src.AccountId));
+            CreateMap<UpdateSessionRequest, Session>()
+                 .ForMember(dest => dest.SessionId, opt => opt.Ignore())
+                .ForMember(dest=>dest.TherapistId, opt => opt.Ignore())
+                .ForMember(dest => dest.DayOfWeek, opt => opt.Ignore());
         }
     }
 }

@@ -4,10 +4,11 @@ using Domain.Entity;
 
 namespace Application.Request.Session
 {
-	public class UpdateSessionRequest
+	public class CreateSessionRequest
 	{
+
         [Required]
-        public required string SessionId { get; set; }
+        public required string TherapistId { get; set; }
 
         [Required]
         public DateTime StartTime { get; set; }
@@ -15,6 +16,8 @@ namespace Application.Request.Session
         [Required]
         public DateTime EndTime { get; set; }
 
+
+        public required DaysOfWeek DayOfWeek { get; set; } // e.g., "Monday"
     }
    
 }
