@@ -1,6 +1,7 @@
 ﻿using System;
 using Application.Interface;
 using Application.IRepository;
+using Application.Request.Account;
 using Application.Response;
 using AutoMapper;
 using Domain.Entity;
@@ -59,7 +60,43 @@ namespace Application.Services
                 return apiResponse.SetBadRequest(ex);
             }
         }
-	}
+
+        public async Task<ApiResponse> UpdateAvatarAsync(AvatarRequest newAvatar)
+        {
+            ApiResponse apiResponse = new ApiResponse();
+            if (newAvatar == null || string.IsNullOrEmpty(newAvatar.AccountId))
+            {
+                return apiResponse.SetBadRequest(message: "AvatarRequest or AccountId is required");
+            }
+
+            try
+            {
+                var existingAccount = await unitOfWorks.AccountRepo.GetAsync(a => a.AccountId == newAvatar.AccountId);
+                if (existingAccount == null)
+                {
+                    return apiResponse.SetNotFound("Account not found");
+                }
+
+
+                // Kiểm tra và cập nhật
+                if (string.IsNullOrEmpty(newAvatar.Avatar))
+                {
+                    return apiResponse.SetBadRequest(message: "NewAvatar is required or cannot be empty");
+                }
+
+                await unitOfWorks.AccountRepo.UpdateFieldAsync(newAvatar.AccountId, a => a.Avatar!, newAvatar.Avatar);
+
+                // Xác nhận giá trị sau cập nhật
+                var updatedAccount = await unitOfWorks.AccountRepo.GetAsync(a => a.AccountId == newAvatar.AccountId);
+
+                return apiResponse.SetOk("Avatar updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return apiResponse.SetBadRequest(message: ex.Message);
+            }
+        }
+    }
 }
 
 // TOFIX

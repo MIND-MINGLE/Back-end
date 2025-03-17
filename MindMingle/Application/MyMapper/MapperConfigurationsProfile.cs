@@ -32,11 +32,9 @@ namespace Application.MyMapper
         public MapperConfigurationsProfile()
         {
             //Account
+           
             CreateMap<Account, ResponseAccount>();
             CreateMap<Account, RequestAccount>();
-            //Role
-            CreateMap<Role, ResponseRole>();
-
             //Patient
             CreateMap<CreateNewPatientRequest, Patient>()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));  // Tạo GUID mới
@@ -110,11 +108,11 @@ namespace Application.MyMapper
              .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
               .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => true));
             CreateMap<Session, ResponseSession>();
+
             CreateMap<UpdateSessionRequest, Session>()
                  .ForMember(dest => dest.SessionId, opt => opt.Ignore())
                 .ForMember(dest=>dest.TherapistId, opt => opt.Ignore())
                 .ForMember(dest => dest.DayOfWeek, opt => opt.Ignore());
-
         }
     }
 }

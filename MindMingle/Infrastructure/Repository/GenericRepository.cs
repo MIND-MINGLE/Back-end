@@ -110,6 +110,81 @@ namespace Infrastructure.Repository
                     throw new Exception();
                 }
         }
+
+        public async Task UpdateAsync(T entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), "Entity cannot be null");
+            }
+
+            try
+            {
+                db.Update(entity); // Đánh dấu thực thể là Modified
+                await mMDbContext.SaveChangesAsync(); // Lưu các thay đổi vào cơ sở dữ liệu
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UpdateAsync: {ex.Message}");
+                throw; // Ném lại ngoại lệ để xử lý ở tầng trên
+            }
+        }
+
+        public async Task UpdateFieldAsync<TKey>(TKey id, Expression<Func<T, object>> propertyExpression, object newValue)
+        {
+            if (id == null || propertyExpression == null || newValue == null)
+            { 
+                throw new ArgumentNullException("ID, property expression, or new value cannot be null");
+            }
+
+            try
+            {
+                // Tìm entity theo ID
+                var entity = await db.FindAsync(id);
+                if (entity == null)
+                {
+                    throw new Exception($"Entity with ID {id} not found");
+                }
+
+                // Lấy tên thuộc tính từ biểu thức lambda
+                var propertyName = GetPropertyName(propertyExpression);
+
+                // Cập nhật giá trị cho field được chỉ định
+                var propertyInfo = typeof(T).GetProperty(propertyName);
+                if (propertyInfo == null)
+                {
+                    throw new Exception($"Property {propertyName} not found on type {typeof(T).Name}");
+                }
+
+                // Đảm bảo giá trị mới phù hợp với kiểu của thuộc tính
+                var convertedValue = Convert.ChangeType(newValue, propertyInfo.PropertyType);
+                propertyInfo.SetValue(entity, convertedValue);
+
+                // Đánh dấu chỉ field này là Modified
+                mMDbContext.Entry(entity).Property(propertyName).IsModified = true;
+
+                // Lưu thay đổi vào cơ sở dữ liệu
+                await mMDbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UpdateFieldAsync: {ex.Message}");
+                throw;
+            }
+        }
+
+        private string GetPropertyName(Expression<Func<T, object>> propertyExpression)
+        {
+            if (propertyExpression.Body is MemberExpression memberExpression)
+            {
+                return memberExpression.Member.Name;
+            }
+            else if (propertyExpression.Body is UnaryExpression unaryExpression && unaryExpression.Operand is MemberExpression unaryMemberExpression)
+            {
+                return unaryMemberExpression.Member.Name;
+            }
+            throw new ArgumentException("Invalid property expression", nameof(propertyExpression));
+        }
     }
 }
 

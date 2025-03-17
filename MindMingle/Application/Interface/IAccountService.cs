@@ -1,4 +1,5 @@
 ﻿using System;
+using Application.Request.Account;
 using Application.Response;
 
 namespace Application.Interface
@@ -7,6 +8,8 @@ namespace Application.Interface
 	{
         public Task<ApiResponse> GetAllAccounts();
 		public Task<ApiResponse> GetAccountById(string accountId);
+		public Task<ApiResponse> UpdateAvatarAsync(AvatarRequest newAvatar);
+        
     }
 }
 
