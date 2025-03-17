@@ -1,4 +1,5 @@
 ﻿using Application.Interface;
+using Application.Request.Account;
 using Application.Request.Patient;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,17 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllPatients()
         {
             var result = await _patientService.GetAllPatientsAsync();
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdatePatient([FromBody] UpdatePersonRequest request)
+        {
+            var result = await _patientService.UpdatePatientAsync(request);
             if (!result.IsSuccess)
             {
                 return BadRequest(result);

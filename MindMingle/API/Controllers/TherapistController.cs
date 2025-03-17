@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Interface;
+using Application.Request.Account;
 using Application.Request.Therapist;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,14 @@ namespace API.Controllers
         public async Task<IActionResult> FindTherapistByAccountId([FromRoute] string accountId)
         {
             var response = await therapistservice.GetTherapistByAccountIdAsync(accountId);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateTherapist([FromBody] UpdatePersonRequest request)
+        {
+            var response = await therapistservice.UpdateTherapistAsync(request);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }

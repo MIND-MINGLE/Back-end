@@ -1,4 +1,5 @@
-﻿using Application.Request.Patient;
+﻿using Application.Request.Account;
+using Application.Request.Patient;
 using Application.Response;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace Application.Interface
 		Task<ApiResponse> AddNewPatient(CreateNewPatientRequest newPatient);
 		Task<ApiResponse> GetPatientByAccountIdAsync(string accountId);
 		Task<ApiResponse> GetAllPatientsAsync();
+		Task<ApiResponse> UpdatePatientAsync(UpdatePersonRequest updatePatient);
     }
 }

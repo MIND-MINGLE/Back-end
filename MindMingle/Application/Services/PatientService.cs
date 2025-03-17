@@ -1,4 +1,5 @@
 ﻿using Application.Interface;
+using Application.Request.Account;
 using Application.Request.Patient;
 using Application.Response;
 using AutoMapper;
@@ -28,19 +29,19 @@ namespace Application.Services
 
 			//Check if account was create
 			var patientAccount = await _unitOfWorks.AccountRepo.GetAsync(x => x.AccountId == newPatient.AccountId);
-			if(patientAccount == null )
+			if (patientAccount == null)
 			{
 				response.SetBadRequest(message: "Account not found nor created!");
 				return response;
 			}
 
 			//Create new patient
-            var patient = _mapper.Map<Patient>(newPatient);
+			var patient = _mapper.Map<Patient>(newPatient);
 			await _unitOfWorks.PatientRepo.AddAsync(patient);
 			await _unitOfWorks.SaveChangeAsync();
-            response.SetOk(newPatient);
-            //Console.WriteLine("Fixing Bug");
-            return response;
+			response.SetOk(newPatient);
+			//Console.WriteLine("Fixing Bug");
+			return response;
 		}
 
 		public async Task<ApiResponse> GetAllPatientsAsync()
@@ -62,7 +63,7 @@ namespace Application.Services
 			}
 		}
 
-        public async Task<ApiResponse> GetPatientByAccountIdAsync(string accountId)
+		public async Task<ApiResponse> GetPatientByAccountIdAsync(string accountId)
 		{
 			ApiResponse response = new ApiResponse();
 
@@ -75,8 +76,38 @@ namespace Application.Services
 			var formattedDob = patient.Dob.Date.ToString("dd/MM/yyyy");
 			var responsePatient = _mapper.Map<ResponsePatient>(patient);
 			responsePatient.Dob = formattedDob;
-            response.SetOk(responsePatient);
+			response.SetOk(responsePatient);
 			return response;
 		}
+
+        public async Task<ApiResponse> UpdatePatientAsync(UpdatePersonRequest updatePatient)
+        {
+            ApiResponse response = new ApiResponse();
+            try
+			{
+                var patient = await _unitOfWorks.PatientRepo.GetAsync(x => x.PatientId == updatePatient.Id);
+                if (patient == null)
+                {
+                    response.SetBadRequest("Patient profile not found.");
+                    return response;
+                }
+
+                _mapper.Map(updatePatient, patient);
+                await _unitOfWorks.PatientRepo.UpdateFieldsAsync(patient.PatientId, new Dictionary<string, object>
+            {
+                { nameof(patient.FirstName), patient.FirstName },
+                { nameof(patient.LastName), patient.LastName },
+                { nameof(patient.Dob), patient.Dob },
+                { nameof(patient.Gender), patient.Gender },
+                { nameof(patient.PhoneNumber), patient.PhoneNumber }
+            });
+                await _unitOfWorks.SaveChangeAsync();
+                return response.SetOk(updatePatient);
+            }
+			catch (Exception ex)
+            {
+                return response.SetBadRequest(ex);
+            }
+        }
 	}
 }
