@@ -19,7 +19,7 @@ namespace Application.Request.Appointment
 
         public required string SessionId { get; set; }
 
-        public required string EmergencyEndId { get; set; }
+        public string EmergencyEndId { get; set; }
 
         public AppointmentType AppointmentType { get; set; } // e.g., "Online", "Offline"
 

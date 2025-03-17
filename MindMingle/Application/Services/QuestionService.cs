@@ -52,7 +52,7 @@ namespace Application.Services
             await _unitOfWorks.QuestionRepo.RemoveByIdAsync(question);
             response.SetOk(question);
             return response;
-        }
+        }   
 
         public async Task<ApiResponse> GetAllQuestions()
         {
