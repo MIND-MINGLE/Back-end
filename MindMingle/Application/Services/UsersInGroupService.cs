@@ -79,39 +79,60 @@ namespace Application.Services
             }
         }
 
-        public async Task<ApiResponse> GetGroupChatListByClientId(string AccountId)
+        public async Task<ApiResponse> GetGroupChatListByClientId(string accountId)
         {
             ApiResponse response = new ApiResponse();
             try
             {
-                var userInGroupModel = await unitOfWorks.UsersInGroupRepo.GetAllAsync(ug => ug.ClientId == AccountId);
+                // Get the caller's group memberships
+                var userInGroupModel = await unitOfWorks.UsersInGroupRepo.GetAllAsync(
+                    ug => ug.ClientId == accountId,
+                    q => q.Include(ug => ug.Accounts) // Include client’s Account
+                );
+
                 if (userInGroupModel.Count == 0)
                 {
                     return response.SetNotFound("Empty Group Chat");
                 }
-                else
+
+                // Determine if the caller is a therapist
+                var callerAccount = await unitOfWorks.AccountRepo.GetAsync(
+                    a => a.AccountId == accountId,
+                    q => q.Include(a => a.Therapist) // Include Therapist details if exists
+                );
+                bool isTherapist = callerAccount?.Therapist != null;
+
+                // Get chat group IDs
+                var chatgroupList = userInGroupModel.Select(cg => cg.ChatGroupId).ToList();
+                var chatGroupResponses = await unitOfWorks.ChatGroupRepo.GetAllAsync(
+                    cg => chatgroupList.Contains(cg.Id),
+                    q => q.Include(cg => cg.Account).ThenInclude(a => a.Therapist) // Admin’s Account and Therapist
+                          .Include(cg => cg.UsersInGroups).ThenInclude(ug => ug.Accounts).ThenInclude(a => a.Patient) // Clients’ Accounts and Patient
+                );
+
+                var chatGroupWithAdmins = chatGroupResponses.Select(cg =>
                 {
-                    // There is no way I am doing extra 3 repos DB calling just to fetch a NAME for therapist admin. I'm gonna use LINQ - Language-Integrated Query of EFCore
-                    var chatgroupList = userInGroupModel.Select(cg => cg.ChatGroupId).ToList();
-                    var chatGroupResponses = await unitOfWorks.ChatGroupRepo.GetAllAsync(cg => chatgroupList.Contains(cg.Id));
-                    //Console.WriteLine("chatGroupResponses: ", chatGroupResponses);
-                    var therapistList = await unitOfWorks.TherapistRepo.GetAllAsync(null); // Await this before using
-                    var chatGroupWithAdmins = from cg in chatGroupResponses
-                                              join t in therapistList on cg.AdminId equals t.AccountId
-                                              join ug in userInGroupModel on cg.Id equals ug.ChatGroupId
-                                              select new ChatGroupResponse
-                                              {
-                                                  ChatGroupId = cg.Id,
-                                                  AdminId = cg.AdminId,
-                                                  AdminName = t.FirstName + " " + t.LastName,
-                                                  UserInGroupId = ug.UsersInGroupId
-                                              };
+                    // For therapist POV, find a patient client (excluding the caller)
+                    var patientClient = isTherapist
+                        ? cg.UsersInGroups.FirstOrDefault(ug => ug.Accounts.Patient != null && ug.ClientId != accountId)
+                        : null;
 
+                    return new ChatGroupResponse
+                    {
+                        ChatGroupId = cg.Id,
+                        AdminId = cg.AdminId,
+                        AdminName = isTherapist
+                            ? patientClient != null
+                                ? patientClient.Accounts.AccountName // Therapist POV: Patient’s AccountName
+                                : "No Patient Client" // Fallback
+                            : cg.Account.Therapist != null
+                                ? $"{cg.Account.Therapist.FirstName} {cg.Account.Therapist.LastName}" // Patient POV: Therapist’s FirstName LastName
+                                : cg.Account.AccountName, // Fallback if admin isn’t a therapist
+                        UserInGroupId = userInGroupModel.First(ug => ug.ChatGroupId == cg.Id).UsersInGroupId,
+                    };
+                }).ToList();
 
-                    var result = chatGroupWithAdmins.ToList();
-                    return response.SetOk(result.Count == 0 ? "No Therapy Exist" : result);
-                }
-
+                return response.SetOk(chatGroupWithAdmins.Any() ? chatGroupWithAdmins : new List<ChatGroupResponse>());
             }
             catch (Exception ex)
             {
@@ -119,7 +140,7 @@ namespace Application.Services
             }
         }
 
-       public async Task<string> GetGroupChatByUsersInGroup(string userInGroupId)
+        public async Task<string> GetGroupChatByUsersInGroup(string userInGroupId)
         {
             ApiResponse response = new ApiResponse();
             var chatgroupId = await unitOfWorks.UsersInGroupRepo.GetAsync(ug => ug.UsersInGroupId == userInGroupId);
