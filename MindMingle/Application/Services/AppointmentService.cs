@@ -39,6 +39,7 @@ namespace Application.Service
             }
         }
 
+
         public async Task<ApiResponse> GetAppointmentByIdAsync(string appointmentId)
         {
             if (string.IsNullOrEmpty(appointmentId))
@@ -66,7 +67,7 @@ namespace Application.Service
 
             try
             {
-                var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.PatientId == patientId);
+                var appointments = await unitOfWorks.AppointmentRepo.GetAllAsync(a => a.PatientId == patientId);
                 var response = _mapper.Map<List<AppointmentResponse>>(appointments);
                 return new ApiResponse().SetOk(response);
             }
