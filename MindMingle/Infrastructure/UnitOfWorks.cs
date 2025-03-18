@@ -26,6 +26,7 @@ namespace Infrastructure
 		public IAnswerRepository AnswerRepo { get; }
 		public ISessionRepository SessionRepo { get; }
         public IAppointmentRepository AppointmentRepo { get; }
+		public ICredentialRepository CredentialRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
@@ -44,6 +45,7 @@ namespace Infrastructure
             AnswerRepo = new AnswerRepository(mMDbContext);
             SessionRepo = new SessionRepository(mMDbContext);
             AppointmentRepo = new AppointmentRepository(mMDbContext);
+            CredentialRepo = new CredentialRepository(mMDbContext);
         }
 		public async Task SaveChangeAsync()
 		{

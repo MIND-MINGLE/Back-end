@@ -26,6 +26,7 @@ using Application.Response.PatientSurvey;
 using Application.Request.Session;
 using Application.Request.Appointment;
 using Application.Response.Appointment;
+using Application.Request.Credential;
 
 namespace Application.MyMapper
 {
@@ -148,6 +149,9 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.TotalFee, opt => opt.MapFrom(src => src.TotalFee))
                 .ForMember(dest => dest.PlatformFee, opt => opt.MapFrom(src => src.PlatformFee))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
+
+            CreateMap<CredentialRequest, Credentials>()
+                .ForMember(dest => dest.CredentialsId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
         }
     }
 }
