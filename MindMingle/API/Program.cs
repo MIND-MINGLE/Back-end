@@ -69,6 +69,7 @@ builder.Services.AddScoped<IAnswerService, AnswerService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<ICredentialService, CredentialService>();
+builder.Services.AddScoped<IEmergencyEndService, EmergencyEndService>();
 
 
 builder.Services.AddScoped<IPatientSurveyService, PatientSurveyService>();

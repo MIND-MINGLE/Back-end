@@ -19,7 +19,9 @@ namespace Application
         public ICategoryRepository CategoryRepo { get; }
         public IAnswerRepository AnswerRepo { get; }
         public ISessionRepository SessionRepo { get; }
+        public IAppointmentRepository AppointmentRepo { get; }
         public ICredentialRepository CredentialRepo { get; }
+        public IEmergencyEndRepository EmergencyEndRepo { get; }
         //TODO
 
         //public Task<T> ExecuteScalarAsync<T>(string sql);

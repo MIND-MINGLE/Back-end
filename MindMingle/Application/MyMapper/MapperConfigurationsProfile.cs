@@ -27,6 +27,7 @@ using Application.Request.Session;
 using Application.Request.Appointment;
 using Application.Response.Appointment;
 using Application.Request.Credential;
+using Application.Request.EmergencyEnd;
 
 namespace Application.MyMapper
 {
@@ -152,6 +153,9 @@ namespace Application.MyMapper
 
             CreateMap<CredentialRequest, Credentials>()
                 .ForMember(dest => dest.CredentialsId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+
+            CreateMap<EmergencyEndRequest, EmergencyEnd>()
+                .ForMember(dest => dest.EmergencyEndId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
         }
     }
 }
