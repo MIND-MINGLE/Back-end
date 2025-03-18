@@ -41,8 +41,11 @@ namespace Application.Services
 				return response;
 			}
 
-			//var claims =  _claimService.GetClaim();
-			var token = _tokenService.CreateToken(user);
+			user.LastLogin = DateTime.Now;
+            await _unitOfWorks.SaveChangeAsync();
+
+            //var claims =  _claimService.GetClaim();
+            var token = _tokenService.CreateToken(user);
 			response.SetOk(token);
 			return response;
 		}
@@ -60,6 +63,7 @@ namespace Application.Services
 				response.SetBadRequest(message: "Invalid Code!!");
 				return response;
 			}
+
 
 			//Check if the code has expired
 			if(verified.ExpiresAt < DateTime.Now)
