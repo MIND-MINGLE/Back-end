@@ -20,6 +20,7 @@ namespace Application
         public IAnswerRepository AnswerRepo { get; }
         public ISessionRepository SessionRepo { get; }
         public ICredentialRepository CredentialRepo { get; }
+        public IAppointmentRepository AppointmentRepo { get; }
         //TODO
 
         //public Task<T> ExecuteScalarAsync<T>(string sql);
