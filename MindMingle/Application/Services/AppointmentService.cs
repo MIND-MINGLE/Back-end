@@ -84,9 +84,26 @@ namespace Application.Service
 
             try
             {
-                var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.TherapistId == therapistId);
+                var appointments = await unitOfWorks.AppointmentRepo.GetAllAsync(a => a.TherapistId == therapistId);
                 var response = _mapper.Map<List<AppointmentResponse>>(appointments);
                 return new ApiResponse().SetOk(response);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse().SetBadRequest(message: $"Error fetching appointments: {ex.Message}");
+            }
+        }
+        public async Task<ApiResponse> GetCurrentAppointments(string therapistId, string patientId)
+        {
+            ApiResponse apiResponse = new ApiResponse();
+            if (string.IsNullOrEmpty(therapistId))
+                return apiResponse.SetBadRequest(message: "TherapistId is required");
+
+            try
+            {
+                var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.TherapistId == therapistId && a.PatientId == patientId && (!a.Status.Equals("Declined") && !a.Status.Equals("Canceled")));
+                var response = _mapper.Map<AppointmentResponse>(appointments);
+                return response!=null?apiResponse.SetOk(response): apiResponse.SetNotFound("No Appoinment Found");
             }
             catch (Exception ex)
             {

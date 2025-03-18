@@ -44,6 +44,13 @@ namespace API.Controllers
             var response = await _appointmentService.GetAppointmentsByTherapistIdAsync(therapistId, pageIndex, pageSize);
             return StatusCode((int)response.StatusCode, response);
         }
+        [HttpGet("{therapistId}/{patientId}")]
+        public async Task<IActionResult> GetCurrentAppointments(string therapistId,string patientId)
+        {
+            var response = await _appointmentService.GetCurrentAppointments(therapistId, patientId);
+            return StatusCode((int)response.StatusCode, response);
+        }
+        
 
         [HttpPut("{appointmentId}")]
         public async Task<IActionResult> UpdateAppointment(string appointmentId, [FromBody] AppointmentUpdateRequest request)

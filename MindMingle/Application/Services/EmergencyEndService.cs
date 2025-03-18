@@ -29,6 +29,8 @@ namespace Application.Services
             try
             {
                 var emergencyEndModel = mapper.Map<EmergencyEnd>(newEmergencyEnd);
+                emergencyEndModel.CreatedAt = DateTime.Now;
+                emergencyEndModel.UpdatedAt = DateTime.Now;
                 await unitOfWorks.EmergencyEndRepo.AddAsync(emergencyEndModel);
                 await unitOfWorks.SaveChangeAsync();
                 return response.SetOk(newEmergencyEnd);
