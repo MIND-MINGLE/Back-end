@@ -58,6 +58,12 @@ namespace API.Controllers
             var response = await _appointmentService.UpdateAppointmentAsync(appointmentId, request);
             return StatusCode((int)response.StatusCode, response);
         }
+        [HttpPut("{appointmentId}")]
+        public async Task<IActionResult> UpdateAppointmentStatus(string appointmentId, [FromBody] AppointmentUpdateStatus request)
+        {
+            var response = await _appointmentService.UpdateAppointmentStatusAsync(appointmentId, request);
+            return StatusCode((int)response.StatusCode, response);
+        }
 
         [HttpDelete("{appointmentId}")]
         public async Task<IActionResult> DeleteAppointment(string appointmentId)

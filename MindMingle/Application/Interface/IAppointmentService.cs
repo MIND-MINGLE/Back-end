@@ -17,5 +17,7 @@ namespace Application.Interface
         Task<ApiResponse> UpdateAppointmentAsync(string appointmentId, AppointmentUpdateRequest request);
         Task<ApiResponse> DeleteAppointmentAsync(string appointmentId);
         Task<ApiResponse> GetCurrentAppointments(string therapistId, string patientId);
+        Task<ApiResponse> UpdateAppointmentStatusAsync(string appointmentId, AppointmentUpdateStatus request);
+       
     }
 }

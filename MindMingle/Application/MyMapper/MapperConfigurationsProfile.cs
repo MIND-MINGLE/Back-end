@@ -136,6 +136,8 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.TherapistId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // Chỉ cập nhật các field có giá trị
+            CreateMap<AppointmentUpdateStatus, Appointment>()
+               .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // Chỉ cập nhật các field có giá trị
 
             // Ánh xạ từ Appointment sang AppointmentResponse (dùng cho Get)
             CreateMap<Appointment, AppointmentResponse>()

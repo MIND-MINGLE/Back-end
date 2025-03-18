@@ -137,7 +137,33 @@ namespace Application.Service
                     await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.TotalFee, request.TotalFee.Value);
                 if (request.PlatformFee.HasValue)
                     await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.PlatformFee, request.PlatformFee.Value);
+                await unitOfWorks.SaveChangeAsync();
+                // Lấy lại entity đã cập nhật để trả về
+                var updatedAppointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
+                var response = _mapper.Map<AppointmentResponse>(updatedAppointment);
+                return new ApiResponse().SetOk(response);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse().SetBadRequest(message: $"Error updating appointment: {ex.Message}");
+            }
+        }
+        public async Task<ApiResponse> UpdateAppointmentStatusAsync(string appointmentId, AppointmentUpdateStatus request)
+        {
+            if (string.IsNullOrEmpty(appointmentId) || request == null)
+                return new ApiResponse().SetBadRequest(message: "AppointmentId or request data is required");
 
+            try
+            {
+                var appointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
+                if (appointment == null)
+                    return new ApiResponse().SetNotFound("Appointment not found");
+
+                // Cập nhật các field nếu có trong request
+               
+                if (request.Status.HasValue)
+                    await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.Status, request.Status.Value);
+                await unitOfWorks.SaveChangeAsync();
                 // Lấy lại entity đã cập nhật để trả về
                 var updatedAppointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
                 var response = _mapper.Map<AppointmentResponse>(updatedAppointment);
