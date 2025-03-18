@@ -109,7 +109,7 @@ namespace Application.Services
 
 
                     var result = chatGroupWithAdmins.ToList();
-                    return response.SetOk(result.Count == 0 ? "No Therapy Exist" : result);
+                    return result.Count == 0?response.SetOk(result):response.SetNotFound("No Therapist Found");
                 }
 
             }
