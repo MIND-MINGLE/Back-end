@@ -103,7 +103,7 @@ namespace Application.Services
                                               {
                                                   ChatGroupId = cg.Id,
                                                   AdminId = cg.AdminId,
-                                                  AdminName = t.FirstName!=null?t.FirstName + " " + t.LastName : "Test",
+                                                  AdminName = t.FirstName + " " + t.LastName,
                                                   UserInGroupId = ug.UsersInGroupId
                                               };
 
