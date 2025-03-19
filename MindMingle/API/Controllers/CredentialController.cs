@@ -26,5 +26,38 @@ namespace API.Controllers
             }
             return Ok(result);
         }
+
+        [HttpGet("get-credentials/{therapistId}")]
+        public async Task<IActionResult> GetCredentialsByTherapistId(string therapistId)
+        {
+            var result = await _credentialService.GetCredentialsByTherapistId(therapistId);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPut("{credentialId}")]
+        public async Task<IActionResult> UpdateCredentails(string credentialId, [FromBody] UpdateCredentialRequest updateCredentialRequest)
+        {
+            var result = await _credentialService.UpdateCredentails(credentialId, updateCredentialRequest);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpDelete("disable-credentials/{credentailId}")]
+        public async Task<IActionResult> DisableCredentials(string credentailId)
+        {
+            var result = await _credentialService.DisableCredentials(credentailId);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
     }
 }

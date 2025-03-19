@@ -50,7 +50,7 @@ namespace API.Controllers
         {
             var response = await _appointmentService.UpdateAppointmentAsync(appointmentId, request);
             return StatusCode((int)response.StatusCode, response);
-        }
+        }   
 
         [HttpDelete("{appointmentId}")]
         public async Task<IActionResult> DeleteAppointment(string appointmentId)

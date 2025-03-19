@@ -47,5 +47,66 @@ namespace Application.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<ApiResponse> DisableCredentials(string credentailId)
+        {
+            ApiResponse response = new ApiResponse();
+
+            try
+            {
+                var credential = await _unitOfWorks.CredentialRepo.GetAsync(x => x.CredentialsId == credentailId);
+                if (credential == null)
+                {
+                    return response.SetNotFound(message: "Credentials not found!");
+                }
+                credential.IsDisabled = true;
+                await _unitOfWorks.SaveChangeAsync();
+                return response.SetOk("Credentials disabled successfully!");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<ApiResponse> GetCredentialsByTherapistId(string therapistId)
+        {
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                var credentials = _unitOfWorks.CredentialRepo.GetAsync(x => x.TherapistId == therapistId);
+                var credentialsList = _mapper.Map<List<RepsonseCredential>>(credentials);
+                if (credentialsList.Count == 0)
+                {
+                    return response.SetNotFound(message: "Credentials not found!");
+                }
+                return response.SetOk(credentialsList);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);    
+            }
+        }
+
+        public async Task<ApiResponse> UpdateCredentails(string credentialId, UpdateCredentialRequest updateCredentialRequest)
+        {
+            ApiResponse response = new ApiResponse();
+
+            try
+            {
+                var credential = await _unitOfWorks.CredentialRepo.GetAsync(x => x.CredentialsId == credentialId);
+                if (credential == null)
+                {
+                    return response.SetNotFound(message: "Credentials not found!");
+                }
+                await _unitOfWorks.CredentialRepo.UpdateFieldAsync(credentialId, x => x.ImageURL, updateCredentialRequest.imageUrl);
+                await _unitOfWorks.SaveChangeAsync();
+                return response.SetOk("Credentials updated successfully!");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

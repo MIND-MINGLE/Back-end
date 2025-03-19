@@ -151,11 +151,19 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.PlatformFee, opt => opt.MapFrom(src => src.PlatformFee))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
-            CreateMap<CredentialRequest, Credentials>()
+            CreateMap < CredentialRequest, Credentials>()
                 .ForMember(dest => dest.CredentialsId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
 
             CreateMap<EmergencyEndRequest, EmergencyEnd>()
                 .ForMember(dest => dest.EmergencyEndId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+
+            CreateMap<Credentials, RepsonseCredential>()
+                .ForMember(dest => dest.credentialId, opt => opt.MapFrom(src => src.CredentialsId))
+                .ForMember(dest => dest.therapistId, opt => opt.MapFrom(src => src.TherapistId))
+                .ForMember(dest => dest.imageUrl, opt => opt.MapFrom(src => src.ImageURL))
+                .ForMember(dest => dest.isDisabled, opt => opt.MapFrom(src => src.IsDisabled))
+                .ForMember(dest => dest.createdAt, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.updatedAt, opt => opt.MapFrom(src => src.UpdatedAt));
         }
     }
 }
