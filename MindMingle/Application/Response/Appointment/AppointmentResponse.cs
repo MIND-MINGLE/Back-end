@@ -20,5 +20,6 @@ namespace Application.Response.Appointment
         public double TotalFee { get; set; }
         public double PlatformFee { get; set; }
         public DateTime CreatedAt { get; set; }
+        public ResponseSession Session { get; set; } = null!;
     }
 }

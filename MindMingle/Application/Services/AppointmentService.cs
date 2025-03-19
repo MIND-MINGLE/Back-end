@@ -1,12 +1,11 @@
 ﻿using Application.Interface;
-using Application.IRepository;
 using Application.Request.Appointment;
 using Application.Response;
 using Application.Response.Appointment;
 using AutoMapper;
 using Domain.Entity;
-using System;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Application.Service
 {
@@ -67,7 +66,10 @@ namespace Application.Service
 
             try
             {
-                var appointments = await unitOfWorks.AppointmentRepo.GetAllAsync(a => a.PatientId == patientId);
+                var appointments = await unitOfWorks.AppointmentRepo.GetAllAsync(
+                    a => a.PatientId == patientId,
+                    s => s.Include(a=>a.Session)
+                    );
                 var response = _mapper.Map<List<AppointmentResponse>>(appointments);
                 return new ApiResponse().SetOk(response);
             }
@@ -84,7 +86,10 @@ namespace Application.Service
 
             try
             {
-                var appointments = await unitOfWorks.AppointmentRepo.GetAllAsync(a => a.TherapistId == therapistId);
+                var appointments = await unitOfWorks.AppointmentRepo.GetAllAsync(
+                    a => a.TherapistId == therapistId,
+                    s=>s.Include(a=>a.Session)
+                    );
                 var response = _mapper.Map<List<AppointmentResponse>>(appointments);
                 return new ApiResponse().SetOk(response);
             }
@@ -101,9 +106,11 @@ namespace Application.Service
 
             try
             {
-                var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.TherapistId == therapistId && a.PatientId == patientId && (!a.Status.Equals("Declined") && !a.Status.Equals("Canceled")));
+                var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.TherapistId == therapistId && a.PatientId == patientId && !a.Status.Equals("Declined") && !a.Status.Equals("Canceled"),
+                   s=>s.Include(a=>a.Session)
+                );
                 var response = _mapper.Map<AppointmentResponse>(appointments);
-                return response!=null?apiResponse.SetOk(response): apiResponse.SetNotFound("No Appoinment Found");
+                return response != null ? apiResponse.SetOk(response) : apiResponse.SetNotFound("No Appoinment Found");
             }
             catch (Exception ex)
             {
@@ -160,7 +167,7 @@ namespace Application.Service
                     return new ApiResponse().SetNotFound("Appointment not found");
 
                 // Cập nhật các field nếu có trong request
-               
+
                 if (request.Status.HasValue)
                     await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, a => a.Status, request.Status.Value);
                 await unitOfWorks.SaveChangeAsync();

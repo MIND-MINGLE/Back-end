@@ -19,7 +19,7 @@ namespace Application.IRepository
         Task<List<T>> GetAllAsync(System.Linq.Expressions.Expression<Func<T, bool>>? filter);
         Task<T> GetAsync(System.Linq.Expressions.Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include);
         Task<List<T>> GetAllAsync(System.Linq.Expressions.Expression<Func<T, bool>>? filter,
-                                               Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, int pageIndex = 1, int pageSize = 25);
+                                               Func<IQueryable<T>, IIncludableQueryable<T, object>>? include, int pageIndex = 1, int pageSize = 25);
         Task UpdateFieldAsync<TKey>(TKey id, Expression<Func<T, object>> propertyExpression, object newValue);
         Task UpdateFieldsAsync<TKey>(TKey id, Dictionary<string, object> fieldsToUpdate);
     }

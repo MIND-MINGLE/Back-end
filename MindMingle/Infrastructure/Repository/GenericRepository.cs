@@ -68,7 +68,7 @@ namespace Infrastructure.Repository
 
         public async Task<List<T>> GetAllAsync(
                 Expression<Func<T, bool>>? filter = null,
-                Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+                Func<IQueryable<T>, IIncludableQueryable<T, object>>? include=null,
                 int pageIndex = 1, int pageSize = 10)
         {
             IQueryable<T> query = db;

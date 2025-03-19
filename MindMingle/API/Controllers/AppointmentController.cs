@@ -58,7 +58,7 @@ namespace API.Controllers
             var response = await _appointmentService.UpdateAppointmentAsync(appointmentId, request);
             return StatusCode((int)response.StatusCode, response);
         }
-        [HttpPut("{appointmentId}")]
+        [HttpPut("status/{appointmentId}")]
         public async Task<IActionResult> UpdateAppointmentStatus(string appointmentId, [FromBody] AppointmentUpdateStatus request)
         {
             var response = await _appointmentService.UpdateAppointmentStatusAsync(appointmentId, request);
