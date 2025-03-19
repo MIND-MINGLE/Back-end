@@ -33,7 +33,8 @@ namespace Infrastructure
         public DbSet<EmergencyEnd> EmergencyEnds { get; set; }
         public DbSet<Subcription> Subcriptions { get; set; }
         public DbSet<PurchasedPackage> PurchasedPackages { get; set; }
-
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -58,6 +59,8 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new EmergencyEndConfig());
             modelBuilder.ApplyConfiguration(new PurchasedPackageConfig());
             modelBuilder.ApplyConfiguration(new SubcriptionConfig());
+            modelBuilder.ApplyConfiguration(new PaymentConfig());
+            modelBuilder.ApplyConfiguration(new RatingConfig());
 
         }
         public MMDbContext(DbContextOptions<MMDbContext> options) : base(options)

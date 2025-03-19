@@ -43,6 +43,8 @@ namespace Domain.Entity
         public Patient Patient { get; set; } = null!;
         public CoWorkingSpace? CoWorkingSpace { get; set; }
         public EmergencyEnd? EmergencyEnd { get; set; }
+        public Payment? Payments { get; set; }
+        public Rating? Ratings { get; set; }
     }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]

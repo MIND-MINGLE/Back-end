@@ -30,6 +30,8 @@ namespace Infrastructure
         public IEmergencyEndRepository EmergencyEndRepo { get; }
         public ISubcriptionRepository SubcriptionRepo { get; }
         public IPurchasedPackageRepository PurchasedPackageRepo { get; }
+        public IRatingRepository RatingRepo { get; }
+        public IPaymentRepository PaymentRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
@@ -52,6 +54,8 @@ namespace Infrastructure
             EmergencyEndRepo = new EmergencyEndRepository(mMDbContext);
 			SubcriptionRepo = new SubcriptionRepository(mMDbContext);
 			PurchasedPackageRepo = new PurchasedPackageRepository(mMDbContext);
+			RatingRepo = new RatingRepository(mMDbContext);
+			PaymentRepo = new PaymentRepository(mMDbContext);
         }
 		public async Task SaveChangeAsync()
 		{

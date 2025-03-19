@@ -24,6 +24,8 @@ namespace Application
         public IEmergencyEndRepository EmergencyEndRepo { get; }
         public ISubcriptionRepository SubcriptionRepo { get; }
         public IPurchasedPackageRepository PurchasedPackageRepo { get; }
+        public IRatingRepository RatingRepo { get; }
+        public IPaymentRepository PaymentRepo { get; }
         //TODO
 
         //public Task<T> ExecuteScalarAsync<T>(string sql);

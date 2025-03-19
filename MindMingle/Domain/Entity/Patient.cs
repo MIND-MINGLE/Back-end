@@ -24,6 +24,8 @@ namespace Domain.Entity
         // Link between Account and Patient
         public Account Account { get; set; } = null!;
         public ICollection<PatientSurvey>? PatientSurveys { get; set; }
+        public ICollection<Payment>? Payments { get; set; }
+        public ICollection<Rating>? Ratings { get; set; }
         public ICollection<Appointment> ? Appointment { get; set; }
         public ICollection<PurchasedPackage>? PurchasedPackages { get; set; } // One-to-many
 
