@@ -27,11 +27,12 @@ namespace Infrastructure
         public DbSet<PatientResponse> PatientResponses { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
-   
         public DbSet<Category> Categories { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<EmergencyEnd> EmergencyEnds { get; set; }
+        public DbSet<Subcription> Subcriptions { get; set; }
+        public DbSet<PurchasedPackage> PurchasedPackages { get; set; }
 
 
 
@@ -55,6 +56,8 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new SessionConfig());
             modelBuilder.ApplyConfiguration(new AppointmentConfig());
             modelBuilder.ApplyConfiguration(new EmergencyEndConfig());
+            modelBuilder.ApplyConfiguration(new PurchasedPackageConfig());
+            modelBuilder.ApplyConfiguration(new SubcriptionConfig());
 
         }
         public MMDbContext(DbContextOptions<MMDbContext> options) : base(options)

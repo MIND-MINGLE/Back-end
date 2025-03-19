@@ -17,5 +17,6 @@ namespace Domain.Entity
         // Navigation properties
         public Patient Patient { get; set; } = null!;
         public ICollection<PatientResponse> PatientResponses { get; set; } = null!; // One-to-many
+      
     }
 }

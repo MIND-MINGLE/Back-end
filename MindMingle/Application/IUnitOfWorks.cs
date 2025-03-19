@@ -22,6 +22,8 @@ namespace Application
         public IAppointmentRepository AppointmentRepo { get; }
         public ICredentialRepository CredentialRepo { get; }
         public IEmergencyEndRepository EmergencyEndRepo { get; }
+        public ISubcriptionRepository SubcriptionRepo { get; }
+        public IPurchasedPackageRepository PurchasedPackageRepo { get; }
         //TODO
 
         //public Task<T> ExecuteScalarAsync<T>(string sql);

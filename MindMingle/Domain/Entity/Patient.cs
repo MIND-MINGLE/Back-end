@@ -25,6 +25,7 @@ namespace Domain.Entity
         public Account Account { get; set; } = null!;
         public ICollection<PatientSurvey>? PatientSurveys { get; set; }
         public ICollection<Appointment> ? Appointment { get; set; }
+        public ICollection<PurchasedPackage>? PurchasedPackages { get; set; } // One-to-many
 
     }
 }

@@ -28,6 +28,8 @@ namespace Infrastructure
         public IAppointmentRepository AppointmentRepo { get; }
 		public ICredentialRepository CredentialRepo { get; }
         public IEmergencyEndRepository EmergencyEndRepo { get; }
+        public ISubcriptionRepository SubcriptionRepo { get; }
+        public IPurchasedPackageRepository PurchasedPackageRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
@@ -48,6 +50,8 @@ namespace Infrastructure
             AppointmentRepo = new AppointmentRepository(mMDbContext);
             CredentialRepo = new CredentialRepository(mMDbContext);
             EmergencyEndRepo = new EmergencyEndRepository(mMDbContext);
+			SubcriptionRepo = new SubcriptionRepository(mMDbContext);
+			PurchasedPackageRepo = new PurchasedPackageRepository(mMDbContext);
         }
 		public async Task SaveChangeAsync()
 		{
