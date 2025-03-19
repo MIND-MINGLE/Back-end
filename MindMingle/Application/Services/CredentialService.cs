@@ -74,7 +74,7 @@ namespace Application.Services
             ApiResponse response = new ApiResponse();
             try
             {
-                var credentials = _unitOfWorks.CredentialRepo.GetAsync(x => x.TherapistId == therapistId);
+                var credentials = await _unitOfWorks.CredentialRepo.GetAllAsync(x => x.TherapistId == therapistId);
                 var credentialsList = _mapper.Map<List<RepsonseCredential>>(credentials);
                 if (credentialsList.Count == 0)
                 {
