@@ -123,10 +123,10 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.DayOfWeek, opt => opt.Ignore());
 
             CreateMap<UpdatePersonRequest, Patient>()
-                .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.DateOfBirth));
+                .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.Dob));
 
             CreateMap<UpdatePersonRequest, Therapist>()
-                .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.DateOfBirth));
+                .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => src.Dob));
             // Ánh xạ từ AppointmentRequest sang Appointment (dùng cho Create)
             CreateMap<AppointmentRequest, Appointment>()
                 .ForMember(dest => dest.AppointmentId, opt => opt.Ignore()) // Tự sinh trong service
