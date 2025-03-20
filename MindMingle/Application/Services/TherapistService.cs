@@ -115,20 +115,27 @@ namespace Application.Services
             ApiResponse response = new ApiResponse();
             try
             {
-                var therapistList = await unitOfWorks.TherapistRepo.GetAllAsync(null);
+                var therapistList = await unitOfWorks.TherapistRepo.GetAllAsync(null,
+                    x => x.Include(t => t.Account)
+                    );
                 var therapistResponseList = new List<ResponseTherapist>();
-                foreach (Therapist therapist in therapistList)
-                {
-                    var formattedDob = therapist.Dob.Date.ToString("dd/MM/yyyy");
-                    var therapistResponse = mapper.Map<ResponseTherapist>(therapist);
-                    therapistResponse.Dob = formattedDob;
-                    therapistResponseList.Add(therapistResponse);
-                }
+                    foreach (Therapist therapist in therapistList)
+                    {
+                        var formattedDob = therapist.Dob.Date.ToString("dd/MM/yyyy");
+                        var therapistResponse = mapper.Map<ResponseTherapist>(therapist);
+                        therapistResponse.Dob = formattedDob;
+                        therapistResponseList.Add(therapistResponse);
+                    }
                 return response.SetOk(therapistResponseList);
             }
             catch (Exception ex)
             {
-                return response.SetBadRequest(ex);
+                string errorMessage = $"Error fetching therapists: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    errorMessage += $". Details: {ex.InnerException.Message}";
+                }
+                return response.SetBadRequest(errorMessage);
             }
         }
     }   

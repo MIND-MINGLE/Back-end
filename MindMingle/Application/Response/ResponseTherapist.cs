@@ -18,6 +18,8 @@ namespace Application.Response
         [Required]
         public required string Dob { get; set; }
         [Required]
+        public string? Description { get; set; }
+        [Required]
         public required string Gender { get; set; }
         public required double PricePerHour { get; set; }
         public ResponseAccount? Account {get;set;}
