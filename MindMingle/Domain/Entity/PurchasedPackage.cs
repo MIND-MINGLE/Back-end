@@ -13,7 +13,7 @@ namespace Domain.Entity
         public required DateTime StartDate { get; set; }
         public required DateTime EndDate { get; set; }
 
-        public required Subcription Subcription { get; set; }
+        public required Subscription Subscription { get; set; }
         public required Patient Patient { get; set; }
     }
 }

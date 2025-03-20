@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entity
 {
-	public class Subcription:Norms
+	public class Subscription:Norms
 	{
         [Key]
-        public required string SubcriptionId { get; set; }
+        public required string SubscriptionId { get; set; }
         public required string PackageName { get; set; }
         public required double Price { get; set; }
 

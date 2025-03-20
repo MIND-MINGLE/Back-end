@@ -16,7 +16,7 @@ namespace Infrastructure.Configuration
             builder.HasOne(r => r.Patient)
              .WithMany(ap => ap.PurchasedPackages)
              .HasForeignKey(ap => ap.PatientId);
-            builder.HasOne(r => r.Subcription)
+            builder.HasOne(r => r.Subscription)
             .WithMany(t => t.PurchasedPackages)
             .HasForeignKey(s => s.SubscriptionId);
         }

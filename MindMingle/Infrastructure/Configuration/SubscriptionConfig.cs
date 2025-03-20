@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configuration
 {
-	public class SubcriptionConfig: IEntityTypeConfiguration<Subcription>
+	public class SubscriptionConfig: IEntityTypeConfiguration<Subscription>
     {
-		public SubcriptionConfig()
+		public SubscriptionConfig()
 		{
 		}
-        public void Configure(EntityTypeBuilder<Subcription> builder)
+        public void Configure(EntityTypeBuilder<Subscription> builder)
         {
-            builder.HasKey(a => a.SubcriptionId);
+            builder.HasKey(a => a.SubscriptionId);
             builder.HasMany(r => r.PurchasedPackages)
-             .WithOne(ap => ap.Subcription)
+             .WithOne(ap => ap.Subscription)
              .HasForeignKey(ap => ap.SubscriptionId);
         }
     }

@@ -46,7 +46,7 @@ namespace Application.Services
 
             try
             {
-                var purchasedPackages = await _unitOfWork.PurchasedPackageRepo.GetAllAsync(null, x => x.Include(p => p.Subcription));
+                var purchasedPackages = await _unitOfWork.PurchasedPackageRepo.GetAllAsync(null, x => x.Include(p => p.Subscription));
                 if (purchasedPackages.Count() == 0)
                 {
                     return response.SetNotFound("Purchased packages not found!");
@@ -65,12 +65,12 @@ namespace Application.Services
             try
             {
                 ApiResponse response = new ApiResponse();
-                var purchasedPackages = await _unitOfWork.PurchasedPackageRepo.GetAsync(x => x.PatientId == patientId, x => x.Include(p => p.Subcription));
+                var purchasedPackages = await _unitOfWork.PurchasedPackageRepo.GetAsync(x => x.PatientId == patientId, x => x.Include(p => p.Subscription));
                 if (purchasedPackages == null)
                 {
                     return response.SetNotFound("Purchased packages not found!");
                 }
-                var resPurchasedPackages = _mapper.Map<List<ResponsePurchasedPackage>>(purchasedPackages);
+                var resPurchasedPackages = _mapper.Map<ResponsePurchasedPackage>(purchasedPackages);
                 return response.SetOk(resPurchasedPackages);
             }
             catch (Exception ex)

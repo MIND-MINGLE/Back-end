@@ -1,6 +1,7 @@
 ﻿using Application.Interface;
 using Application.Request.Subcription;
 using Application.Response;
+using Application.Response.Subcription;
 using AutoMapper;
 using Domain.Entity;
 using System;
@@ -27,8 +28,8 @@ namespace Application.Services
 
             try
             {
-                var subcription = _mapper.Map<Subcription>(subRequest);
-                await unitOfWorks.SubcriptionRepo.AddAsync(subcription);
+                var subscription = _mapper.Map<Subscription>(subRequest);
+                await unitOfWorks.SubscriptionRepo.AddAsync(subscription);
                 await unitOfWorks.SaveChangeAsync();
                 return response.SetOk(subRequest);
             }
@@ -44,7 +45,7 @@ namespace Application.Services
 
             try
             {
-                var subcription = await unitOfWorks.SubcriptionRepo.GetAsync(x => x.SubcriptionId == id);
+                var subcription = await unitOfWorks.SubscriptionRepo.GetAsync(x => x.SubscriptionId == id);
                 if (subcription == null)
                 {
                     return response.SetNotFound("Subcription not found!");
@@ -65,8 +66,8 @@ namespace Application.Services
 
             try
             {
-                var subcriptions = await unitOfWorks.SubcriptionRepo.GetAllAsync(null);
-                var resSubcriptions = _mapper.Map<List<ResponseSubcription>>(subcriptions);
+                var subcriptions = await unitOfWorks.SubscriptionRepo.GetAllAsync(null);
+                var resSubcriptions = _mapper.Map<List<ResponseSubscription>>(subcriptions);
                 return response.SetOk(subcriptions);
             }
             catch (Exception ex)
@@ -81,7 +82,7 @@ namespace Application.Services
 
             try
             {
-                var subcription = await unitOfWorks.SubcriptionRepo.GetAsync(x => x.SubcriptionId == id);
+                var subcription = await unitOfWorks.SubscriptionRepo.GetAsync(x => x.SubscriptionId == id);
                 if (subcription == null)
                 {
                     return response.SetNotFound("Subcription not found!");

@@ -31,7 +31,7 @@ namespace Infrastructure
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<EmergencyEnd> EmergencyEnds { get; set; }
-        public DbSet<Subcription> Subcriptions { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<PurchasedPackage> PurchasedPackages { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Rating> Ratings { get; set; }
@@ -58,7 +58,7 @@ namespace Infrastructure
             modelBuilder.ApplyConfiguration(new AppointmentConfig());
             modelBuilder.ApplyConfiguration(new EmergencyEndConfig());
             modelBuilder.ApplyConfiguration(new PurchasedPackageConfig());
-            modelBuilder.ApplyConfiguration(new SubcriptionConfig());
+            modelBuilder.ApplyConfiguration(new SubscriptionConfig());
             modelBuilder.ApplyConfiguration(new PaymentConfig());
             modelBuilder.ApplyConfiguration(new RatingConfig());
 

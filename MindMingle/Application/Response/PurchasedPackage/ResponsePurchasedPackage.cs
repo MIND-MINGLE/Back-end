@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Response.Subcription;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,6 @@ namespace Application.Response.PurchasedPackage
         public string SubscriptionId { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime StartDate { get; set; }
-        public ResponseSubcription Subcription { get; set; } // Add this property
+        public ResponseSubscription Subscription { get; set; } // Add this property
     }
 }
