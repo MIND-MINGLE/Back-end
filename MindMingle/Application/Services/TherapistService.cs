@@ -58,9 +58,8 @@ namespace Application.Services
                 therapistResponse.Dob = formattedDob;
                 return response.SetOk(therapistResponse);
             }
-
-          
         }
+
         public async Task<ApiResponse> GetTherapistByTherapistIdAsync(string therapistId)
         {
             ApiResponse response = new ApiResponse();
@@ -79,8 +78,6 @@ namespace Application.Services
                 therapistResponse.Dob = formattedDob;
                 return response.SetOk(therapistResponse);
             }
-
-
         }
 
         public async Task<ApiResponse> UpdateTherapistAsync(UpdatePersonRequest updateTherapist)

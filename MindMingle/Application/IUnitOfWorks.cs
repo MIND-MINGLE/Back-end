@@ -22,7 +22,7 @@ namespace Application
         public IAppointmentRepository AppointmentRepo { get; }
         public ICredentialRepository CredentialRepo { get; }
         public IEmergencyEndRepository EmergencyEndRepo { get; }
-        public ISubcriptionRepository SubcriptionRepo { get; }
+        public ISubscriptionRepository SubcriptionRepo { get; }
         public IPurchasedPackageRepository PurchasedPackageRepo { get; }
         public IRatingRepository RatingRepo { get; }
         public IPaymentRepository PaymentRepo { get; }

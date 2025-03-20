@@ -28,6 +28,10 @@ using Application.Request.Appointment;
 using Application.Response.Appointment;
 using Application.Request.Credential;
 using Application.Request.EmergencyEnd;
+using Application.Request.Subcription;
+using Application.Request.PurchasedPackage;
+using Application.Response.PurchasedPackage;
+using Application.Response.Subcription;
 
 namespace Application.MyMapper
 {
@@ -166,6 +170,25 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.isDisabled, opt => opt.MapFrom(src => src.IsDisabled))
                 .ForMember(dest => dest.createdAt, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(dest => dest.updatedAt, opt => opt.MapFrom(src => src.UpdatedAt));
+
+            CreateMap<SubscriptionRequest, Subcription>()
+                .ForMember(dest => dest.SubcriptionId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+
+            CreateMap<Subcription, ResponseSubscription>()
+                .ForMember(dest => dest.SubscriptionId, opt => opt.MapFrom(src => src.SubcriptionId))
+                .ForMember(dest => dest.PackageName, opt => opt.MapFrom(src => src.PackageName))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
+
+            CreateMap<PurchasedPackageRequest, PurchasedPackage>()
+                .ForMember(dest => dest.PurchasedPackageId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+
+            CreateMap<PurchasedPackage, ResponsePurchasedPackage>()
+                .ForMember(dest => dest.PurchasedPackageId, opt => opt.MapFrom(src => src.PurchasedPackageId))
+                .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
+                .ForMember(dest => dest.SubscriptionId, opt => opt.MapFrom(src => src.SubscriptionId))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.Subcription, opt => opt.MapFrom(src => src.Subcription));
         }
     }
 }

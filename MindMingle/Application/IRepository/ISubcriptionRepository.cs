@@ -3,7 +3,7 @@ using Domain.Entity;
 
 namespace Application.IRepository
 {
-	public interface ISubcriptionRepository: IGenericRepository<Subcription>
+	public interface ISubscriptionRepository: IGenericRepository<Subcription>
     {
 
 	}

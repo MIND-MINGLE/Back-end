@@ -16,7 +16,7 @@ namespace API.Controllers
             _credentialService = credentialService;
         }
 
-        [HttpPost("add-credentials")]
+        [HttpPost]
         public async Task<IActionResult> AddNewCredentials(CredentialRequest newCredentials)
         {
             var result = await _credentialService.AddNewCredentials(newCredentials);
@@ -27,7 +27,7 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("get-credentials/{therapistId}")]
+        [HttpGet("{therapistId}")]
         public async Task<IActionResult> GetCredentialsByTherapistId(string therapistId)
         {
             var result = await _credentialService.GetCredentialsByTherapistId(therapistId);
@@ -49,7 +49,7 @@ namespace API.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("disable-credentials/{credentailId}")]
+        [HttpDelete("{credentailId}")]
         public async Task<IActionResult> DisableCredentials(string credentailId)
         {
             var result = await _credentialService.DisableCredentials(credentailId);

@@ -28,7 +28,7 @@ namespace Infrastructure
         public IAppointmentRepository AppointmentRepo { get; }
 		public ICredentialRepository CredentialRepo { get; }
         public IEmergencyEndRepository EmergencyEndRepo { get; }
-        public ISubcriptionRepository SubcriptionRepo { get; }
+        public ISubscriptionRepository SubcriptionRepo { get; }
         public IPurchasedPackageRepository PurchasedPackageRepo { get; }
         public IRatingRepository RatingRepo { get; }
         public IPaymentRepository PaymentRepo { get; }
@@ -52,7 +52,7 @@ namespace Infrastructure
             AppointmentRepo = new AppointmentRepository(mMDbContext);
             CredentialRepo = new CredentialRepository(mMDbContext);
             EmergencyEndRepo = new EmergencyEndRepository(mMDbContext);
-			SubcriptionRepo = new SubcriptionRepository(mMDbContext);
+			SubcriptionRepo = new SubscriptionRepository(mMDbContext);
 			PurchasedPackageRepo = new PurchasedPackageRepository(mMDbContext);
 			RatingRepo = new RatingRepository(mMDbContext);
 			PaymentRepo = new PaymentRepository(mMDbContext);

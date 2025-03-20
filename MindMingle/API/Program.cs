@@ -70,6 +70,8 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<ICredentialService, CredentialService>();
 builder.Services.AddScoped<IEmergencyEndService, EmergencyEndService>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+builder.Services.AddScoped<IPurchasedPackageService, PurchasedPackageService>();
 
 
 builder.Services.AddScoped<IPatientSurveyService, PatientSurveyService>();
