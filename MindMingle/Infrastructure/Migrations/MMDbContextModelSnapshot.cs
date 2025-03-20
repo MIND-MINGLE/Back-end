@@ -640,9 +640,9 @@ namespace Infrastructure.Migrations
                     b.ToTable("Sessions");
                 });
 
-            modelBuilder.Entity("Domain.Entity.Subcription", b =>
+            modelBuilder.Entity("Domain.Entity.Subscription", b =>
                 {
-                    b.Property<string>("SubcriptionId")
+                    b.Property<string>("SubscriptionId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -661,9 +661,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("SubcriptionId");
+                    b.HasKey("SubscriptionId");
 
-                    b.ToTable("Subcriptions");
+                    b.ToTable("Subscriptions");
                 });
 
             modelBuilder.Entity("Domain.Entity.Therapist", b =>
@@ -1113,7 +1113,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("Appointments");
                 });
 
-            modelBuilder.Entity("Domain.Entity.Subcription", b =>
+            modelBuilder.Entity("Domain.Entity.Subscription", b =>
                 {
                     b.Navigation("PurchasedPackages");
                 });
