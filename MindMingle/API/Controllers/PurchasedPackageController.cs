@@ -30,8 +30,8 @@ namespace API.Controllers
             return response.IsSuccess ? Ok(response) : NotFound(response);
         }
 
-        [HttpGet("patientId")]
-        public async Task<IActionResult> GetPurchasedPackageByPatientIdAsync(string patientId)
+        [HttpGet("{patientId}")]
+        public async Task<IActionResult> GetPurchasedPackageByPatientIdAsync([FromRoute]string patientId)
         {
             var response = await _purchasedPackageService.GetPurchasedPackageByPatientIdAsync(patientId);
             return response.IsSuccess ? Ok(response) : NotFound(response);

@@ -182,7 +182,10 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
 
             CreateMap<PurchasedPackageRequest, PurchasedPackage>()
-                .ForMember(dest => dest.PurchasedPackageId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+                .ForMember(dest => dest.PurchasedPackageId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src=>DateTime.UtcNow))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => DateTime.UtcNow.AddMonths(1)))
+            ;
 
             CreateMap<PurchasedPackage, ResponsePurchasedPackage>();
 
