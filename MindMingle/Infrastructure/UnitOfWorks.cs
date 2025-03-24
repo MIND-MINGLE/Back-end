@@ -32,6 +32,7 @@ namespace Infrastructure
         public IPurchasedPackageRepository PurchasedPackageRepo { get; }
         public IRatingRepository RatingRepo { get; }
         public IPaymentRepository PaymentRepo { get; }
+		public ISpecializationRepository SpecializationRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
@@ -56,6 +57,7 @@ namespace Infrastructure
 			PurchasedPackageRepo = new PurchasedPackageRepository(mMDbContext);
 			RatingRepo = new RatingRepository(mMDbContext);
 			PaymentRepo = new PaymentRepository(mMDbContext);
+			SpecializationRepo = new SpecializationRepository(mMDbContext);
         }
 		public async Task SaveChangeAsync()
 		{

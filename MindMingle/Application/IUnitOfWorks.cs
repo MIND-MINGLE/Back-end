@@ -7,7 +7,6 @@ namespace Application
 	{
         public IAccountRepository AccountRepo { get; }
         public IRoleRepository RoleRepo { get; }
-
         public ITwilioRepository TwilioRepo { get; }
         public IEmailVerificationRepository EmailVerificationRepo { get; }
         public IPatientRepository PatientRepo { get; }
@@ -26,6 +25,7 @@ namespace Application
         public IPurchasedPackageRepository PurchasedPackageRepo { get; }
         public IRatingRepository RatingRepo { get; }
         public IPaymentRepository PaymentRepo { get; }
+        public ISpecializationRepository SpecializationRepo { get; }
         //TODO
 
         //public Task<T> ExecuteScalarAsync<T>(string sql);
