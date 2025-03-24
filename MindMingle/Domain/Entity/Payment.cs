@@ -14,7 +14,6 @@ namespace Domain.Entity
         public required double Amount { get; set; }
         public required double TherapistReceive { get; set; }
         public required string PaymentUrl { get; set; }
-        public required string TransactionId { get; set; }
         public required PaymentMethod PaymentMethod { get; set; }
         public required PaymentStatus PaymentStatus { get; set; }
 
@@ -34,8 +33,6 @@ namespace Domain.Entity
     {
         [EnumMember(Value = "Pending")]
         PENDING,
-        [EnumMember(Value = "AwaitingConfirmation")]
-        AWAITING_CONFIRMATION,
         [EnumMember(Value = "Paid")]
         PAID,
         [EnumMember(Value = "Canceled")]
