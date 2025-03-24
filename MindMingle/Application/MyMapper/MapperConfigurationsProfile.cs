@@ -36,6 +36,8 @@ using Application.Request.Rating;
 using Application.Response.Rating;
 using Application.Request.Specialization;
 using Application.Response.Specialization;
+using Application.Request.Payment;
+using Application.Response.Payment;
 
 namespace Application.MyMapper
 {
@@ -200,6 +202,14 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.SpecializationId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
 
             CreateMap<Specialization, ResponseSpecialization>();
+            //Payment Mapper
+
+            // Ánh xạ từ PaymentRequest sang Payment
+            CreateMap<PaymentRequest, Payment>()
+                .ForMember(dest => dest.PaymentId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
+                .ForMember(dest => dest.Patient, opt => opt.Ignore()) // Sẽ gán sau
+                .ForMember(dest => dest.Appointment, opt => opt.Ignore());
+            CreateMap<Payment, PaymentResponse>();
         }
     }
 }
