@@ -38,6 +38,8 @@ using Application.Request.Specialization;
 using Application.Response.Specialization;
 using Application.Response.TherapistSpecialization;
 using Application.Request.Therapist_Specialization;
+using Application.Request.Payment;
+using Application.Response.Payment;
 
 namespace Application.MyMapper
 {
@@ -210,6 +212,14 @@ namespace Application.MyMapper
 
             CreateMap<Therapist_Specialization, ResponseDetailTherapistSpecialization>();
 
+            //Payment Mapper
+
+            // Ánh xạ từ PaymentRequest sang Payment
+            CreateMap<PaymentRequest, Payment>()
+                .ForMember(dest => dest.PaymentId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
+                .ForMember(dest => dest.Patient, opt => opt.Ignore()) // Sẽ gán sau
+                .ForMember(dest => dest.Appointment, opt => opt.Ignore());
+            CreateMap<Payment, PaymentResponse>();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Domain.Entity
         public string? AppointmentId { get; set; }
         public required double Amount { get; set; }
         public required double TherapistReceive { get; set; }
-        public required string PaymentUrl { get; set; }
+        public string? PaymentUrl { get; set; }
         public required PaymentMethod PaymentMethod { get; set; }
         public required PaymentStatus PaymentStatus { get; set; }
 

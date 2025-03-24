@@ -73,6 +73,7 @@ builder.Services.AddScoped<IEmergencyEndService, EmergencyEndService>();
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 builder.Services.AddScoped<IPurchasedPackageService, PurchasedPackageService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<ISpecializationService, SpecializationService>();
 builder.Services.AddScoped<ITherapistSpecializationService, TherapistSpecializationService>();
 
