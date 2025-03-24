@@ -50,12 +50,19 @@ namespace Application.Services
 			try
 			{
 				var patientsModel = await _unitOfWorks.PatientRepo.GetAllAsync(null);
-				var resPatients = _mapper.Map<List<ResponsePatient>>(patientsModel);
-				if (resPatients.Count == 0)
+			
+				if (patientsModel.Count == 0)
 				{
 					return response.SetNotFound("No patient profile found.");
 				}
-				return response.SetOk(resPatients);
+				List<ResponsePatient> listPatientRes = new List<ResponsePatient>();
+				foreach(Patient patient in patientsModel) {
+					var formattedDob = patient.Dob.Date.ToString("dd/MM/yyyy");
+					var resPatient = _mapper.Map<ResponsePatient>(patient);
+					resPatient.Dob = formattedDob;
+					listPatientRes.Add(resPatient);
+                };
+                return response.SetOk(listPatientRes);
 			}
 			catch (Exception ex)
 			{

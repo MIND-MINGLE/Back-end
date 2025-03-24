@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
