@@ -75,7 +75,7 @@ builder.Services.AddScoped<IPurchasedPackageService, PurchasedPackageService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<ISpecializationService, SpecializationService>();
-
+builder.Services.AddScoped<ITherapistSpecializationService, TherapistSpecializationService>();
 
 builder.Services.AddScoped<IPatientSurveyService, PatientSurveyService>();
 builder.Services.AddScoped<IPatientResponseService, PatientResponseService>();

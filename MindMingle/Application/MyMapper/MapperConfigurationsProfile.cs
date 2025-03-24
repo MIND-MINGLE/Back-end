@@ -36,6 +36,8 @@ using Application.Request.Rating;
 using Application.Response.Rating;
 using Application.Request.Specialization;
 using Application.Response.Specialization;
+using Application.Response.TherapistSpecialization;
+using Application.Request.Therapist_Specialization;
 using Application.Request.Payment;
 using Application.Response.Payment;
 
@@ -202,6 +204,14 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.SpecializationId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
 
             CreateMap<Specialization, ResponseSpecialization>();
+
+            CreateMap<TherapistSpecializationRequest, Therapist_Specialization>()
+                .ForMember(dest => dest.Therapist_SpecializationId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+
+            CreateMap<Therapist_Specialization, ResponseTherapistSpecialization>();
+
+            CreateMap<Therapist_Specialization, ResponseDetailTherapistSpecialization>();
+
             //Payment Mapper
 
             // Ánh xạ từ PaymentRequest sang Payment

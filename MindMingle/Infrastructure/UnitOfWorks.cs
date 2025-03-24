@@ -33,6 +33,7 @@ namespace Infrastructure
         public IRatingRepository RatingRepo { get; }
         public IPaymentRepository PaymentRepo { get; }
 		public ISpecializationRepository SpecializationRepo { get; }
+        public ITherapistSpecializationRepository TherapistSpecializationRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
@@ -58,6 +59,7 @@ namespace Infrastructure
 			RatingRepo = new RatingRepository(mMDbContext);
 			PaymentRepo = new PaymentRepository(mMDbContext);
 			SpecializationRepo = new SpecializationRepository(mMDbContext);
+            TherapistSpecializationRepo = new TherapistSpecializationRepository(mMDbContext);
         }
 		public async Task SaveChangeAsync()
 		{
