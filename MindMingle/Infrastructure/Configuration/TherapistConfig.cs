@@ -1,7 +1,6 @@
 ﻿using Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.Entity;
 
 namespace Infrastructure.Configuration
 {
@@ -30,6 +29,9 @@ namespace Infrastructure.Configuration
             builder.HasMany(t => t.Credentials)
                 .WithOne(t => t.Therapist)
                 .HasForeignKey(t => t.CredentialsId);
+            builder.HasMany(t => t.Therapist_Specializations)
+             .WithOne(t => t.Therapist)
+             .HasForeignKey(t => t.TherapistId);
         }
     }
 }
