@@ -34,6 +34,8 @@ using Application.Response.PurchasedPackage;
 using Application.Response.Subcription;
 using Application.Request.Rating;
 using Application.Response.Rating;
+using Application.Request.Specialization;
+using Application.Response.Specialization;
 
 namespace Application.MyMapper
 {
@@ -193,6 +195,11 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.RatingId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
 
             CreateMap<Rating, ResponseRating>();
+
+            CreateMap<SpecializationRequest, Specialization>()
+                .ForMember(dest => dest.SpecializationId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
+
+            CreateMap<Specialization, ResponseSpecialization>();
         }
     }
 }
