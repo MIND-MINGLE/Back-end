@@ -10,10 +10,11 @@ namespace Domain.Entity
 		[Key]
 		public required string PaymentId { get; set; }
         public required string PatientId { get; set; }
-        public required string AppointmentId { get; set; }
+        public string? AppointmentId { get; set; }
         public required double Amount { get; set; }
         public required double TherapistReceive { get; set; }
         public required string PaymentUrl { get; set; }
+        public required string TransactionId { get; set; }
         public required PaymentMethod PaymentMethod { get; set; }
         public required PaymentStatus PaymentStatus { get; set; }
 
@@ -25,14 +26,16 @@ namespace Domain.Entity
     {
         [EnumMember(Value = "Momo")]
         MOMO,
-        [EnumMember(Value = "VNPay")]
-        VNPAY,
+        //[EnumMember(Value = "VNPay")]
+        //VNPAY,
     }
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum PaymentStatus
     {
         [EnumMember(Value = "Pending")]
         PENDING,
+        [EnumMember(Value = "AwaitingConfirmation")]
+        AWAITING_CONFIRMATION,
         [EnumMember(Value = "Paid")]
         PAID,
         [EnumMember(Value = "Canceled")]
