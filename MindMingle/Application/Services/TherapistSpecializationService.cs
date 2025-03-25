@@ -67,39 +67,29 @@ namespace Application.Services
         public async Task<ApiResponse> GetTherapistSpecializationByTherapistIdAsync(string therapistId)
         {
             ApiResponse response = new ApiResponse();
-
             try
             {
-                var therapistSpecialization = await _unitOfWorks.TherapistSpecializationRepo.GetAsync(
+                var therapistSpecializations = await _unitOfWorks.TherapistSpecializationRepo.GetAllAsync(
                     x => x.TherapistId == therapistId,
-                    x => x.Include(p => p.Therapist).Include(p => p.Specialization)
-                );
-                if (therapistSpecialization == null)
-                {
-                    return response.SetNotFound("No therapist specialization found.");
-                }
-                var therapist = await _unitOfWorks.TherapistRepo.GetAsync(x => x.TherapistId == therapistId);
-                var specialization = await _unitOfWorks.SpecializationRepo.GetAsync(x => x.SpecializationId == therapistSpecialization.SpecializationId);
+                    x => x.Include(p => p.Therapist).Include(p => p.Specialization));
+               
+                var firstTherapist = therapistSpecializations.First().Therapist;
+                var responseSpecializations = _mapper.Map<List<ResponseSpecialization>>(
+                    //using LINQ
+                    therapistSpecializations.Select(ts => ts.Specialization).ToList()
+                    );
 
                 var therapistSpecializationResponse = new ResponseDetailTherapistSpecialization
                 {
-                    TherapistId = therapistSpecialization.TherapistId,
-                    FirstName = therapist.FirstName,
-                    LastName = therapist.LastName,
-                    PhoneNumber = therapist.PhoneNumber,
-                    Description = therapist.Description,
-                    Dob = therapist.Dob,
-                    Gender = therapist.Gender,
-                    PricePerHour = therapist.PricePerHour,
-                    Specializations = new List<ResponseSpecialization>
-                    {
-                        new ResponseSpecialization
-                        {
-                            SpecializationId = specialization.SpecializationId,
-                            Name = specialization.Name,
-                            Description = "",
-                        }
-                    }.ToList()
+                    TherapistId = firstTherapist.TherapistId,
+                    FirstName = firstTherapist.FirstName,
+                    LastName = firstTherapist.LastName,
+                    PhoneNumber = firstTherapist.PhoneNumber,
+                    Description = firstTherapist.Description,
+                    Dob = firstTherapist.Dob,
+                    Gender = firstTherapist.Gender,
+                    PricePerHour = firstTherapist.PricePerHour,
+                    Specializations = responseSpecializations
                 };
 
                 return response.SetOk(therapistSpecializationResponse);
