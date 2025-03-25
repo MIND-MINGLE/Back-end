@@ -5,6 +5,7 @@ using Application.Response;
 using Application.Response.Payment;
 using AutoMapper;
 using Domain.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -166,6 +167,73 @@ namespace Application.Services
                     statusCode: HttpStatusCode.InternalServerError,
                     isSuccess: false,
                     message: $"Error updating payment to CANCELED: {ex.Message}"
+                );
+            }
+        }
+
+        public async Task<ApiResponse> GetPaymentsByPendingStatus(int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                // Lấy tổng số bản ghi trước khi phân trang
+                var totalCount = await _unitOfWorks.PaymentRepo.CountAsync(x => x.PaymentStatus == PaymentStatus.PENDING);
+
+                // Lấy danh sách với phân trang
+                var payments = await _unitOfWorks.PaymentRepo.GetAllAsync(
+                    x => x.PaymentStatus == PaymentStatus.PENDING,
+                    x => x.Include(p => p.Patient),
+                    pageIndex,
+                    pageSize
+                );
+
+                if (payments == null || !payments.Any())
+                {
+                    return new ApiResponse().SetNotFound(message: "No payments with PENDING status found");
+                }
+
+                var response = _mapper.Map<IEnumerable<PaymentResponse>>(payments);
+                var pagedResponse = new PagedResponse<PaymentResponse>(response, totalCount, pageIndex, pageSize);
+                return new ApiResponse().SetOk(pagedResponse);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse().SetApiResponse(
+                    statusCode: HttpStatusCode.InternalServerError,
+                    isSuccess: false,
+                    message: $"Error retrieving payments with PENDING status: {ex.Message}. Inner exception: {ex.InnerException?.Message ?? "No inner exception"}"
+                );
+            }
+        }
+        public async Task<ApiResponse> GetAllPayments(int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                // Lấy tổng số bản ghi trước khi phân trang
+                var totalCount = await _unitOfWorks.PaymentRepo.CountAsync();
+
+                // Lấy danh sách với phân trang
+                var payments = await _unitOfWorks.PaymentRepo.GetAllAsync(
+                    null,
+                    x => x.Include(p => p.Patient),
+                    pageIndex,
+                    pageSize
+                );
+
+                if (payments == null || !payments.Any())
+                {
+                    return new ApiResponse().SetNotFound(message: "No payments found");
+                }
+
+                var response = _mapper.Map<IEnumerable<PaymentResponse>>(payments);
+                var pagedResponse = new PagedResponse<PaymentResponse>(response, totalCount, pageIndex, pageSize);
+                return new ApiResponse().SetOk(pagedResponse);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse().SetApiResponse(
+                    statusCode: HttpStatusCode.InternalServerError,
+                    isSuccess: false,
+                    message: $"Error retrieving payments: {ex.Message}. Inner exception: {ex.InnerException?.Message ?? "No inner exception"}"
                 );
             }
         }

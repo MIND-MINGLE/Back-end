@@ -36,7 +36,25 @@ namespace Infrastructure.Repository
             else
                 throw new Exception(); 
         }
+        public async Task<int> CountAsync(Expression<Func<T, bool>>? filter = null)
+        {
+            try
+            {
+                IQueryable<T> query = db;
 
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
+
+                return await query.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in CountAsync: {ex.Message}");
+                return 0;
+            }
+        }
         public async Task<int> CountAsync()
         {
             return await mMDbContext.Set<T>().CountAsync();

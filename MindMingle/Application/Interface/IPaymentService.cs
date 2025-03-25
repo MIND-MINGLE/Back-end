@@ -16,6 +16,8 @@ namespace Application.Interface
         Task<IEnumerable<ApiResponse>> GetPaymentsByPatientIdAsync(string patientId);
         Task<ApiResponse> UpdateToPaidAsync(string paymentId);
         Task<ApiResponse> UpdateToCanceledAsync(string paymentId);
+        Task<ApiResponse> GetPaymentsByPendingStatus(int pageIndex = 1, int pageSize = 10);
+        Task<ApiResponse> GetAllPayments(int pageIndex = 1, int pageSize = 10);
         Task DeletePaymentAsync(string paymentId);
     }
 }

@@ -15,7 +15,9 @@ namespace Application.IRepository
         Task AddAsync(T entity);
         Task<T> RemoveByIdAsync(object id);
         Task<int> CountAsync();
+        Task<int> CountAsync(Expression<Func<T, bool>>? filter = null);
         Task AddRangeAsync(List<T> entities);
+
         Task<List<T>> GetAllAsync(System.Linq.Expressions.Expression<Func<T, bool>>? filter);
         Task<T> GetAsync(System.Linq.Expressions.Expression<Func<T, bool>> filter, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include);
         Task<List<T>> GetAllAsync(System.Linq.Expressions.Expression<Func<T, bool>>? filter,
