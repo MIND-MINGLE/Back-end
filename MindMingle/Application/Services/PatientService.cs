@@ -22,8 +22,11 @@ namespace Application.Services
 			_unitOfWorks = unitOfWorks;
 			_mapper = mapper;
 		}
-
-		public async Task<ApiResponse> AddNewPatient(CreateNewPatientRequest newPatient)
+        public async Task<int> GetTotalPatientsAsync()
+        {
+            return await _unitOfWorks.PatientRepo.CountAsync();
+        }
+        public async Task<ApiResponse> AddNewPatient(CreateNewPatientRequest newPatient)
 		{
 			ApiResponse response = new ApiResponse();
 

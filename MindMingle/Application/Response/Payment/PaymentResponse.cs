@@ -16,5 +16,7 @@ namespace Application.Response.Payment
         public string? PaymentUrl { get; set; } = null!;
         public PaymentMethod PaymentMethod { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
+
+        public DateTime CreatedAt { get; set; } // Thêm trường này
     }
 }

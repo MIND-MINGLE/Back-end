@@ -19,7 +19,10 @@ namespace Application.Service
             this.unitOfWorks = unitOfWorks;
             _mapper = mapper;
         }
-
+        public async Task<int> GetTotalAppointmentsAsync()
+        {
+            return await unitOfWorks.AppointmentRepo.CountAsync();
+        }
         public async Task<ApiResponse> CreateAppointmentAsync(AppointmentRequest request)
         {
             try

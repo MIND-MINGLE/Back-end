@@ -8,6 +8,7 @@ namespace Application.Interface
 {
 	public interface ITherapistService
 	{
+        Task<int> GetTotalTherapistsAsync();
         Task<ApiResponse> AddNewTherapist(AddNewTherapistRequest newTherapist);
         Task<ApiResponse> GetTherapistByAccountIdAsync(string accountId);
         Task<ApiResponse> GetTherapistByTherapistIdAsync(string therapistId);

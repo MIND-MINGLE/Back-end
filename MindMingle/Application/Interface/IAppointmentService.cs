@@ -10,6 +10,7 @@ namespace Application.Interface
 {
     public interface IAppointmentService
     {
+        Task<int> GetTotalAppointmentsAsync();
         Task<ApiResponse> CreateAppointmentAsync(AppointmentRequest request);
         Task<ApiResponse> GetAppointmentByIdAsync(string appointmentId);
         Task<ApiResponse> GetAppointmentsByPatientIdAsync(string patientId, int pageIndex = 1, int pageSize = 10);

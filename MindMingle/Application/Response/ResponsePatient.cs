@@ -10,6 +10,7 @@ namespace Application.Response
 			public required string Dob { get; set; }
 			public required string Gender { get; set; }
 			public required string PhoneNumber { get; set; }
+		    public DateTime CreatedAt { get; set; }
 	}
 }
 

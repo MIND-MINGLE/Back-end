@@ -19,6 +19,10 @@ namespace Application.Services
             this.mapper = mapper;
             this.unitOfWorks = unitOfWorks;
         }
+        public async Task<int> GetTotalTherapistsAsync()
+        {
+            return await unitOfWorks.TherapistRepo.CountAsync();
+        }
         public async Task<ApiResponse> AddNewTherapist(AddNewTherapistRequest newTherapist)
         {
             ApiResponse response = new ApiResponse();

@@ -32,7 +32,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "https://mindmingle202.vercel.app")
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5098", "http://localhost:5173","https://mindmingle202.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -77,6 +77,7 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<ISpecializationService, SpecializationService>();
 builder.Services.AddScoped<ITherapistSpecializationService, TherapistSpecializationService>();
 
+builder.Services.AddScoped<IDashboardService, DashboardService>(); // Đăng ký DashboardService
 builder.Services.AddScoped<IPatientSurveyService, PatientSurveyService>();
 builder.Services.AddScoped<IPatientResponseService, PatientResponseService>();
 builder.Services.AddScoped<ITokenService, TokenService>();

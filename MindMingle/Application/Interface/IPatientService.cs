@@ -14,6 +14,7 @@ namespace Application.Interface
 		Task<ApiResponse> AddNewPatient(CreateNewPatientRequest newPatient);
 		Task<ApiResponse> GetPatientByAccountIdAsync(string accountId);
 		Task<ApiResponse> GetAllPatientsAsync();
-		Task<ApiResponse> UpdatePatientAsync(UpdatePersonRequest updatePatient);
+        Task<int> GetTotalPatientsAsync();
+        Task<ApiResponse> UpdatePatientAsync(UpdatePersonRequest updatePatient);
     }
 }
