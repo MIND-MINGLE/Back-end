@@ -7,8 +7,6 @@ namespace Infrastructure
 {
 	public class MMDbContext : DbContext
 	{
-
-     
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
           
