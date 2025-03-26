@@ -30,6 +30,12 @@ namespace API.Controllers
             var response = await _appointmentService.GetAppointmentByIdAsync(appointmentId);
             return StatusCode((int)response.StatusCode, response);
         }
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetAllAppointment()
+        {
+            var response = await _appointmentService.GetAllAppointment(); ;
+            return StatusCode((int)response.StatusCode, response);
+        }
 
         [HttpGet("patient/{patientId}")]
         public async Task<IActionResult> GetAppointmentsByPatientId(string patientId, [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)

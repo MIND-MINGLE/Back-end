@@ -23,6 +23,22 @@ namespace Application.Service
         {
             return await unitOfWorks.AppointmentRepo.CountAsync();
         }
+        public async Task<ApiResponse> GetAllAppointment()
+        {
+            ApiResponse response = new ApiResponse();
+            var appList = await unitOfWorks.AppointmentRepo.GetAllAsync(null,x=>
+            x.Include(p=>p.Patient)
+            .Include(t => t.Therapist)
+            .Include(s=>s.Session)
+            .Include(e=>e.EmergencyEnd)
+            );
+            if (appList.Count == 0)
+            {
+                return response.SetNotFound("No Appointment Found");
+            }
+            var appListRes = _mapper.Map<List<AllAppointmentResponse>>(appList);
+            return response.SetOk(appListRes);
+        }
         public async Task<ApiResponse> CreateAppointmentAsync(AppointmentRequest request)
         {
             try

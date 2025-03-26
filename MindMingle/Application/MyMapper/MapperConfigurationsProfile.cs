@@ -165,7 +165,9 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.TotalFee, opt => opt.MapFrom(src => src.TotalFee))
                 .ForMember(dest => dest.PlatformFee, opt => opt.MapFrom(src => src.PlatformFee))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
-
+            //
+            CreateMap<Appointment, AllAppointmentResponse>();
+            //Credit
             CreateMap < CredentialRequest, Credentials>()
                 .ForMember(dest => dest.CredentialsId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
 
@@ -221,6 +223,9 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.Patient, opt => opt.Ignore()) // Sẽ gán sau
                 .ForMember(dest => dest.Appointment, opt => opt.Ignore());
             CreateMap<Payment, PaymentResponse>();
+
+            //EmergencyEnd
+            CreateMap<EmergencyEnd, ResponseEmergencyEnd>();
         }
     }
 }
