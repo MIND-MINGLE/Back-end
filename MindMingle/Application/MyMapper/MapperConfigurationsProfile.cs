@@ -55,7 +55,8 @@ namespace Application.MyMapper
             CreateMap<CreateNewPatientRequest, Patient>()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));  // Tạo GUID mới
             CreateMap<Patient, ResponsePatient>()
-                .ForMember(dest => dest.Dob, opt => opt.Ignore()); // ignore, we custom Date
+                .ForMember(dest => dest.Dob, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt)); // ignore, we custom Date
             //Therapist
             CreateMap<AddNewTherapistRequest, Therapist>()
                 .ForMember(t => t.TherapistId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
