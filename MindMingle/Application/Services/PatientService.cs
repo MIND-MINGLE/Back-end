@@ -111,7 +111,6 @@ namespace Application.Services
                 { nameof(patient.Gender), patient.Gender },
                 { nameof(patient.PhoneNumber), patient.PhoneNumber }
             });
-                await _unitOfWorks.SaveChangeAsync();
                 return response.SetOk(updatePatient);
             }
 			catch (Exception ex)

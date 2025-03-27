@@ -39,6 +39,42 @@ namespace Application.Service
             var appListRes = _mapper.Map<List<AllAppointmentResponse>>(appList);
             return response.SetOk(appListRes);
         }
+        public async Task<ApiResponse> UpdateAppointmentStatusApproved(string appointmentId)
+        {
+            var appointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
+            if (appointment == null)
+                return new ApiResponse().SetNotFound("Appointment not found");
+            else
+            {
+                await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, x => x.Status, appointment.Status = Status.APPROVED);
+            }
+            var response = _mapper.Map<AppointmentResponse>(appointment);
+            return new ApiResponse().SetOk(response);
+        }
+        public async Task<ApiResponse> UpdateAppointmentStatusCanceled(string appointmentId)
+        {
+            var appointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
+            if (appointment == null)
+                return new ApiResponse().SetNotFound("Appointment not found");
+            else
+            {
+                await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, x => x.Status, appointment.Status = Status.CANCELED);
+            }
+            var response = _mapper.Map<AppointmentResponse>(appointment);
+            return new ApiResponse().SetOk(response);
+        }
+        public async Task<ApiResponse> UpdateAppointmentStatusDeclined(string appointmentId)
+        {
+            var appointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
+            if (appointment == null)
+                return new ApiResponse().SetNotFound("Appointment not found");
+            else
+            {
+                await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, x => x.Status, appointment.Status = Status.DECLINED);
+            }
+            var response = _mapper.Map<AppointmentResponse>(appointment);
+            return new ApiResponse().SetOk(response);
+        }
         public async Task<ApiResponse> CreateAppointmentAsync(AppointmentRequest request)
         {
             try
@@ -46,6 +82,7 @@ namespace Application.Service
                 var appointment = _mapper.Map<Appointment>(request);
                 appointment.AppointmentId = Guid.NewGuid().ToString(); // Tự sinh Guid cho AppointmentId
                 appointment.CreatedAt = DateTime.UtcNow;
+                appointment.Status = Status.PENDING;
                 await unitOfWorks.AppointmentRepo.AddAsync(appointment);
                 await unitOfWorks.SaveChangeAsync();
                 var response = _mapper.Map<AppointmentResponse>(appointment);
@@ -122,7 +159,6 @@ namespace Application.Service
             ApiResponse apiResponse = new ApiResponse();
             if (string.IsNullOrEmpty(therapistId))
                 return apiResponse.SetBadRequest(message: "TherapistId is required");
-
             try
             {
                 var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.TherapistId == therapistId && a.PatientId == patientId && !a.Status.Equals("Declined") && !a.Status.Equals("Canceled"),

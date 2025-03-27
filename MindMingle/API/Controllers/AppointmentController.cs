@@ -64,13 +64,24 @@ namespace API.Controllers
             var response = await _appointmentService.UpdateAppointmentAsync(appointmentId, request);
             return StatusCode((int)response.StatusCode, response);
         }
-        [HttpPut("status/{appointmentId}")]
-        public async Task<IActionResult> UpdateAppointmentStatus(string appointmentId, [FromBody] AppointmentUpdateStatus request)
+        [HttpPatch("status-approved/{appointmentId}")]
+        public async Task<IActionResult> UpdateAppointmentApprovedStatus(string appointmentId)
         {
-            var response = await _appointmentService.UpdateAppointmentStatusAsync(appointmentId, request);
+            var response = await _appointmentService.UpdateAppointmentStatusApproved(appointmentId);
             return StatusCode((int)response.StatusCode, response);
         }
-
+        [HttpPatch("status-canceled/{appointmentId}")]
+        public async Task<IActionResult> UpdateAppointmentCanceledStatus(string appointmentId)
+        {
+            var response = await _appointmentService.UpdateAppointmentStatusCanceled(appointmentId);
+            return StatusCode((int)response.StatusCode, response);
+        }
+        [HttpPatch("status-declined/{appointmentId}")]
+        public async Task<IActionResult> UpdateAppointmentDeclinedStatus(string appointmentId)
+        {
+            var response = await _appointmentService.UpdateAppointmentStatusDeclined(appointmentId);
+            return StatusCode((int)response.StatusCode, response);
+        }
         [HttpDelete("{appointmentId}")]
         public async Task<IActionResult> DeleteAppointment(string appointmentId)
         {

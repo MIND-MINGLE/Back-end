@@ -12,6 +12,9 @@ namespace Application.Interface
     {
         Task<int> GetTotalAppointmentsAsync();
         Task<ApiResponse> CreateAppointmentAsync(AppointmentRequest request);
+        Task<ApiResponse> UpdateAppointmentStatusApproved(string appointmentId);
+        Task<ApiResponse> UpdateAppointmentStatusCanceled(string appointmentId);
+        Task<ApiResponse> UpdateAppointmentStatusDeclined(string appointmentId);
         Task<ApiResponse> GetAllAppointment();
         Task<ApiResponse> GetAppointmentByIdAsync(string appointmentId);
         Task<ApiResponse> GetAppointmentsByPatientIdAsync(string patientId, int pageIndex = 1, int pageSize = 10);

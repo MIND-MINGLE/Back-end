@@ -58,7 +58,7 @@ namespace Domain.Entity
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Status
     {
-        [EnumMember(Value = "Peding")]
+        [EnumMember(Value = "Pending")]
         PENDING,
         [EnumMember(Value = "Approved")]
         APPROVED,
