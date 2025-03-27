@@ -237,5 +237,87 @@ namespace Application.Services
                 );
             }
         }
+
+        public Task<IEnumerable<ApiResponse>> GetPaymentHasAppointmentByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ApiResponse> CreatePaymentHasAppointmentAsync(PaymentRequestAppointment paymentRequest)
+        {
+            try
+            {
+                if (paymentRequest == null)
+                {
+                    return new ApiResponse().SetBadRequest(message: "Payment cannot be null");
+                }
+
+                // Ánh xạ PaymentRequest sang Payment entity
+                var payment = _mapper.Map<Payment>(paymentRequest);
+                payment.PaymentMethod = PaymentMethod.MOMO;
+                payment.PaymentStatus = PaymentStatus.PENDING;
+                // Gọi AddAsync mà không gán vào biến, vì nó không trả về giá trị
+                await _unitOfWorks.PaymentRepo.AddAsync(payment);
+
+                // Nếu cần lấy lại payment (ví dụ để trả về ID), bạn có thể gọi GetAsync
+                var createdPayment = await _unitOfWorks.PaymentRepo.GetAsync(p => p.PaymentId == payment.PaymentId);
+                if (createdPayment == null)
+                {
+                    return new ApiResponse().SetApiResponse(
+                        statusCode: HttpStatusCode.InternalServerError,
+                        isSuccess: false,
+                        message: "Failed to retrieve the created payment"
+                    );
+                }
+                var paymentResponse = _mapper.Map<PaymentResponse>(createdPayment);
+                return new ApiResponse().SetOk(createdPayment);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse().SetApiResponse(
+                    statusCode: HttpStatusCode.InternalServerError,
+                    isSuccess: false,
+                    message: $"Error creating payment: {ex.Message}"
+                );
+            }
+        }
+
+        //public async Task<IEnumerable<ApiResponse>> GetPaymentHasAppointmentByPatientId(string patientId)
+        //{
+        //    try
+        //    {
+        //        if (paymentRequest == null)
+        //        {
+        //            return new ApiResponse().SetBadRequest(message: "Payment cannot be null");
+        //        }
+        //        // Ánh xạ PaymentRequest sang Payment entity
+        //        var payment = _mapper.Map<Payment>(paymentRequest);
+        //        payment.PaymentMethod = PaymentMethod.MOMO;
+        //        payment.PaymentStatus = PaymentStatus.PENDING;
+        //        // Gọi AddAsync mà không gán vào biến, vì nó không trả về giá trị
+        //        await _unitOfWorks.PaymentRepo.AddAsync(payment);
+
+        //        // Nếu cần lấy lại payment (ví dụ để trả về ID), bạn có thể gọi GetAsync
+        //        var createdPayment = await _unitOfWorks.PaymentRepo.GetAsync(p => p.PaymentId == payment.PaymentId);
+        //        if (createdPayment == null)
+        //        {
+        //            return new ApiResponse().SetApiResponse(
+        //                statusCode: HttpStatusCode.InternalServerError,
+        //                isSuccess: false,
+        //                message: "Failed to retrieve the created payment"
+        //            );
+        //        }
+        //        var paymentResponse = _mapper.Map<PaymentResponse>(createdPayment);
+        //        return new ApiResponse().SetOk(createdPayment);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ApiResponse().SetApiResponse(
+        //            statusCode: HttpStatusCode.InternalServerError,
+        //            isSuccess: false,
+        //            message: $"Error creating payment: {ex.Message}"
+        //        );
+        //    }
+        //}
     }
 }

@@ -25,6 +25,12 @@ namespace API.Controllers
             var response = await _paymentService.CreatePaymentAsync(paymentRequest);
             return StatusCode((int)response.StatusCode, response);
         }
+        [HttpPost("create-has-appointment")]
+        public async Task<IActionResult> CreatePaymentHasAppointment([FromBody] PaymentRequestAppointment paymentRequest)
+        {
+            var response = await _paymentService.CreatePaymentHasAppointmentAsync(paymentRequest);
+            return StatusCode((int)response.StatusCode, response);
+        }
         [HttpPatch("{paymentId}/status/paid")]
         public async Task<IActionResult> UpdateToPaid(string paymentId)
         {

@@ -5,20 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Response.Payment
+namespace Application.Request.Payment
 {
-    public class PaymentResponse
+    public class PaymentRequestAppointment
     {
-        public string PaymentId { get; set; } = null!;
         public string PatientId { get; set; } = null!;
+        public string AppointmentId { get; set; } = null!;
         public double Amount { get; set; }
-        public double TherapistReceive { get; set; }
+        public double? TherapistReceive { get; set; }
         public string? PaymentUrl { get; set; } = null!;
-        public PaymentMethod PaymentMethod { get; set; }
+        public PaymentMethod PaymentMethod { get; set; } // Thêm PaymentMethod
         public PaymentStatus PaymentStatus { get; set; }
-        public ResponsePatient Patient { get; set; }
-
-
-        public DateTime CreatedAt { get; set; } // Thêm trường này
     }
 }

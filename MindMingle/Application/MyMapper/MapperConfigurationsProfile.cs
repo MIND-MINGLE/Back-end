@@ -217,6 +217,8 @@ namespace Application.MyMapper
             //Payment Mapper
 
             // Ánh xạ từ PaymentRequest sang Payment
+            CreateMap<PaymentRequestAppointment, Payment>()
+              .ForMember(dest => dest.PaymentId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
             CreateMap<PaymentRequest, Payment>()
                 .ForMember(dest => dest.PaymentId, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
                 .ForMember(dest => dest.Patient, opt => opt.Ignore()) // Sẽ gán sau
