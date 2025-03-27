@@ -181,7 +181,7 @@ namespace Application.Services
                 // Lấy danh sách với phân trang
                 var payments = await _unitOfWorks.PaymentRepo.GetAllAsync(
                     x => x.PaymentStatus == PaymentStatus.PENDING,
-                    x => x.Include(p => p.Patient),
+                    x => x.Include(p => p.Patient).Include(a => a.Appointment),
                     pageIndex,
                     pageSize
                 );

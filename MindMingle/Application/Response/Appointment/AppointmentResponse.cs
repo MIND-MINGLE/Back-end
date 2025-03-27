@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Response.Appointment
 {
-    internal class AppointmentResponse
+    public class AppointmentResponse
     {
         public string AppointmentId { get; set; } = null!;
         public string PatientId { get; set; } = null!;
