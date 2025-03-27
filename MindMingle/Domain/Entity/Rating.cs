@@ -14,7 +14,7 @@ namespace Domain.Entity
         [Required]
         public required string Comment { get; set; }
         [Required]
-        public required int Score { get; set; }
+        public required double Score { get; set; }
 
         public required Patient Patient { get; set; }
         public required Appointment Appointment { get; set; }
