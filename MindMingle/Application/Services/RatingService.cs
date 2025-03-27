@@ -48,6 +48,10 @@ namespace Application.Services
             {
                 var ratings = await _unitOfWorks.RatingRepo.GetAllAsync(null);
                 var resRating = _mapper.Map<List<ResponseRating>>(ratings);
+                if (resRating.Count == 0)
+                {
+                    return response.SetNotFound("No ratings here");
+                }
                 return response.SetOk(resRating);
             }
             catch (Exception ex)
