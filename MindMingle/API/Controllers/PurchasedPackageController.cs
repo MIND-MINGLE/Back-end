@@ -22,6 +22,13 @@ namespace API.Controllers
             var response = await _purchasedPackageService.AddPurchasedPackageAsync(purchasedPackageRequest);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+        [Route("status-disabled/{purchasedPackageId}")]
+        [HttpPatch]
+        public async Task<IActionResult> AddPurchasedPackageAsync(string purchasedPackageId)
+        {
+            var response = await _purchasedPackageService.UpdatePurchasedStatus(purchasedPackageId);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetPurchasedPackageAsync()

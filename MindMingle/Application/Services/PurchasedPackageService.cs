@@ -30,6 +30,7 @@ namespace Application.Services
             try
             {
                 var purchasedPackage = _mapper.Map<PurchasedPackage>(purchasedPackageRequest);
+                purchasedPackage.IsDisabled = false;
                 await _unitOfWork.PurchasedPackageRepo.AddAsync(purchasedPackage);
                 await _unitOfWork.SaveChangeAsync();
                 return response.SetOk(purchasedPackageRequest);
@@ -65,13 +66,32 @@ namespace Application.Services
             try
             {
                 ApiResponse response = new ApiResponse();
-                var purchasedPackages = await _unitOfWork.PurchasedPackageRepo.GetAsync(x => x.PatientId == patientId, x => x.Include(p => p.Subscription));
+                var purchasedPackages = await _unitOfWork.PurchasedPackageRepo.GetAllAsync(x => x.PatientId == patientId, x => x.Include(p => p.Subscription));
                 if (purchasedPackages == null)
                 {
                     return response.SetNotFound("Purchased packages not found!");
                 }
-                var resPurchasedPackages = _mapper.Map<ResponsePurchasedPackage>(purchasedPackages);
+                var resPurchasedPackages = _mapper.Map<List<ResponsePurchasedPackage>>(purchasedPackages);
                 return response.SetOk(resPurchasedPackages);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse().SetBadRequest(ex.Message);
+            }
+        }
+
+        public async Task<ApiResponse> UpdatePurchasedStatus(string id)
+        {
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                var purchasedPackages = await _unitOfWork.PurchasedPackageRepo.GetAsync(x => x.PurchasedPackageId == id);
+                if (purchasedPackages == null)
+                {
+                    return response.SetNotFound("Purchased package not found!");
+                }
+                await _unitOfWork.PurchasedPackageRepo.UpdateFieldAsync(purchasedPackages.PurchasedPackageId, p=>p.IsDisabled, purchasedPackages.IsDisabled=true);
+                return response.SetOk("Status Update");
             }
             catch (Exception ex)
             {

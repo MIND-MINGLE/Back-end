@@ -12,6 +12,7 @@ namespace Application.Interface
     {
         Task<ApiResponse> AddPurchasedPackageAsync(PurchasedPackageRequest purchasedPackageRequest);
         Task<ApiResponse> GetPurchasedPackageAsync();
+        Task<ApiResponse> UpdatePurchasedStatus(string id);
         Task<ApiResponse> GetPurchasedPackageByPatientIdAsync(string patientId);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using Domain.Entity;
+
 namespace Application.Response
 {
 	public class ResponseAccount : Norms

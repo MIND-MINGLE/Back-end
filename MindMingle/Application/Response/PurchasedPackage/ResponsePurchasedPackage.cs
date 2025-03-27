@@ -1,4 +1,5 @@
 ﻿using Application.Response.Subcription;
+using Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Response.PurchasedPackage
 {
-    public class ResponsePurchasedPackage
+    public class ResponsePurchasedPackage:Norms
     {
         public string PurchasedPackageId { get; set; }
         public string PatientId { get; set; }

@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entity
 {
-	public class PurchasedPackage
+	public class PurchasedPackage:Norms
 	{
         [Key]
         public required string PurchasedPackageId { get; set; }
         public required string PatientId { get; set; }
         public required string SubscriptionId { get; set; }
-
         public required DateTime StartDate { get; set; }
         public required DateTime EndDate { get; set; }
 
