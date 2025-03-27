@@ -144,7 +144,7 @@ namespace Application.Service
             {
                 var appointments = await unitOfWorks.AppointmentRepo.GetAllAsync(
                     a => a.TherapistId == therapistId,
-                    s=>s.Include(a=>a.Session)
+                    s=>s.Include(a=>a.Session).Include(p=>p.Patient)
                     );
                 var response = _mapper.Map<List<AppointmentResponse>>(appointments);
                 return new ApiResponse().SetOk(response);

@@ -21,5 +21,7 @@ namespace Application.Response.Appointment
         public double PlatformFee { get; set; }
         public DateTime CreatedAt { get; set; }
         public ResponseSession Session { get; set; } = null!;
+        public ResponsePatient? Patient { get; set; }
+        public ResponseTherapist? Therapist { get; set; }
     }
 }
