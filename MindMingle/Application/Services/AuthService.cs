@@ -1,6 +1,7 @@
 ﻿using Application.Interface;
 using Application.Request.Account;
 using Application.Response;
+using AutoMapper;
 using Domain;
 using Domain.Entity;
 using Microsoft.AspNetCore.Identity; // PasswordHasher<Account>
@@ -24,8 +25,29 @@ namespace Application.Services
 			_emailService = emailService;	
 			_tokenService = tokenService;
 		}
+        public async Task<ApiResponse> ActivateAccountAsync(string accountId)
+		{
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                var account = await _unitOfWorks.AccountRepo.GetAsync(x => x.AccountId == accountId);
+				if (account == null)
+				{
+                    return response.SetBadRequest(message: "User not found!!");
+                }
+				else
+				{
+					await _unitOfWorks.AccountRepo.UpdateFieldAsync(accountId, a => a.IsDisabled, false);
+                    return response.SetOk($"Account {accountId} is activated");
+                }
+            }
+            catch (Exception ex)
+            {
+                return response.SetBadRequest(ex.Message);
 
-		public async Task<ApiResponse> LoginAsync(LoginRequest request)
+            }
+        }
+        public async Task<ApiResponse> LoginAsync(LoginRequest request)
 		{
 			ApiResponse response = new ApiResponse();
 			var user = await _unitOfWorks.AccountRepo.GetAsync(x => x.Email == request.EmailOrAccountName || x.AccountName == request.EmailOrAccountName);
@@ -34,6 +56,11 @@ namespace Application.Services
 				response.SetBadRequest(message: "Invalid AccountName, Email or Password");
 				return response;
 			}
+			else if (user.IsDisabled)
+			{
+                response.SetBadRequest(message: "Account Is Not Verified");
+                return response;
+            }
 			var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, request.Password);
 			if (passwordVerificationResult != PasswordVerificationResult.Success)
 			{
@@ -115,7 +142,9 @@ namespace Application.Services
 					Email = userRequest.Email,
 					AccountName = userRequest.AccountName,
 					Password = userRequest.Password,
-				};
+					IsDisabled = roleId.Equals("doc")||roleId.Equals("agent")
+					//Disable business account on default, admin verified
+                };
 
 				//Hash the password
 				var hashedPassword = _passwordHasher.HashPassword(newAccount, userRequest.Password);

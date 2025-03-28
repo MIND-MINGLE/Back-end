@@ -50,5 +50,12 @@ namespace API.Controllers
 			var result = await _service.VerifyEmailAsync(request.AccountId, request.VerificationCode);
 			return result.IsSuccess ? Ok(result) : BadRequest(result);
 		}
-	}
+        [HttpPost("activate-account/{accountId}")]
+        public async Task<IActionResult> ActivateAccount([FromBody]string accountId)
+        {
+
+            var result = await _service.ActivateAccountAsync(accountId);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
+    }
 }

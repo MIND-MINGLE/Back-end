@@ -62,6 +62,8 @@ namespace Domain.Entity
         PENDING,
         [EnumMember(Value = "Approved")]
         APPROVED,
+        [EnumMember(Value = "Ended")]
+        ENDED,
         [EnumMember(Value = "Declined")]
         DECLINED,
         [EnumMember(Value = "Canceled")]

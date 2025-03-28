@@ -51,6 +51,18 @@ namespace Application.Service
             var response = _mapper.Map<AppointmentResponse>(appointment);
             return new ApiResponse().SetOk(response);
         }
+        public async Task<ApiResponse> UpdateAppointmentStatusEnded(string appointmentId)
+        {
+            var appointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);
+            if (appointment == null)
+                return new ApiResponse().SetNotFound("Appointment not found");
+            else
+            {
+                await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, x => x.Status, appointment.Status = Status.ENDED);
+            }
+            var response = _mapper.Map<AppointmentResponse>(appointment);
+            return new ApiResponse().SetOk(response);
+        }
         public async Task<ApiResponse> UpdateAppointmentStatusCanceled(string appointmentId)
         {
             var appointment = await unitOfWorks.AppointmentRepo.GetAsync(a => a.AppointmentId == appointmentId);

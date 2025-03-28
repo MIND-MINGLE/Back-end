@@ -70,6 +70,12 @@ namespace API.Controllers
             var response = await _appointmentService.UpdateAppointmentStatusApproved(appointmentId);
             return StatusCode((int)response.StatusCode, response);
         }
+        [HttpPatch("status-ended/{appointmentId}")]
+        public async Task<IActionResult> UpdateAppointmentEndedStatus(string appointmentId)
+        {
+            var response = await _appointmentService.UpdateAppointmentStatusEnded(appointmentId);
+            return StatusCode((int)response.StatusCode, response);
+        }
         [HttpPatch("status-canceled/{appointmentId}")]
         public async Task<IActionResult> UpdateAppointmentCanceledStatus(string appointmentId)
         {

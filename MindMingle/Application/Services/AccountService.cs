@@ -35,7 +35,6 @@ namespace Application.Services
 
 			}
 		}
-
 		public async Task<ApiResponse> GetAllAccounts()
         {
             // Create a new API Response everytime the api route is called

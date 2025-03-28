@@ -41,5 +41,34 @@ namespace Application.Services
 				return new ApiResponse().SetBadRequest($"Something went wrong: {ex.Message}");
 			}
 		}
-	}
+
+        public async Task<ApiResponse> SendBusinessEmail(string receivedUser)
+        {
+			var businessCode = "MindMingle202BusinessQuiry";
+			var emailContent = "";
+            try
+            {
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Mindmingle", "mindmingleskill.com"));
+                message.To.Add(new MailboxAddress("", receivedUser));
+                message.Subject = $"Business Email";
+                var bodyBuilder = new BodyBuilder();
+                bodyBuilder.HtmlBody = emailContent;
+                message.Body = bodyBuilder.ToMessageBody();
+
+                using (var client = new SmtpClient())
+                {
+                    await client.ConnectAsync("smtp.gmail.com", 465, true);
+                    await client.AuthenticateAsync(EmailUserSystem, EmailPasswordSystem);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                }
+                return new ApiResponse().SetOk("Mail Sent!");
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse().SetBadRequest($"Something went wrong: {ex.Message}");
+            }
+        }
+    }
 }

@@ -13,6 +13,7 @@ namespace Application.Interface
         Task<int> GetTotalAppointmentsAsync();
         Task<ApiResponse> CreateAppointmentAsync(AppointmentRequest request);
         Task<ApiResponse> UpdateAppointmentStatusApproved(string appointmentId);
+        Task<ApiResponse> UpdateAppointmentStatusEnded(string appointmentId);
         Task<ApiResponse> UpdateAppointmentStatusCanceled(string appointmentId);
         Task<ApiResponse> UpdateAppointmentStatusDeclined(string appointmentId);
         Task<ApiResponse> GetAllAppointment();
