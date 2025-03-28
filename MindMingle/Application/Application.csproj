@@ -32,7 +32,6 @@
     <Folder Include="Request\ChatMessage\" />
     <Folder Include="Response\ChatMessage\" />
     <Folder Include="Response\ChatGroup\" />
-    <Folder Include="Request\Therapist\" />
     <Folder Include="Request\Session\" />
   </ItemGroup>
   <ItemGroup>

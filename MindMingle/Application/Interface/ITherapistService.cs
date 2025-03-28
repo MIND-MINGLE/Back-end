@@ -12,7 +12,7 @@ namespace Application.Interface
         Task<ApiResponse> AddNewTherapist(AddNewTherapistRequest newTherapist);
         Task<ApiResponse> GetTherapistByAccountIdAsync(string accountId);
         Task<ApiResponse> GetTherapistByTherapistIdAsync(string therapistId);
-        Task<ApiResponse> UpdateTherapistAsync(UpdatePersonRequest request);
+        Task<ApiResponse> UpdateTherapistAsync(UpdateTherapistRequest request);
         Task<ApiResponse> GetAllTherapistAsync( );
         
     }

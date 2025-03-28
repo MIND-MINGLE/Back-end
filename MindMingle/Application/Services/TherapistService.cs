@@ -6,6 +6,7 @@ using Application.Response;
 using AutoMapper;
 using Domain.Entity;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Application.Services
 {
@@ -84,7 +85,7 @@ namespace Application.Services
             }
         }
 
-        public async Task<ApiResponse> UpdateTherapistAsync(UpdatePersonRequest updateTherapist)
+        public async Task<ApiResponse> UpdateTherapistAsync(UpdateTherapistRequest updateTherapist)
         {
             ApiResponse response = new ApiResponse();
             try
@@ -92,25 +93,33 @@ namespace Application.Services
                 var therapist = await unitOfWorks.TherapistRepo.GetAsync(x => x.TherapistId == updateTherapist.Id);
                 if (therapist == null)
                 {
-                    response.SetBadRequest("Therapist profile not found.");
-                    return response;
+                    return response.SetNotFound(null, "Therapist profile not found.");
                 }
 
-                mapper.Map(updateTherapist, therapist);
-                await unitOfWorks.TherapistRepo.UpdateFieldsAsync(therapist.TherapistId, new Dictionary<string, object>
+                // Chỉ cập nhật các trường không null
+                var fieldsToUpdate = new Dictionary<string, object>();
+                if (updateTherapist.FirstName != null) fieldsToUpdate.Add(nameof(therapist.FirstName), updateTherapist.FirstName);
+                if (updateTherapist.LastName != null) fieldsToUpdate.Add(nameof(therapist.LastName), updateTherapist.LastName);
+                if (updateTherapist.Dob.HasValue) fieldsToUpdate.Add(nameof(therapist.Dob), updateTherapist.Dob.Value);
+                if (updateTherapist.Gender != null) fieldsToUpdate.Add(nameof(therapist.Gender), updateTherapist.Gender);
+                if (updateTherapist.PhoneNumber != null) fieldsToUpdate.Add(nameof(therapist.PhoneNumber), updateTherapist.PhoneNumber);
+                if (updateTherapist.Description != null) fieldsToUpdate.Add(nameof(therapist.Description), updateTherapist.Description);
+
+                if (fieldsToUpdate.Any())
+                {
+                    await unitOfWorks.TherapistRepo.UpdateFieldsAsync(therapist.TherapistId, fieldsToUpdate);
+                    await unitOfWorks.SaveChangeAsync();
+                }
+
+                return response.SetOk(therapist);
+            }
+            catch (DbUpdateException ex)
             {
-                { nameof(therapist.FirstName), therapist.FirstName },
-                { nameof(therapist.LastName), therapist.LastName },
-                { nameof(therapist.Dob), therapist.Dob },
-                { nameof(therapist.Gender), therapist.Gender },
-                { nameof(therapist.PhoneNumber), therapist.PhoneNumber }
-            });
-                await unitOfWorks.SaveChangeAsync();
-                return response.SetOk(updateTherapist);
+                return response.SetApiResponse(HttpStatusCode.InternalServerError, false, "Database error: " + ex.InnerException?.Message);
             }
             catch (Exception ex)
             {
-                return response.SetBadRequest(ex);
+                return response.SetBadRequest(null, "An error occurred: " + ex.Message);
             }
         }
 
