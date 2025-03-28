@@ -16,7 +16,6 @@ namespace Application.Request.Therapist
         public required DateTime Dob { get; set; }
         [Required]
         public required string Gender { get; set; }
-        [Required]
         public string? Description { get; set; }
         [Required]
         public required double PricePerHour { get; set; }
