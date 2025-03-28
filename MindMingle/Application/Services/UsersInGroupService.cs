@@ -119,6 +119,7 @@ namespace Application.Services
 
                     return new ChatGroupResponse
                     {
+                        IsDisabled = cg.IsDisabled,
                         ChatGroupId = cg.Id,
                         AdminId = cg.AdminId,
                         AdminName = isTherapist
@@ -129,6 +130,7 @@ namespace Application.Services
                                 ? $"{cg.Account.Therapist.FirstName} {cg.Account.Therapist.LastName}" // Patient POV: Therapist’s FirstName LastName
                                 : cg.Account.AccountName, // Fallback if admin isn’t a therapist
                         UserInGroupId = userInGroupModel.First(ug => ug.ChatGroupId == cg.Id).UsersInGroupId,
+                       
                     };
                 }).ToList();
 
@@ -144,7 +146,7 @@ namespace Application.Services
         {
             ApiResponse response = new ApiResponse();
             var chatgroupId = await unitOfWorks.UsersInGroupRepo.GetAsync(ug => ug.UsersInGroupId == userInGroupId);
-            if (chatgroupId!=null)
+            if (chatgroupId != null)
             {
                 return chatgroupId.ChatGroupId;
             }
@@ -152,8 +154,9 @@ namespace Application.Services
             {
                 return "";
             }
-           
+
         }
+
     }
 }
 

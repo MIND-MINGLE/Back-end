@@ -9,6 +9,7 @@ namespace Application.Interface
 	{
 		public Task<ApiResponse> GetAllChatGroup();
         public Task<ApiResponse> GetAllChatGroupByAdminId(string adminId);
+        public Task<ApiResponse> DisableChatGroup(string groupId);
         public Task<ApiResponse> GetChatGroupByGroupId(string groupId);
         public Task<ApiResponse> AddChatGroup(AddChatGroupRequest addChatGroupRequest);
         public Task<ApiResponse> DeleteChatGroup(string groupId);

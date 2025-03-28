@@ -28,6 +28,13 @@ namespace API.Controllers
 
             return response.IsSuccess? Ok(response) : BadRequest(response);
         }
+        [HttpPatch("disable/{chatgroupId}")]
+        public async Task<IActionResult> PatchDisableChatGroup([FromRoute]string chatgroupId)
+        {
+            var response = await chatGroupService.DisableChatGroup(chatgroupId);
+
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
         [HttpGet("admin/{adminId}")]
         public async Task<IActionResult> GetAllChatGroupByAdminId([FromRoute] string adminId)
         {

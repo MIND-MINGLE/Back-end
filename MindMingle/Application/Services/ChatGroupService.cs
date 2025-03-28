@@ -20,8 +20,29 @@ namespace Application.Services
             this.mapper = mapper;
             this.usersInGroupService = usersInGroupService;
         }
+        public async Task<ApiResponse> DisableChatGroup(string groupId)
+        {
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                var chatGroupModel = await unitOfWorks.ChatGroupRepo.GetAsync(c => c.Id.Equals(groupId));
+                if (chatGroupModel!=null)
+                {
+                    await unitOfWorks.ChatGroupRepo.UpdateFieldAsync(groupId, c => c.IsDisabled, true);
+                    return response.SetOk("Chat Group Disabled");
+                }
+                else
+                {
+                    return response.SetNotFound("No Group Chat Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return response.SetBadRequest($"Error: {ex.Message}. Details: {ex.InnerException?.Message}");
+            }
+        }
 
-        public async Task<ApiResponse> AddChatGroup(AddChatGroupRequest addChatGroupRequest)
+            public async Task<ApiResponse> AddChatGroup(AddChatGroupRequest addChatGroupRequest)
         {
             ApiResponse response = new ApiResponse();
             try
