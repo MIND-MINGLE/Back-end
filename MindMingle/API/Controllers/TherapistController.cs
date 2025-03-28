@@ -47,7 +47,7 @@ namespace API.Controllers
 
 
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateTherapist([FromBody] UpdatePersonRequest request)
+        public async Task<IActionResult> UpdateTherapist([FromBody] UpdateTherapistRequest request)
         {
             var response = await therapistservice.UpdateTherapistAsync(request);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
