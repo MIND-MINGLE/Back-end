@@ -30,7 +30,7 @@ namespace Application.Services
             try
             {
                 var purchasedPackage = _mapper.Map<PurchasedPackage>(purchasedPackageRequest);
-                purchasedPackage.IsDisabled = false;
+                purchasedPackage.IsDisabled = true;
                 await _unitOfWork.PurchasedPackageRepo.AddAsync(purchasedPackage);
                 await _unitOfWork.SaveChangeAsync();
                 return response.SetOk(purchasedPackageRequest);

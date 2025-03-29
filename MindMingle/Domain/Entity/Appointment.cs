@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Domain.Entity
 {
-    public class Appointment
+    public class Appointment:Norms
     {
         [Key]
         public required string AppointmentId { get; set; }
