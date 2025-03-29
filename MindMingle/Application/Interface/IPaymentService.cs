@@ -1,5 +1,6 @@
 ﻿using Application.Request.Payment;
 using Application.Response;
+using Application.Response.Payment;
 using Domain.Entity;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,9 @@ namespace Application.Interface
 {
     public interface IPaymentService
     {
+        Task<ApiResponse> PayWithPayOS(PaymentRequest paymentRequest);
+        Task<ApiResponse> PayWithPayOS(PaymentRequestAppointment paymentRequest);
+        Task<ApiResponse> ConfirmPayment(string paymentId, bool success);
         Task<ApiResponse> CreatePaymentAsync(PaymentRequest paymentRequest);
         Task<ApiResponse> GetPaymentByIdAsync(string paymentId);
         Task<IEnumerable<ApiResponse>> GetPaymentsByPatientIdAsync(string patientId);

@@ -18,13 +18,21 @@ namespace API.Controllers
         {
             _paymentService = paymentService;
         }
-
+        [HttpGet("receiveTransaction")]
+        public async Task<IActionResult> MakePaymentPayOS([FromQuery] string paymentId, [FromQuery] bool success)
+        {
+            await _paymentService.ConfirmPayment(paymentId, success);
+            // Dynamically construct the redirect URL with paymentId and success
+            string redirectUrl = $"https://mindmingle202.vercel.app/payment/{paymentId}?paymentStatus={success.ToString().ToLower()}";
+            return Redirect(redirectUrl);
+        }
         [HttpPost("create")]
         public async Task<IActionResult> CreatePayment([FromBody] PaymentRequest paymentRequest)
         {
-            var response = await _paymentService.CreatePaymentAsync(paymentRequest);
+            var response = await _paymentService.PayWithPayOS(paymentRequest);
             return StatusCode((int)response.StatusCode, response);
         }
+
         [HttpPost("create-has-appointment")]
         public async Task<IActionResult> CreatePaymentHasAppointment([FromBody] PaymentRequestAppointment paymentRequest)
         {

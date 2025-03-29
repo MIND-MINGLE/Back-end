@@ -5,13 +5,18 @@ using Application.Response;
 using Application.Response.Payment;
 using AutoMapper;
 using Domain.Entity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Net.payOS;
+using Net.payOS.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Application.Services
 {
@@ -19,9 +24,11 @@ namespace Application.Services
     {
         private readonly IUnitOfWorks _unitOfWorks;
         private readonly IMapper _mapper;
-
-        public PaymentService(IUnitOfWorks unitOfWorks, IMapper mapper)
+        private readonly IConfiguration configuration;
+        
+        public PaymentService(IUnitOfWorks unitOfWorks, IMapper mapper, IConfiguration configuration)
         {
+            this.configuration = configuration;
             _unitOfWorks = unitOfWorks;
             _mapper = mapper;
         }
@@ -281,43 +288,120 @@ namespace Application.Services
                 );
             }
         }
+        public async Task<ApiResponse> PayWithPayOS(PaymentRequest paymentRequest)
+        {
+            ApiResponse apiResponse = new ApiResponse();
+            var payment = _mapper.Map<Payment>(paymentRequest);
+            payment.PaymentId = Guid.NewGuid().ToString();
+            payment.PaymentMethod = PaymentMethod.MOMO;
+            payment.PaymentStatus = PaymentStatus.PENDING;
+            await _unitOfWorks.PaymentRepo.AddAsync(payment);
+            await _unitOfWorks.SaveChangeAsync();
 
-        //public async Task<IEnumerable<ApiResponse>> GetPaymentHasAppointmentByPatientId(string patientId)
-        //{
-        //    try
-        //    {
-        //        if (paymentRequest == null)
-        //        {
-        //            return new ApiResponse().SetBadRequest(message: "Payment cannot be null");
-        //        }
-        //        // Ánh xạ PaymentRequest sang Payment entity
-        //        var payment = _mapper.Map<Payment>(paymentRequest);
-        //        payment.PaymentMethod = PaymentMethod.MOMO;
-        //        payment.PaymentStatus = PaymentStatus.PENDING;
-        //        // Gọi AddAsync mà không gán vào biến, vì nó không trả về giá trị
-        //        await _unitOfWorks.PaymentRepo.AddAsync(payment);
+            var clientId = configuration.GetSection("PayOS").GetSection("PayOSClientID").Value;
+            var apiKey = configuration.GetSection("PayOS").GetSection("PayOSAPIKey").Value;
+            var checksumKey = configuration.GetSection("PayOS").GetSection("PayOSChecksumKey").Value;
+            var random = new Random(); // generate a order code
+            // Redirect to here, the API to confirm payment
+            var domain = "https://mindmingle202.azurewebsites.net/api/Payment/receiveTransaction";
+            if(clientId==null|| apiKey==null||checksumKey==null){
+                return apiResponse.SetBadRequest("Cannot create PayOS url");
+            }
+            var payOS = new PayOS(clientId, apiKey, checksumKey);
+            List<ItemData> itemDatas = new List<ItemData>
+            {
+                new("Deposit", 1, (int)payment.Amount)
+            };
+            var paymentLinkRequest = new PaymentData(
+                orderCode: random.Next(),
+                amount: (int)payment.Amount,
+                description: "Payment",
+                items: itemDatas,
+                returnUrl: domain + $"?paymentId={payment.PaymentId}&success=true",
+                cancelUrl: domain + $"?paymentId={payment.PaymentId}&success=false"
+            );
+            var response = await payOS.createPaymentLink(paymentLinkRequest);
 
-        //        // Nếu cần lấy lại payment (ví dụ để trả về ID), bạn có thể gọi GetAsync
-        //        var createdPayment = await _unitOfWorks.PaymentRepo.GetAsync(p => p.PaymentId == payment.PaymentId);
-        //        if (createdPayment == null)
-        //        {
-        //            return new ApiResponse().SetApiResponse(
-        //                statusCode: HttpStatusCode.InternalServerError,
-        //                isSuccess: false,
-        //                message: "Failed to retrieve the created payment"
-        //            );
-        //        }
-        //        var paymentResponse = _mapper.Map<PaymentResponse>(createdPayment);
-        //        return new ApiResponse().SetOk(createdPayment);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new ApiResponse().SetApiResponse(
-        //            statusCode: HttpStatusCode.InternalServerError,
-        //            isSuccess: false,
-        //            message: $"Error creating payment: {ex.Message}"
-        //        );
-        //    }
-        //}
+            return apiResponse.SetOk(response.checkoutUrl);
+        }
+        public async Task<ApiResponse> PayWithPayOS(PaymentRequestAppointment paymentRequest)
+        {
+            ApiResponse apiResponse = new ApiResponse();
+            var payment = _mapper.Map<Payment>(paymentRequest);
+            payment.PaymentId = Guid.NewGuid().ToString();
+            payment.PaymentMethod = PaymentMethod.MOMO;
+            payment.PaymentStatus = PaymentStatus.PENDING;
+            await _unitOfWorks.PaymentRepo.AddAsync(payment);
+            await _unitOfWorks.SaveChangeAsync();
+
+            var clientId = configuration.GetSection("PayOS").GetSection("PayOSClientID").Value;
+            var apiKey = configuration.GetSection("PayOS").GetSection("PayOSAPIKey").Value;
+            var checksumKey = configuration.GetSection("PayOS").GetSection("PayOSChecksumKey").Value;
+            var random = new Random(); // generate a order code
+            var domain = "https://mindmingle202.azurewebsites.net/api/Payment/receiveTransaction";
+            if (clientId == null || apiKey == null || checksumKey == null)
+            {
+                return apiResponse.SetBadRequest("Cannot create PayOS url");
+            }
+            var payOS = new PayOS(clientId, apiKey, checksumKey);
+            List<ItemData> itemDatas = new List<ItemData>
+            {
+                new("Deposit", 1, (int)payment.Amount)
+            };
+            var paymentLinkRequest = new PaymentData(
+                orderCode: random.Next(),
+                amount: (int)payment.Amount,
+                description: "Payment",
+                items: itemDatas,
+                returnUrl: domain + $"?success=true&transactionId={payment.PaymentId}",
+                cancelUrl: domain + $"?success=false&transactionId={payment.PaymentId}"
+            );
+            var response = await payOS.createPaymentLink(paymentLinkRequest);
+
+            return apiResponse.SetOk(response.checkoutUrl);
+        }
+
+
+        public async Task<ApiResponse> ConfirmPayment(string paymentId,bool success)
+        {
+            ApiResponse apiResponse = new ApiResponse();
+            var payment = await _unitOfWorks.PaymentRepo.GetAsync(p=>p.PaymentId.Equals(paymentId));
+                if (success)
+                {
+                    await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId,p=>p.PaymentStatus, PaymentStatus.PAID);
+                // For Checking Subscription Data
+                var now = DateTime.UtcNow; 
+                // Fetch all matching subscriptions and sort by proximity to now
+                var subscriptions = await _unitOfWorks.PurchasedPackageRepo
+                    .GetAllAsync(pu => pu.PatientId == payment.PatientId && pu.IsDisabled == true);
+                if (subscriptions.Count> 0)
+                {
+                    var closestSubscription = subscriptions
+                    .OrderBy(pu => Math.Abs((pu.StartDate - now).TotalSeconds))
+                    .FirstOrDefault();
+                    await _unitOfWorks.PurchasedPackageRepo.UpdateFieldAsync(closestSubscription?.PurchasedPackageId, p => p.IsDisabled, false);
+                }
+                // For Checking Appointment Data TODO
+
+                PayOSResponse payOSResponse = new PayOSResponse
+                {
+                    PaymentId = paymentId,
+                    PaymentStatus = true
+                };
+                return apiResponse.SetOk(payOSResponse);
+                }
+                else
+                {
+                await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId, p => p.PaymentStatus, PaymentStatus.CANCELED);
+                PayOSResponse payOSResponse = new PayOSResponse
+                {
+                    PaymentId = paymentId
+                 ,
+                    PaymentStatus = false
+                };
+                return apiResponse.SetOk(payOSResponse);
+            }
+                
+        }
     }
 }
