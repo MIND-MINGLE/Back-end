@@ -64,12 +64,12 @@ namespace Application.MyMapper
                .ForMember(dest => dest.Dob, opt => opt.Ignore()); // ignore, we custom Date
             // ChatGroup Mapper
             CreateMap<AddChatGroupRequest, ChatGroup>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src =>
+            .ForMember(dest => dest.GroupChatId, opt => opt.MapFrom(src =>
                Guid.NewGuid().ToString()
             ));
             CreateMap<ChatGroup, ChatGroupResponse>()
                 .ForMember(dest => dest.AdminName, opt => opt.Ignore())
-                .ForMember(dest => dest.ChatGroupId, opt => opt.MapFrom(cg => cg.Id));
+                .ForMember(dest => dest.ChatGroupId, opt => opt.MapFrom(cg => cg.GroupChatId));
             // UsersInGroup
             CreateMap<UsersInGroup, GetAllUserInGroupResponse>()
                 .ForMember(des=>des.AccountName, opt=>opt.MapFrom(us=>us.Accounts.AccountName))

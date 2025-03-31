@@ -15,13 +15,15 @@ namespace Application.Response.Appointment
         public string? CoWorkingSpaceId { get; set; }
         public string SessionId { get; set; } = null!;
         public string EmergencyEndId { get; set; } = null!;
+        public required string GroupChatId { get; set; }
         public AppointmentType AppointmentType { get; set; }
         public Status Status { get; set; }
         public double TotalFee { get; set; }
         public double PlatformFee { get; set; }
         public DateTime CreatedAt { get; set; }
-        public ResponseSession Session { get; set; } = null!;
+        public ResponseSession? Session { get; set; }
         public ResponsePatient? Patient { get; set; }
         public ResponseTherapist? Therapist { get; set; }
+        public ResponseEmergencyEnd? EmergencyEnd { get; set; }
     }
 }

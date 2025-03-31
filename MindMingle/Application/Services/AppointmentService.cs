@@ -58,7 +58,12 @@ namespace Application.Service
                 return new ApiResponse().SetNotFound("Appointment not found");
             else
             {
+                var chatgroupApp = await unitOfWorks.ChatGroupRepo.GetAsync(cg => cg.GroupChatId.Equals(appointment.GroupChatId));
                 await unitOfWorks.AppointmentRepo.UpdateFieldAsync(appointmentId, x => x.Status, appointment.Status = Status.ENDED);
+                if (chatgroupApp!=null)
+                {
+                    await unitOfWorks.ChatGroupRepo.UpdateFieldAsync(chatgroupApp.GroupChatId, x => x.IsDisabled, chatgroupApp.IsDisabled = true);
+                }
             }
             var response = _mapper.Map<AppointmentResponse>(appointment);
             return new ApiResponse().SetOk(response);

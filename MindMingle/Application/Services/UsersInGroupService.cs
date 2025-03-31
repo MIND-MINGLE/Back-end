@@ -105,7 +105,7 @@ namespace Application.Services
                 // Get chat group IDs
                 var chatgroupList = userInGroupModel.Select(cg => cg.ChatGroupId).ToList();
                 var chatGroupResponses = await unitOfWorks.ChatGroupRepo.GetAllAsync(
-                    cg => chatgroupList.Contains(cg.Id),
+                    cg => chatgroupList.Contains(cg.GroupChatId),
                     q => q.Include(cg => cg.Account).ThenInclude(a => a.Therapist) // Admin’s Account and Therapist
                           .Include(cg => cg.UsersInGroups).ThenInclude(ug => ug.Accounts).ThenInclude(a => a.Patient) // Clients’ Accounts and Patient
                 );
@@ -120,7 +120,7 @@ namespace Application.Services
                     return new ChatGroupResponse
                     {
                         IsDisabled = cg.IsDisabled,
-                        ChatGroupId = cg.Id,
+                        ChatGroupId = cg.GroupChatId,
                         AdminId = cg.AdminId,
                         AdminName = isTherapist
                             ? patientClient != null
@@ -129,7 +129,7 @@ namespace Application.Services
                             : cg.Account.Therapist != null
                                 ? $"{cg.Account.Therapist.FirstName} {cg.Account.Therapist.LastName}" // Patient POV: Therapist’s FirstName LastName
                                 : cg.Account.AccountName, // Fallback if admin isn’t a therapist
-                        UserInGroupId = userInGroupModel.First(ug => ug.ChatGroupId == cg.Id).UsersInGroupId,
+                        UserInGroupId = userInGroupModel.First(ug => ug.ChatGroupId == cg.GroupChatId).UsersInGroupId,
                        
                     };
                 }).ToList();

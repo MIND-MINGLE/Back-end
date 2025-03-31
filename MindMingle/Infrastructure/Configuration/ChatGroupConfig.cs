@@ -11,7 +11,7 @@ namespace Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<ChatGroup> builder)
         {
             // Primary key
-            builder.HasKey(a => a.Id);
+            builder.HasKey(a => a.GroupChatId);
             builder.Property(a => a.CreatedAt).IsRequired();
             builder.Property(a => a.UpdatedAt).IsRequired();
 

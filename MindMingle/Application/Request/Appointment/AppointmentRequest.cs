@@ -13,6 +13,8 @@ namespace Application.Request.Appointment
 
         public required string TherapistId { get; set; }
 
+        public required string GroupChatId { get; set; }
+
         //public string? CoWorkingSpaceId { get; set; } // Nullable FK
 
         public required string SessionId { get; set; }

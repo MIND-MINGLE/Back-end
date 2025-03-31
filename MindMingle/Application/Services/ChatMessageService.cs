@@ -47,7 +47,7 @@ namespace Application.Services
             ApiResponse response = new ApiResponse();
             try
             {
-                var groupChatExist = await unitOfWorks.ChatGroupRepo.GetAllAsync(g => g.Id == chatGroupId);
+                var groupChatExist = await unitOfWorks.ChatGroupRepo.GetAllAsync(g => g.GroupChatId == chatGroupId);
                 if (groupChatExist.Count == 0)
                 {
                     return response.SetNotFound("No Group Chat Exist");

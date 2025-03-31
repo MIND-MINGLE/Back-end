@@ -15,6 +15,7 @@ namespace Application.Response.Appointment
         public string? CoWorkingSpaceId { get; set; }
         public string SessionId { get; set; } = null!;
         public string EmergencyEndId { get; set; } = null!;
+        public required string GroupChatId { get; set; }
         public AppointmentType AppointmentType { get; set; }
         public Status Status { get; set; }
         public double TotalFee { get; set; }

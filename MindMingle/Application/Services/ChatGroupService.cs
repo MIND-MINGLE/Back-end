@@ -25,7 +25,7 @@ namespace Application.Services
             ApiResponse response = new ApiResponse();
             try
             {
-                var chatGroupModel = await unitOfWorks.ChatGroupRepo.GetAsync(c => c.Id.Equals(groupId));
+                var chatGroupModel = await unitOfWorks.ChatGroupRepo.GetAsync(c => c.GroupChatId.Equals(groupId));
                 if (chatGroupModel!=null)
                 {
                     await unitOfWorks.ChatGroupRepo.UpdateFieldAsync(groupId, c => c.IsDisabled, true);
@@ -48,14 +48,14 @@ namespace Application.Services
             try
             {
                 var chatGroupModel = mapper.Map<ChatGroup>(addChatGroupRequest);
-                chatGroupModel.Id = Guid.NewGuid().ToString();
+                chatGroupModel.GroupChatId = Guid.NewGuid().ToString();
                 await unitOfWorks.ChatGroupRepo.AddAsync(chatGroupModel);
                 await unitOfWorks.SaveChangeAsync();
                 // Multi-task that when a new group is created, the admin got joined in too. Saving the time have to call another API in FE
                 UsersInGroupRequest newUser = new UsersInGroupRequest()
                 {
                     ClientId = chatGroupModel.AdminId,
-                    ChatGroupId = chatGroupModel.Id
+                    ChatGroupId = chatGroupModel.GroupChatId
                 };
                 var addUserInGroup = await usersInGroupService.AddUsersIntoGroup(newUser);
                 if (addUserInGroup.IsSuccess)
@@ -91,7 +91,7 @@ namespace Application.Services
             ApiResponse response = new ApiResponse();
             try
             {
-                var chatGroupModel = await unitOfWorks.ChatGroupRepo.GetAsync(g => g.Id == groupId);
+                var chatGroupModel = await unitOfWorks.ChatGroupRepo.GetAsync(g => g.GroupChatId == groupId);
                 if (chatGroupModel != null)
                     return response.SetOk(chatGroupModel);
                 else

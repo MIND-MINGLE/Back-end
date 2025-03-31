@@ -22,7 +22,8 @@ namespace Domain.Entity
 
         public required string SessionId { get; set; } 
 
-        public string? EmergencyEndId { get; set; } 
+        public string? EmergencyEndId { get; set; }
+        public required string GroupChatId { get; set; }
 
         [Required]
         public AppointmentType AppointmentType { get; set; } // e.g., "Online", "Offline"
@@ -35,9 +36,8 @@ namespace Domain.Entity
 
         public double PlatformFee { get; set; } // 20% of TotalFee
 
-        public DateTime CreatedAt { get; set; }
-
         // Navigation properties
+        public ChatGroup ChatGroup { get; set; } = null!;
         public Therapist Therapist { get; set; } = null!;
         public Session Session { get; set; } = null!;
         public Patient Patient { get; set; } = null!;
