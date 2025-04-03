@@ -79,7 +79,8 @@ namespace Application.Services
                     Answers = answers.Where(a => a.QuestionId == q.QuestionId).Select(a => new ResponseAnswer
                     {
                         AnswerId = a.AnswerId,
-                        AnswerContent = a.AnswerContent
+                        AnswerContent = a.AnswerContent,
+                        Score = a.Score
                     }).ToList()
                 }).ToList();
 
@@ -114,7 +115,8 @@ namespace Application.Services
                     Answers = answers.Select(a => new ResponseAnswer
                     {
                         AnswerId = a.AnswerId,
-                        AnswerContent = a.AnswerContent
+                        AnswerContent = a.AnswerContent,
+                        Score = a.Score
                     }).ToList()
                 };
 
