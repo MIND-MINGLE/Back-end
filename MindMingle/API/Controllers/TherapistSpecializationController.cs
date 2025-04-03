@@ -38,9 +38,9 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTherapistSpecializationByIdAsync(string theraSpecId, string specId)
+        public async Task<IActionResult> DeleteTherapistSpecializationByIdAsync(string therapistId, string specId)
         {
-            var response = await _therapistSpecializationService.DeleteTherapistSpecializationByIdAsync(theraSpecId,specId);
+            var response = await _therapistSpecializationService.DeleteTherapistSpecializationByIdAsync(therapistId,specId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }
