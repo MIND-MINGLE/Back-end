@@ -212,7 +212,8 @@ namespace Application.MyMapper
 
             CreateMap<Therapist_Specialization, ResponseTherapistSpecialization>();
 
-            CreateMap<Therapist_Specialization, ResponseDetailTherapistSpecialization>();
+            CreateMap<Therapist_Specialization, ResponseDetailTherapistSpecialization>()
+                ;
 
             //Payment Mapper
 

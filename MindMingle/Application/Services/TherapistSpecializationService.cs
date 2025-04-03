@@ -43,18 +43,18 @@ namespace Application.Services
             }
         }
 
-        public async Task<ApiResponse> DeleteTherapistSpecializationByIdAsync(string theraSpecId, string specId)
+        public async Task<ApiResponse> DeleteTherapistSpecializationByIdAsync(string therapistId, string specId)
         {
             ApiResponse response = new ApiResponse();
             try
             {
-                var therapistSpecialization = await _unitOfWorks.TherapistSpecializationRepo.GetAsync(x => x.Therapist_SpecializationId == theraSpecId && x.SpecializationId == specId);
+                var therapistSpecialization = await _unitOfWorks.TherapistSpecializationRepo.GetAsync(x => x.TherapistId == therapistId && x.SpecializationId == specId);
                 if (therapistSpecialization == null)
                 {
                     return response.SetNotFound("Therapist specialization not found.");
                 }
 
-                await _unitOfWorks.TherapistSpecializationRepo.RemoveByIdAsync(theraSpecId);
+                await _unitOfWorks.TherapistSpecializationRepo.RemoveByIdAsync(therapistSpecialization.Therapist_SpecializationId);
                 await _unitOfWorks.SaveChangeAsync();
                 return response.SetOk("Therapist specialization deleted successfully.");
             }
