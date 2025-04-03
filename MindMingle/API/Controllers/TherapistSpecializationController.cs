@@ -36,5 +36,12 @@ namespace API.Controllers
             var response = await _therapistSpecializationService.GetTherapistSpecializationByTherapistIdAsync(therapistId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DisableTherapistSpecializationByIdAsync(string id)
+        {
+            var response = await _therapistSpecializationService.DisableTherapistSpecializationByIdAsync(id);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
     }
 }

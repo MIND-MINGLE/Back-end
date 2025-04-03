@@ -43,6 +43,26 @@ namespace Application.Services
             }
         }
 
+        public async Task<ApiResponse> DisableTherapistSpecializationByIdAsync(string id)
+        {
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                var therapistSpecialization = await _unitOfWorks.TherapistSpecializationRepo.GetAsync(x => x.Therapist_SpecializationId == id);
+                if (therapistSpecialization == null)
+                {
+                    return response.SetNotFound("Therapist specialization not found.");
+                }
+                therapistSpecialization.IsDisabled = true;
+                _unitOfWorks.SaveChangeAsync();
+                return response.SetOk("Therapist specialization deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                return response.SetBadRequest(ex.Message);
+            }
+        }
+
         public async Task<ApiResponse> GetTherapistSpecializationAsync()
         {
             ApiResponse response = new ApiResponse();
