@@ -10,5 +10,6 @@ namespace Application.Response
     {
         required public string AnswerId { get; set; }
         required public string AnswerContent { get; set; }
+        required public int Score { get; set; }
     }
 }
