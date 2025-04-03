@@ -54,7 +54,7 @@ namespace Application.Services
                     return response.SetNotFound("Therapist specialization not found.");
                 }
 
-                await _unitOfWorks.TherapistSpecializationRepo.RemoveByIdAsync(id);
+                await _unitOfWorks.TherapistSpecializationRepo.RemoveByIdAsync(theraSpecId);
                 await _unitOfWorks.SaveChangeAsync();
                 return response.SetOk("Therapist specialization deleted successfully.");
             }
