@@ -43,7 +43,7 @@ namespace Application.Services
             }
         }
 
-        public async Task<ApiResponse> DisableTherapistSpecializationByIdAsync(string id)
+        public async Task<ApiResponse> DeleteTherapistSpecializationByIdAsync(string id)
         {
             ApiResponse response = new ApiResponse();
             try
@@ -53,8 +53,9 @@ namespace Application.Services
                 {
                     return response.SetNotFound("Therapist specialization not found.");
                 }
-                therapistSpecialization.IsDisabled = true;
-                _unitOfWorks.SaveChangeAsync();
+
+                await _unitOfWorks.TherapistSpecializationRepo.RemoveByIdAsync(id);
+                await _unitOfWorks.SaveChangeAsync();
                 return response.SetOk("Therapist specialization deleted successfully.");
             }
             catch (Exception ex)
