@@ -13,6 +13,6 @@ namespace Application.Interface
         Task<ApiResponse> AddTherapistSpecializationAsync(TherapistSpecializationRequest request);
         Task<ApiResponse> GetTherapistSpecializationAsync();
         Task<ApiResponse> GetTherapistSpecializationByTherapistIdAsync(string therapistId);
-        Task<ApiResponse> DeleteTherapistSpecializationByIdAsync(string id);
+        Task<ApiResponse> DeleteTherapistSpecializationByIdAsync(string theraSpecId, string specId);
     }
 }
