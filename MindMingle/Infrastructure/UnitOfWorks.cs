@@ -34,12 +34,16 @@ namespace Infrastructure
         public IPaymentRepository PaymentRepo { get; }
 		public ISpecializationRepository SpecializationRepo { get; }
         public ITherapistSpecializationRepository TherapistSpecializationRepo { get; }
+        public IPatientResponseRepository PatientResponseRepo { get; }
+        public IPatientSurveyRepository PatientSurveyRepo { get; }
 
         public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
         {
             _mMDbContext = mMDbContext;
 			EmailVerificationRepo = new EmailVerificationRepository(mMDbContext);
 			AccountRepo = new AccountRepository(mMDbContext);
+			PatientResponseRepo = new PatientResponseRepository(mMDbContext);
+			PatientSurveyRepo = new PatientSurveyRepository(mMDbContext);
             RoleRepo = new RoleRespository(mMDbContext);
             TwilioRepo = new TwilioRepository(options);
 			PatientRepo = new PatientRepository(mMDbContext);

@@ -18,9 +18,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddResponse([FromBody] PatientResRequest request)
+        public async Task<IActionResult> AddResponse([FromBody] PatientResRequest[] request)
         {
-            var response = await _patientResponseService.AddResponseAsync(request);
+            var response = await _patientResponseService.ComposeResponse(request);
             return StatusCode((int)response.StatusCode, response);
         }
 

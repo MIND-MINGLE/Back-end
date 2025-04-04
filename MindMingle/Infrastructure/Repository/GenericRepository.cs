@@ -32,7 +32,10 @@ namespace Infrastructure.Repository
        public async Task AddRangeAsync(List<T> entities)
         {
             if (entities.Count > 0)
+            {
                 await mMDbContext.Set<T>().AddRangeAsync(entities);
+                await mMDbContext.SaveChangesAsync();
+            }
             else
                 throw new Exception(); 
         }

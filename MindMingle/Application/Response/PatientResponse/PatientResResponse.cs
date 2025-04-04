@@ -12,7 +12,7 @@ namespace Application.Response.PatientResponse
         public string SurveyId { get; set; }
         public string QuestionId { get; set; }
         public string? AnswerId { get; set; }
-        public string? CustomerAnswer { get; set; }
+        public string? CustomAnswer { get; set; }
         public int? Score { get; set; }
     }
 }

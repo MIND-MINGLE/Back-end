@@ -12,5 +12,7 @@ namespace Application.Interface
     {
         Task<ApiResponse> AddSurveyAsync(PatientSurveyRequest request);
         Task<ApiResponse> GetSurveysByPatientIdAsync(string patientId, int pageIndex = 1, int pageSize = 10);
+        Task<ApiResponse> GetLatestSurveysByPatientIdAsync(string patientId);
+        
     }
 }

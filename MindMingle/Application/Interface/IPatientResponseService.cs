@@ -12,6 +12,7 @@ namespace Application.Interface
     public interface IPatientResponseService
     {
         Task<ApiResponse> AddResponseAsync(PatientResRequest request);
+        Task<ApiResponse> ComposeResponse(PatientResRequest[] request);
         Task<ApiResponse> GetResponsesBySurveyIdAsync(string surveyId, int pageIndex = 1, int pageSize = 10);
     }
 }

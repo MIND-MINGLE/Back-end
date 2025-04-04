@@ -29,5 +29,11 @@ namespace API.Controllers
             var response = await _patientSurveyService.GetSurveysByPatientIdAsync(patientId, pageIndex, pageSize);
             return StatusCode((int)response.StatusCode, response);
         }
+        [HttpGet("latest/{patientId}")]
+        public async Task<IActionResult> GetLatestSurveysByPatientId(string patientId)
+        {
+            var response = await _patientSurveyService.GetLatestSurveysByPatientIdAsync(patientId);
+            return StatusCode((int)response.StatusCode, response);
+        }
     }
 }

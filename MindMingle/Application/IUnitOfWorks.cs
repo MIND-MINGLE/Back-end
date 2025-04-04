@@ -27,6 +27,8 @@ namespace Application
         public IPaymentRepository PaymentRepo { get; }
         public ISpecializationRepository SpecializationRepo { get; }
         public ITherapistSpecializationRepository TherapistSpecializationRepo { get; }
+        public IPatientResponseRepository PatientResponseRepo { get; }
+        public IPatientSurveyRepository PatientSurveyRepo { get; }
         //TODO
 
         //public Task<T> ExecuteScalarAsync<T>(string sql);

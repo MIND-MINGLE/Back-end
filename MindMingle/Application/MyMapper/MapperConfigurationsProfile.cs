@@ -93,7 +93,7 @@ namespace Application.MyMapper
                 .ForMember(dest => dest.SurveyId, opt => opt.MapFrom(src => src.PatientSurveyId))
                 .ForMember(dest => dest.QuestionId, opt => opt.MapFrom(src => src.QuestionId))
                 .ForMember(dest => dest.AnswerId, opt => opt.MapFrom(src => src.AnswerId))
-                .ForMember(dest => dest.CustomerAnswer, opt => opt.MapFrom(src => src.CustomerAnswer))
+                .ForMember(dest => dest.CustomAnswer, opt => opt.MapFrom(src => src.CustomAnswer))
                 .ForMember(dest => dest.Score, opt => opt.MapFrom(src => src.Score));
             CreateMap<Question, ResponseQuestion>();
             CreateMap<QuestionRequest, Question>()
@@ -111,8 +111,6 @@ namespace Application.MyMapper
           
             //PatientSurvey
             CreateMap<PatientSurveyRequest, PatientSurvey>()
-                .ForMember(dest => dest.PatientSurveyId, opt => opt.MapFrom(src => Guid.NewGuid().ToString())) // Bỏ qua vì sẽ được tạo tự động
-                .ForMember(dest => dest.PatientResponses, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt == default ? DateTime.UtcNow : src.CreatedAt));
 
             // Ánh xạ từ PatientSurvey sang PatientSurveyResponse
