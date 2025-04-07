@@ -338,7 +338,7 @@ namespace Application.Services
             var apiKey = configuration.GetSection("PayOS").GetSection("PayOSAPIKey").Value;
             var checksumKey = configuration.GetSection("PayOS").GetSection("PayOSChecksumKey").Value;
             var random = new Random(); // generate a order code
-            var domain = "https://mindmingle202.azurewebsites.net/api/Payment/receiveTransaction";
+            var domain = "https://mindmingleexe202.azurewebsites.net/api/Payment/receiveTransaction";
             if (clientId == null || apiKey == null || checksumKey == null)
             {
                 return apiResponse.SetBadRequest("Cannot create PayOS url");

@@ -150,18 +150,8 @@ namespace Application.MyMapper
             CreateMap<AppointmentUpdateStatus, Appointment>()
                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // Chỉ cập nhật các field có giá trị
             // Ánh xạ từ Appointment sang AppointmentResponse (dùng cho Get)
-            CreateMap<Appointment, AppointmentResponse>()
-                .ForMember(dest => dest.AppointmentId, opt => opt.MapFrom(src => src.AppointmentId))
-                .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
-                .ForMember(dest => dest.TherapistId, opt => opt.MapFrom(src => src.TherapistId))
-                .ForMember(dest => dest.CoWorkingSpaceId, opt => opt.MapFrom(src => src.CoWorkingSpaceId))
-                .ForMember(dest => dest.SessionId, opt => opt.MapFrom(src => src.SessionId))
-                .ForMember(dest => dest.EmergencyEndId, opt => opt.MapFrom(src => src.EmergencyEndId))
-                .ForMember(dest => dest.AppointmentType, opt => opt.MapFrom(src => src.AppointmentType))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-                .ForMember(dest => dest.TotalFee, opt => opt.MapFrom(src => src.TotalFee))
-                .ForMember(dest => dest.PlatformFee, opt => opt.MapFrom(src => src.PlatformFee))
-                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
+            CreateMap<Appointment, AppointmentResponse>();
+  
             //
             CreateMap<Appointment, AllAppointmentResponse>();
             //Credit
