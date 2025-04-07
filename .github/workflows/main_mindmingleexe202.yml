@@ -27,16 +27,16 @@ jobs:
         run: dotnet build ./MindMingle/API/API.csproj --configuration Release
           
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/MindMingle/API"
+        run: dotnet publish ./MindMingle/API/API.csproj -c Release -o 
         
       - name: Debug publish output
-        run: dir "${{env.DOTNET_ROOT}}/./MindMingle/API" || echo "Directory not found or empty"
+        run: dir ./MindMingle/API/API || echo "Directory not found or empty"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/MindMingle/API/API.csproj
+          path: ./MindMingle/API
 
   deploy:
     runs-on: windows-latest
