@@ -1,9 +1,5 @@
-﻿using Domain.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Response.Rating;
+using Domain.Entity;
 
 namespace Application.Response.Appointment
 {
@@ -25,5 +21,6 @@ namespace Application.Response.Appointment
         public ResponsePatient? Patient { get; set; }
         public ResponseTherapist? Therapist { get; set; }
         public ResponseEmergencyEnd? EmergencyEnd { get; set; }
+        public ResponseRating? Ratings { get; set; }
     }
 }

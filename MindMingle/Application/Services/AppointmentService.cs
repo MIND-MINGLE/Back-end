@@ -31,6 +31,7 @@ namespace Application.Service
             .Include(t => t.Therapist)
             .Include(s=>s.Session)
             .Include(e=>e.EmergencyEnd)
+            .Include(r=>r.Ratings)
             );
             if (appList.Count == 0)
             {
@@ -143,6 +144,7 @@ namespace Application.Service
                     a => a.PatientId == patientId,
                     s => s.Include(a=>a.Session)
                     .Include(t=>t.Therapist)
+                    .Include(r=>r.Ratings)
                     );
                 var response = _mapper.Map<List<AppointmentResponse>>(appointments);
                 return new ApiResponse().SetOk(response);
@@ -162,7 +164,9 @@ namespace Application.Service
             {
                 var appointments = await unitOfWorks.AppointmentRepo.GetAllAsync(
                     a => a.TherapistId == therapistId,
-                    s=>s.Include(a=>a.Session).Include(p=>p.Patient)
+                    s=>s.Include(a=>a.Session)
+                    .Include(p=>p.Patient)
+                    .Include(r => r.Ratings)
                     );
                 var response = _mapper.Map<List<AppointmentResponse>>(appointments);
                 return new ApiResponse().SetOk(response);

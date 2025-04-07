@@ -150,7 +150,8 @@ namespace Application.MyMapper
             CreateMap<AppointmentUpdateStatus, Appointment>()
                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); // Chỉ cập nhật các field có giá trị
             // Ánh xạ từ Appointment sang AppointmentResponse (dùng cho Get)
-            CreateMap<Appointment, AppointmentResponse>();
+            CreateMap<Appointment, AppointmentResponse>()
+               .ForMember(r=>r.Ratings, opt=>opt.MapFrom(r=>r.Ratings));
   
             //
             CreateMap<Appointment, AllAppointmentResponse>();

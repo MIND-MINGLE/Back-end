@@ -1,4 +1,5 @@
-﻿using Domain.Entity;
+﻿using Application.Response.Rating;
+using Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace Application.Response.Appointment
         public ResponseSession Session { get; set; } = null!;
         public ResponsePatient Patient { get; set; } = null!;
         public ResponseTherapist Therapist { get; set; } = null!;
-        public ResponseEmergencyEnd? EmergencyEnd { get; set; } 
+        public ResponseEmergencyEnd? EmergencyEnd { get; set; }
+        public ResponseRating? Ratings { get; set; }
     }
 }

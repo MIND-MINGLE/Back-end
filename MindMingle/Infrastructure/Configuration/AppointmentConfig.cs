@@ -28,6 +28,9 @@ namespace Infrastructure.Configuration
             builder.HasOne(ap => ap.ChatGroup)
             .WithOne(t => t.Appointment)
             .HasForeignKey<Appointment>(ap => ap.GroupChatId);
+            builder.HasOne(ap => ap.Ratings)
+         .WithOne(t => t.Appointment)
+         .HasForeignKey<Rating>(ap => ap.AppointmentId);
         }
     }
 }
