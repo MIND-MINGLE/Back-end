@@ -63,5 +63,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'mindmingleexe202'
-          package: .
+          package: ${{env.DOTNET_ROOT}}/MindMingle
+          verbose: true
           
