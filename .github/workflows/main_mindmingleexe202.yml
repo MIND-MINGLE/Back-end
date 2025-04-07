@@ -27,7 +27,7 @@ jobs:
         run: dotnet build ./MindMingle/API/API.csproj --configuration Release
           
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/MindMingle/API/API.csproj"
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/MindMingle/API"
         
       - name: Debug publish output
         run: dir "${{env.DOTNET_ROOT}}/./MindMingle/API" || echo "Directory not found or empty"
