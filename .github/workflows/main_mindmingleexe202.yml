@@ -63,5 +63,5 @@ jobs:
         with:
           app-name: 'mindmingleexe202'
           package: ./mindmingle
-          verbose: true
+          resource-group-name: "mindmingleexe202_group"
           
