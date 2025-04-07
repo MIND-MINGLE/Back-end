@@ -56,14 +56,7 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CA0917B8798B4BFFA2BF81B1C2C1ED64 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_EC5D028FA9DF4EB9A99FA3737D0A60FD }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E9E8D5146731456E8C93302F7B8DDB11 }}
-      - name: Debug Azure login
-        run: |
-          az account show || echo "Failed to show account details"
-          az account list --output table || echo "Failed to list subscriptions"
-      - name: Debug Web App existence
-        run: |
-          az webapp list --output table || echo "Failed to list Web Apps"
-          az webapp show --name mindmingleexe202 --resource-group mindmingleexe202_group --output table || echo "Web App mindmingleexe202 not found"
+          
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
