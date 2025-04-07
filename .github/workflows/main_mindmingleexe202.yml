@@ -27,13 +27,12 @@ jobs:
         run: dotnet build ./MindMingle/API/API.csproj --configuration Release
           
       - name: dotnet publish
-        run: dotnet publish ./MindMingle/API/API.csproj --configuration Release -o "${{env.DOTNET_ROOT}}/MindMingle"
-
+        run: dotnet publish ./MindMingle/API/API.csproj --configuration Release -o ./mindmingle
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/MindMingle
+          path: ./mindmingle
 
   deploy:
     runs-on: windows-latest
@@ -63,6 +62,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'mindmingleexe202'
-          package: ${{env.DOTNET_ROOT}}/MindMingle
+          package: ./mindmingle
           verbose: true
           
