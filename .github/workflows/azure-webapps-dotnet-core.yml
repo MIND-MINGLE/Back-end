@@ -1,0 +1,68 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - mindmingleexe202
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+      - name: Build with dotnet
+        run: dotnet build ./MindMingle/API/API.csproj --configuration Release
+      - name: dotnet publish
+        run: dotnet publish ./MindMingle/API/API.csproj --configuration Release -o ./mindmingle
+      - name: Debug publish output
+        run: dir ./mindmingle || echo "Directory not found or empty"
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ./mindmingle
+          retention-days: 7
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+          path: ./mindmingle
+      - name: Debug artifact contents
+        run: dir ./mindmingle || echo "Directory not found or empty"
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CA0917B8798B4BFFA2BF81B1C2C1ED64 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_EC5D028FA9DF4EB9A99FA3737D0A60FD }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E9E8D5146731456E8C93302F7B8DDB11 }}
+          
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'mindmingleexe202'
+          package: ./mindmingle
+          resource-group-name: 'mindmingleexe202_group'
+
+
