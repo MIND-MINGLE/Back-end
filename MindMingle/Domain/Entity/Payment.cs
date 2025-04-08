@@ -22,7 +22,7 @@ namespace Domain.Entity
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum PaymentMethod
     {
-        [EnumMember(Value = "Momo")]
+        [EnumMember(Value = "PayOS")]
         MOMO,
         //[EnumMember(Value = "VNPay")]
         //VNPAY,
