@@ -20,19 +20,9 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-      - name: Build with dotnet
-        run: dotnet build ./MindMingle/API/API.csproj --configuration Release
       - name: dotnet publish
         run: dotnet publish ./MindMingle/API/API.csproj --configuration Release -o ./mindmingle
-      - name: Debug publish output
-        run: dir ./mindmingle || echo "Directory not found or empty"
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: ./mindmingle
-          retention-days: 7
-
+  
   deploy:
     runs-on: windows-latest
     needs: build
@@ -48,33 +38,14 @@ jobs:
         with:
           name: .net-app
           path: ./mindmingle
-      - name: Debug artifact contents
-        run: dir ./mindmingle || echo "Directory not found or empty"
+    
       - name: Login to Azure
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_CA0917B8798B4BFFA2BF81B1C2C1ED64 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_EC5D028FA9DF4EB9A99FA3737D0A60FD }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E9E8D5146731456E8C93302F7B8DDB11 }}
-      - name: Debug Azure login
-        run: |
-          az account show || echo "Failed to show account details"
-          az account list --output table || echo "Failed to list subscriptions"
-      - name: Debug Web App existence
-        run: |
-          az webapp list --output table || echo "Failed to list Web Apps"
-          az webapp show --name mindmingleexe202 --resource-group mindmingleexe202_group --output table || echo "Web App mindmingleexe202 not found"
-      - name: Debug azure/webapps-deploy inputs
-        run: |
-          echo "App Name: ${{ env.AZURE_WEBAPP_NAME }}"
-          echo "Package: ${{ env.AZURE_WEBAPP_PACKAGE }}"
-          echo "Resource Group: ${{ env.AZURE_RESOURCE_GROUP }}"
-          echo "Slot Name: ${{ env.AZURE_WEBAPP_SLOT_NAME || 'not-set' }}"
-        env:
-          AZURE_WEBAPP_NAME: mindmingleexe202
-          AZURE_WEBAPP_PACKAGE: ./mindmingle
-          AZURE_RESOURCE_GROUP: mindmingleexe202_group
-          AZURE_WEBAPP_SLOT_NAME: ${{ env.SLOT_NAME || '' }}
+    
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
