@@ -20,8 +20,21 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
+      - name: cache nuget packages
+        id: cache-nuget
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{hashFiles('**/MindMingle/API/API.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
       - name: dotnet publish
-        run: dotnet publish ./MindMingle/API/API.csproj --configuration Release -o ./mindmingle
+        run: |
+          if (${{ steps.cache-nuget.outputs.cache-hit }} == 'true'){
+          dotnet publish ./MindMingle/API/API.csproj --configuration Release --no-restore -o ./mindmingle
+          } else {
+          dotnet publish ./MindMingle/API/API.csproj --configuration Release -o ./mindmingle
+          }
+        shell: pwsh
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
