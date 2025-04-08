@@ -4,7 +4,6 @@ using Application;
 using Application.Interface;
 using Application.Services;
 using Application.MyMapper;
-using Application.Library;
 using Microsoft.OpenApi.Models;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +31,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5098", "http://localhost:5173","https://mindmingle202.vercel.app")
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173","https://mindmingle202.vercel.app")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
