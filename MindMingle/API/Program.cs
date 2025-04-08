@@ -38,8 +38,6 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
-//Add twilio "secret keys" from Appsetting
-builder.Services.Configure<TwilioOptions>(builder.Configuration.GetSection("Twilio"));
 
 // Add Automapper
 builder.Services.AddAutoMapper(typeof(MapperConfigurationsProfile).Assembly);
@@ -57,7 +55,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<ITwilioService, TwilioService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<ITherapistService, TherapistService>();
 builder.Services.AddScoped<IChatGroupService, ChatGroupService>();

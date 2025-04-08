@@ -15,7 +15,6 @@ namespace Infrastructure
         public IAccountRepository AccountRepo { get; }
 		public ITherapistRepository TherapistRepo { get; }
         public IRoleRepository RoleRepo { get; }
-        public ITwilioRepository TwilioRepo { get; }
 		public IEmailVerificationRepository EmailVerificationRepo { get; }
 		public IPatientRepository PatientRepo { get; }
 		public IChatGroupRepository ChatGroupRepo { get; }
@@ -37,7 +36,7 @@ namespace Infrastructure
         public IPatientResponseRepository PatientResponseRepo { get; }
         public IPatientSurveyRepository PatientSurveyRepo { get; }
 
-        public UnitOfWorks(MMDbContext mMDbContext, IOptions<TwilioOptions> options)
+        public UnitOfWorks(MMDbContext mMDbContext)
         {
             _mMDbContext = mMDbContext;
 			EmailVerificationRepo = new EmailVerificationRepository(mMDbContext);
@@ -45,7 +44,6 @@ namespace Infrastructure
 			PatientResponseRepo = new PatientResponseRepository(mMDbContext);
 			PatientSurveyRepo = new PatientSurveyRepository(mMDbContext);
             RoleRepo = new RoleRespository(mMDbContext);
-            TwilioRepo = new TwilioRepository(options);
 			PatientRepo = new PatientRepository(mMDbContext);
 			TherapistRepo = new TherapistRepository(mMDbContext);
             ChatGroupRepo = new ChatGroupRepository(mMDbContext);

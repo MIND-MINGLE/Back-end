@@ -7,7 +7,6 @@ namespace Application
 	{
         public IAccountRepository AccountRepo { get; }
         public IRoleRepository RoleRepo { get; }
-        public ITwilioRepository TwilioRepo { get; }
         public IEmailVerificationRepository EmailVerificationRepo { get; }
         public IPatientRepository PatientRepo { get; }
         public ITherapistRepository TherapistRepo { get; }
