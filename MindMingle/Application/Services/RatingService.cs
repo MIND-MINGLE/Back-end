@@ -82,7 +82,7 @@ namespace Application.Services
             try
             {
                 var ratings = await _unitOfWorks.RatingRepo.GetAllAsync(x => x.TherapistId == therapistId);
-                var resRating = _mapper.Map<ResponseRating>(ratings);
+                var resRating = _mapper.Map<List<ResponseRating>>(ratings);
                 return response.SetOk(resRating);
             }
             catch (Exception ex)
