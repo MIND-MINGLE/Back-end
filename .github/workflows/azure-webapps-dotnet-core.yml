@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{hashFiles('**/MindMingle/API/API.csproj') }}
+          key: ${{ runner.os }}-nuget-${{hashFiles('MindMingle/API/API.csproj') }}
           restore-keys: ${{ runner.os }}-nuget-
       - name: dotnet publish
         run: |
