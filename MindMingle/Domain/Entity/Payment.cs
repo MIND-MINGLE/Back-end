@@ -23,7 +23,7 @@ namespace Domain.Entity
     public enum PaymentMethod
     {
         [EnumMember(Value = "PayOS")]
-        MOMO,
+        PAYOS,
         //[EnumMember(Value = "VNPay")]
         //VNPAY,
     }
