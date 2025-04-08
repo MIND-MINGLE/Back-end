@@ -19,7 +19,7 @@ namespace Infrastructure.Repository
             {
                 if (entity.PaymentMethod == default)
                 {
-                    entity.PaymentMethod = PaymentMethod.MOMO;
+                    entity.PaymentMethod = PaymentMethod.PAYOS;
                 }
                 await _mMDbContext.Payments.AddAsync(entity);
                 await _mMDbContext.SaveChangesAsync();

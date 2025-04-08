@@ -43,7 +43,7 @@ namespace Application.Services
                 }
                 // Ánh xạ PaymentRequest sang Payment entity
                 var payment = _mapper.Map<Payment>(paymentRequest);
-                payment.PaymentMethod = PaymentMethod.MOMO;
+                payment.PaymentMethod = PaymentMethod.PAYOS;
                 payment.PaymentStatus = PaymentStatus.PENDING;
                 // Gọi AddAsync mà không gán vào biến, vì nó không trả về giá trị
                 await _unitOfWorks.PaymentRepo.AddAsync(payment);
@@ -261,7 +261,7 @@ namespace Application.Services
 
                 // Ánh xạ PaymentRequest sang Payment entity
                 var payment = _mapper.Map<Payment>(paymentRequest);
-                payment.PaymentMethod = PaymentMethod.MOMO;
+                payment.PaymentMethod = PaymentMethod.PAYOS;
                 payment.PaymentStatus = PaymentStatus.PENDING;
                 // Gọi AddAsync mà không gán vào biến, vì nó không trả về giá trị
                 await _unitOfWorks.PaymentRepo.AddAsync(payment);
@@ -293,7 +293,7 @@ namespace Application.Services
             ApiResponse apiResponse = new ApiResponse();
             var payment = _mapper.Map<Payment>(paymentRequest);
             payment.PaymentId = Guid.NewGuid().ToString();
-            payment.PaymentMethod = PaymentMethod.MOMO;
+            payment.PaymentMethod = PaymentMethod.PAYOS;
             payment.PaymentStatus = PaymentStatus.PENDING;
             await _unitOfWorks.PaymentRepo.AddAsync(payment);
             await _unitOfWorks.SaveChangeAsync();
@@ -329,7 +329,7 @@ namespace Application.Services
             ApiResponse apiResponse = new ApiResponse();
             var payment = _mapper.Map<Payment>(paymentRequest);
             payment.PaymentId = Guid.NewGuid().ToString();
-            payment.PaymentMethod = PaymentMethod.MOMO;
+            payment.PaymentMethod = PaymentMethod.PAYOS;
             payment.PaymentStatus = PaymentStatus.PENDING;
             await _unitOfWorks.PaymentRepo.AddAsync(payment);
             await _unitOfWorks.SaveChangeAsync();
