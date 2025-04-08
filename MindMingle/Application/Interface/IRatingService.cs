@@ -12,6 +12,7 @@ namespace Application.Interface
     {
         Task<ApiResponse> AddRatingAsync(RatingRequest request);
         Task<ApiResponse> GetAllRatingAsync();
+        Task<ApiResponse> GetRatingByTherapistIdAsync(string therapistId);
         Task<ApiResponse> GetRatingByPatientIdAsync(string patientId);
         Task<ApiResponse> GetRatingByAppointmentIdAsync(string appointmentId);
     }

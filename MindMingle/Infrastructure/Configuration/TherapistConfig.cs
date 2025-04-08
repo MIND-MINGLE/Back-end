@@ -32,6 +32,9 @@ namespace Infrastructure.Configuration
             builder.HasMany(t => t.Therapist_Specializations)
              .WithOne(t => t.Therapist)
              .HasForeignKey(t => t.TherapistId);
+            builder.HasMany(t => t.Ratings)
+            .WithOne(t => t.Therapist)
+            .HasForeignKey(t => t.TherapistId);
         }
     }
 }

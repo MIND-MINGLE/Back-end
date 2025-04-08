@@ -19,6 +19,9 @@ namespace Infrastructure.Configuration
             builder.HasOne(r => r.Appointment)
           .WithOne(t => t.Ratings)
           .HasForeignKey<Rating>(s => s.AppointmentId);
+            builder.HasOne(r => r.Therapist)
+          .WithMany(t => t.Ratings)
+          .HasForeignKey(s => s.TherapistId);
         }
     }
 }

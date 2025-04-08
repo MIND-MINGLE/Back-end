@@ -8,6 +8,8 @@ namespace Domain.Entity
         [Key]
         public required string RatingId { get; set; }
         [Required]
+        required public string TherapistId { get; set; }
+        [Required]
         public required string PatientId { get; set; }
         [Required]
         public required string AppointmentId { get; set; }
@@ -18,6 +20,7 @@ namespace Domain.Entity
 
         public required Patient Patient { get; set; }
         public required Appointment Appointment { get; set; }
+        public required Therapist Therapist { get; set; }
     }
 }
 

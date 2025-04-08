@@ -43,5 +43,11 @@ namespace API.Controllers
             var response = await _ratingService.GetRatingByPatientIdAsync(patientId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+        [HttpGet("therapist/{therapistId}")]
+        public async Task<IActionResult> GetRatingByTherapistIdAsync(string therapistId)
+        {
+            var response = await _ratingService.GetRatingByTherapistIdAsync(therapistId);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
     }
 }

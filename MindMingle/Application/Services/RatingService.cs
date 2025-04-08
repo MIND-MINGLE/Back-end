@@ -75,6 +75,21 @@ namespace Application.Services
                 return response.SetBadRequest(ex.Message);
             }
         }
+        public async Task<ApiResponse> GetRatingByTherapistIdAsync(string therapistId)
+        {
+            ApiResponse response = new ApiResponse();
+
+            try
+            {
+                var ratings = await _unitOfWorks.RatingRepo.GetAllAsync(x => x.TherapistId == therapistId);
+                var resRating = _mapper.Map<ResponseRating>(ratings);
+                return response.SetOk(resRating);
+            }
+            catch (Exception ex)
+            {
+                return response.SetBadRequest(ex.Message);
+            }
+        }
 
         public async Task<ApiResponse> GetRatingByPatientIdAsync(string patientId)
         {

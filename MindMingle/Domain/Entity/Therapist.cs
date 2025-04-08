@@ -23,6 +23,7 @@ namespace Domain.Entity
 
         // Link between Account and Therapist
         public Account Account { get; set; } = null!;
+        public ICollection<Rating>? Ratings { get; set; }
         public ICollection<Therapist_Specialization>? Therapist_Specializations { get; set; }
         public ICollection<Credentials>? Credentials{get;set;}
         public ICollection<Session>? Sessions { get; set; } // one-many
