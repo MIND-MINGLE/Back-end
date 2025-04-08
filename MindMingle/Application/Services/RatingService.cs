@@ -82,6 +82,10 @@ namespace Application.Services
             try
             {
                 var ratings = await _unitOfWorks.RatingRepo.GetAllAsync(x => x.TherapistId == therapistId);
+                if (ratings.Count == 0)
+                {
+                    return response.SetNotFound("No Rating Available");
+                }
                 var resRating = _mapper.Map<List<ResponseRating>>(ratings);
                 return response.SetOk(resRating);
             }
