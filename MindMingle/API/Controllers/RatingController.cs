@@ -49,5 +49,12 @@ namespace API.Controllers
             var response = await _ratingService.GetRatingByTherapistIdAsync(therapistId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+
+        [HttpGet("therapist/{therapistId}/average")]
+        public async Task<IActionResult> GetAverageRatingByTherapistId(string therapistId)
+        {
+            var response = await _ratingService.GetAverageRatingByTherapistIdAsync(therapistId);
+            return StatusCode((int)response.StatusCode, response);
+        }
     }
 }

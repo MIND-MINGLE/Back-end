@@ -15,5 +15,6 @@ namespace Application.Interface
         Task<ApiResponse> GetRatingByTherapistIdAsync(string therapistId);
         Task<ApiResponse> GetRatingByPatientIdAsync(string patientId);
         Task<ApiResponse> GetRatingByAppointmentIdAsync(string appointmentId);
+        Task<ApiResponse> GetAverageRatingByTherapistIdAsync(string therapistId);
     }
 }
