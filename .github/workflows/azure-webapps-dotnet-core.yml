@@ -29,10 +29,10 @@ jobs:
           restore-keys: ${{ runner.os }}-nuget-
       - name: dotnet publish
         run: |
-          if (${{ steps.cache-nuget.outputs.cache-hit }} -eq 'true'){
-          dotnet publish ./MindMingle/API/API.csproj --configuration Release --no-restore -o ./mindmingle
+          if ("${{ steps.cache-nuget.outputs.cache-hit }}" -eq "true") {
+            dotnet publish ./MindMingle/API/API.csproj --configuration Release --no-restore -o ./mindmingle
           } else {
-          dotnet publish ./MindMingle/API/API.csproj --configuration Release -o ./mindmingle
+            dotnet publish ./MindMingle/API/API.csproj --configuration Release -o ./mindmingle
           }
         shell: pwsh
       - name: Upload artifact for deployment job
