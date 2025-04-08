@@ -97,8 +97,12 @@ namespace Application.Services
 
             try
             {
-                var ratings = await _unitOfWorks.RatingRepo.GetAsync(x => x.PatientId == patientId);
-                var resRating = _mapper.Map<ResponseRating>(ratings);
+                var ratings = await _unitOfWorks.RatingRepo.GetAllAsync(x => x.PatientId == patientId);
+                if (ratings.Count == 0)
+                {
+                    return response.SetNotFound("No Rating Available");
+                }
+                var resRating = _mapper.Map<List<ResponseRating>>(ratings);
                 return response.SetOk(resRating);
             }
             catch (Exception ex)
