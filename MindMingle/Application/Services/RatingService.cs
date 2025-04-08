@@ -106,5 +106,36 @@ namespace Application.Services
                 return response.SetBadRequest(ex.Message);
             }
         }
+        public async Task<ApiResponse> GetAverageRatingByTherapistIdAsync(string theraId)
+        {
+            ApiResponse response = new ApiResponse();
+            try
+            {
+                //Lấy tất cả ratings
+                var ratings = await _unitOfWorks.RatingRepo.GetAllAsync(x => x.TherapistId == theraId);
+                if(ratings == null || ratings.Count == 0)
+                {
+                    return response.SetNotFound("No ratings here");
+                }
+                // Tính số sao trung bình
+                var averageStar = ratings.Average(r => r.Score); 
+                var totalRatings = ratings.Count();                //Lấy tất cả rating của therapist
+                //Tạo response
+                var averageResponse = new AverageRatingResponse
+                {
+                    TherapistId = theraId,
+                    AverageStar = averageStar,
+                    TotalRatings = totalRatings
+                };
+
+
+                //Trả về response
+                return response.SetOk(averageResponse);
+            } catch (Exception ex)
+            {
+                return response.SetBadRequest(ex.Message);
+            }
+        }
+
     }
 }
