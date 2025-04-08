@@ -9,6 +9,6 @@ namespace Application.Interface
 {
     public interface IDashboardService
     {
-        Task<ApiResponse> GetDashboardStatsAsync();
+        Task<ApiResponse> GetDashboardStatsAsync(string timeRange);
     }
 }

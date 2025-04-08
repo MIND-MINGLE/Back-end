@@ -16,16 +16,14 @@ namespace API.Controllers
         }
 
         [HttpGet("stats")]
-        public async Task<IActionResult> GetDashboardStats()
+        public async Task<IActionResult> GetStats([FromQuery] string timeRange = "month")
         {
-            var response = await _dashboardService.GetDashboardStatsAsync();
-
+            var response = await _dashboardService.GetDashboardStatsAsync(timeRange);
             if (!response.IsSuccess)
             {
                 return StatusCode((int)response.StatusCode, response);
             }
-
-            return Ok(response.Result);
+            return Ok(response);
         }
     }
 }

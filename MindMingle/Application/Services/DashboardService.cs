@@ -31,10 +31,22 @@ namespace Application.Services
             _appointmentService = appointmentService;
         }
 
-        public async Task<ApiResponse> GetDashboardStatsAsync()
+        // Thêm tham số timeRange vào phương thức
+        public async Task<ApiResponse> GetDashboardStatsAsync(string timeRange = "month")
         {
             try
             {
+                // Xác thực giá trị timeRange
+                timeRange = timeRange.ToLower();
+                if (!new[] { "week", "month", "year" }.Contains(timeRange))
+                {
+                    return new ApiResponse().SetApiResponse(
+                        statusCode: HttpStatusCode.BadRequest,
+                        isSuccess: false,
+                        message: "Invalid timeRange. Allowed values: 'week', 'month', 'year'."
+                    );
+                }
+
                 // Lấy tổng doanh thu từ PaymentService
                 var totalRevenue = await CalculateTotalRevenue();
 
@@ -47,8 +59,8 @@ namespace Application.Services
                 // Lấy tổng số cuộc hẹn từ AppointmentService
                 var totalAppointments = await _appointmentService.GetTotalAppointmentsAsync();
 
-                // Lấy doanh thu theo tháng từ PaymentService
-                var revenueByMonth = await CalculateRevenueByMonth();
+                // Lấy doanh thu theo khoảng thời gian (tuần, tháng, năm)
+                var revenueByTimeRange = await CalculateRevenueByTimeRange(timeRange);
 
                 // Tạo response
                 var stats = new DashboardStatsResponse
@@ -57,7 +69,7 @@ namespace Application.Services
                     TotalPatients = totalPatients,
                     TotalTherapists = totalTherapists,
                     TotalAppointments = totalAppointments,
-                    RevenueByMonth = revenueByMonth
+                    RevenueByMonth = revenueByTimeRange // Tạm giữ tên field, có thể đổi nếu cần
                 };
 
                 return new ApiResponse().SetOk(stats);
@@ -74,7 +86,6 @@ namespace Application.Services
 
         private async Task<decimal> CalculateTotalRevenue()
         {
-            // Giả định rằng PaymentService có phương thức GetAllPayments
             var paymentsResponse = await _paymentService.GetAllPayments();
             if (!paymentsResponse.IsSuccess)
             {
@@ -87,15 +98,14 @@ namespace Application.Services
                 return 0;
             }
 
-            // Tính tổng doanh thu từ các Payment có trạng thái PAID
             return (decimal)payments
                 .Where(p => p.PaymentStatus == PaymentStatus.PAID)
                 .Sum(p => p.Amount);
         }
 
-        private async Task<List<RevenueByMonthResponse>> CalculateRevenueByMonth()
+        // Phương thức mới thay thế CalculateRevenueByMonth
+        private async Task<List<RevenueByMonthResponse>> CalculateRevenueByTimeRange(string timeRange)
         {
-            // Giả định rằng PaymentService có phương thức GetAllPayments
             var paymentsResponse = await _paymentService.GetAllPayments();
             if (!paymentsResponse.IsSuccess)
             {
@@ -108,21 +118,59 @@ namespace Application.Services
                 return new List<RevenueByMonthResponse>();
             }
 
-            // Lấy danh sách Payment có trạng thái PAID
             var paidPayments = payments.Where(p => p.PaymentStatus == PaymentStatus.PAID).ToList();
 
-            // Nhóm theo tháng và tính tổng doanh thu
-            var revenueByMonth = paidPayments
-                .GroupBy(p => new { p.CreatedAt.Year, p.CreatedAt.Month })
-                .Select(g => new RevenueByMonthResponse
-                {
-                    Month = $"{g.Key.Year}-{g.Key.Month:D2}", // Định dạng: "YYYY-MM"
-                    Revenue = (decimal)g.Sum(p => p.Amount)
-                })
-                .OrderBy(r => r.Month)
-                .ToList();
+            // Logic phân loại theo week, month, year
+            List<RevenueByMonthResponse> revenueByTimeRange;
 
-            return revenueByMonth;
+            switch (timeRange)
+            {
+                case "week":
+                    revenueByTimeRange = paidPayments
+                        .GroupBy(p => new
+                        {
+                            p.CreatedAt.Year,
+                            Week = System.Globalization.ISOWeek.GetWeekOfYear(p.CreatedAt)
+                        })
+                        .Select(g => new RevenueByMonthResponse
+                        {
+                            Month = $"{g.Key.Year}-W{g.Key.Week:D2}", // Định dạng: "YYYY-Www"
+                            Revenue = (decimal)g.Sum(p => p.Amount)
+                        })
+                        .OrderBy(r => r.Month)
+                        .ToList();
+                    break;
+
+                case "month":
+                    revenueByTimeRange = paidPayments
+                        .GroupBy(p => new { p.CreatedAt.Year, p.CreatedAt.Month })
+                        .Select(g => new RevenueByMonthResponse
+                        {
+                            Month = $"{g.Key.Year}-{g.Key.Month:D2}", // Định dạng: "YYYY-MM"
+                            Revenue = (decimal)g.Sum(p => p.Amount)
+                        })
+                        .OrderBy(r => r.Month)
+                        .ToList();
+                    break;
+
+                case "year":
+                    revenueByTimeRange = paidPayments
+                        .GroupBy(p => p.CreatedAt.Year)
+                        .Select(g => new RevenueByMonthResponse
+                        {
+                            Month = $"{g.Key}", // Định dạng: "YYYY"
+                            Revenue = (decimal)g.Sum(p => p.Amount)
+                        })
+                        .OrderBy(r => r.Month)
+                        .ToList();
+                    break;
+
+                default:
+                    revenueByTimeRange = new List<RevenueByMonthResponse>();
+                    break;
+            }
+
+            return revenueByTimeRange;
         }
     }
 }
