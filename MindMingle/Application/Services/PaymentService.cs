@@ -25,7 +25,8 @@ namespace Application.Services
         private readonly IUnitOfWorks _unitOfWorks;
         private readonly IMapper _mapper;
         private readonly IConfiguration configuration;
-        
+        readonly string domain = "https://mindmingleexe202.azurewebsites.net/api/Payment/receiveTransaction";
+
         public PaymentService(IUnitOfWorks unitOfWorks, IMapper mapper, IConfiguration configuration)
         {
             this.configuration = configuration;
@@ -303,7 +304,6 @@ namespace Application.Services
             var checksumKey = configuration.GetSection("PayOS").GetSection("PayOSChecksumKey").Value;
             var random = new Random(); // generate a order code
             // Redirect to here, the API to confirm payment
-            var domain = "https://mindmingle202.azurewebsites.net/api/Payment/receiveTransaction";
             if(clientId==null|| apiKey==null||checksumKey==null){
                 return apiResponse.SetBadRequest("Cannot create PayOS url");
             }
@@ -338,7 +338,6 @@ namespace Application.Services
             var apiKey = configuration.GetSection("PayOS").GetSection("PayOSAPIKey").Value;
             var checksumKey = configuration.GetSection("PayOS").GetSection("PayOSChecksumKey").Value;
             var random = new Random(); // generate a order code
-            var domain = "https://mindmingleexe202.azurewebsites.net/api/Payment/receiveTransaction";
             if (clientId == null || apiKey == null || checksumKey == null)
             {
                 return apiResponse.SetBadRequest("Cannot create PayOS url");
