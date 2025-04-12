@@ -52,6 +52,13 @@ namespace API.Controllers
             var response = await therapistservice.UpdateTherapistAsync(request);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+
+        [HttpPut("approve/{therapistId}")]
+        public async Task<IActionResult> ApproveToBecomeTherapist([FromRoute] string therapistId)
+        {
+            var response = await therapistservice.ApproveToBecomeTherapist(therapistId);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
     }
 }
 

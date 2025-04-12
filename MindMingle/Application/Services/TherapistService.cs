@@ -45,6 +45,21 @@ namespace Application.Services
             return response;
         }
 
+        public async Task<ApiResponse> ApproveToBecomeTherapist(string therapistId)
+        {
+            ApiResponse response = new ApiResponse();
+            var therapist = await unitOfWorks.TherapistRepo.GetAsync(x => x.TherapistId == therapistId);
+            if (therapist == null)
+            {
+                return response.SetNotFound(therapistId);
+            }
+            else
+            {
+                therapist.IsDisabled = false;
+                await unitOfWorks.SaveChangeAsync();
+                return response.SetOk(therapist);
+            }
+        }
         public async Task<ApiResponse> GetTherapistByAccountIdAsync(string accountId)
         {
             ApiResponse response = new ApiResponse();
