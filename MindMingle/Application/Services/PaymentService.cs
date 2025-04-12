@@ -255,12 +255,12 @@ namespace Application.Services
 
                 // Lấy danh sách với phân trang
                 var payments = await _unitOfWorks.PaymentRepo.GetAllAsync(
-                    x=>x.PatientId.Equals(patientId) &&
-                    x.AppointmentId!=null,
-                    x=>x.Include(a=>a.Appointment)
+                    x => x.PatientId.Equals(patientId) &&
+                    x.AppointmentId != null,
+                    x => x.Include(a => a.Appointment)
                     );
 
-                if (payments == null || payments.Count==0)
+                if (payments == null || payments.Count == 0)
                 {
                     return new ApiResponse().SetNotFound(message: "No payments found");
                 }
@@ -331,7 +331,8 @@ namespace Application.Services
             var checksumKey = configuration.GetSection("PayOS").GetSection("PayOSChecksumKey").Value;
             var random = new Random(); // generate a order code
             // Redirect to here, the API to confirm payment
-            if(clientId==null|| apiKey==null||checksumKey==null){
+            if (clientId == null || apiKey == null || checksumKey == null)
+            {
                 return apiResponse.SetBadRequest("Cannot create PayOS url");
             }
             var payOS = new PayOS(clientId, apiKey, checksumKey);
@@ -388,36 +389,34 @@ namespace Application.Services
         }
 
 
-        public async Task<ApiResponse> ConfirmPayment(string paymentId,bool success)
+        public async Task<ApiResponse> ConfirmPayment(string paymentId, bool success)
         {
             ApiResponse apiResponse = new ApiResponse();
-            var payment = await _unitOfWorks.PaymentRepo.GetAsync(p=>p.PaymentId.Equals(paymentId));
-                if (success)
-                {
-                    await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId,p=>p.PaymentStatus, PaymentStatus.PAID);
+            var payment = await _unitOfWorks.PaymentRepo.GetAsync(p => p.PaymentId.Equals(paymentId));
+            if (success)
+            {
+                await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId, p => p.PaymentStatus, PaymentStatus.PAID);
                 // For Checking Subscription Data
-                var now = DateTime.UtcNow; 
+                var now = DateTime.UtcNow;
                 // Fetch all matching subscriptions and sort by proximity to now
                 var subscriptions = await _unitOfWorks.PurchasedPackageRepo
                     .GetAllAsync(pu => pu.PatientId == payment.PatientId && pu.IsDisabled == true);
-                if (subscriptions.Count> 0)
+                if (subscriptions.Count > 0)
                 {
                     var closestSubscription = subscriptions
                     .OrderBy(pu => Math.Abs((pu.StartDate - now).TotalSeconds))
                     .FirstOrDefault();
                     await _unitOfWorks.PurchasedPackageRepo.UpdateFieldAsync(closestSubscription?.PurchasedPackageId, p => p.IsDisabled, false);
                 }
-                // For Checking Appointment Data TODO
-
                 PayOSResponse payOSResponse = new PayOSResponse
                 {
                     PaymentId = paymentId,
                     PaymentStatus = true
                 };
                 return apiResponse.SetOk(payOSResponse);
-                }
-                else
-                {
+            }
+            else
+            {
                 await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId, p => p.PaymentStatus, PaymentStatus.CANCELED);
                 if (payment.AppointmentId != null)
                 {
@@ -431,7 +430,7 @@ namespace Application.Services
                 };
                 return apiResponse.SetOk(payOSResponse);
             }
-                
+
         }
     }
 }
