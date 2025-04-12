@@ -341,7 +341,7 @@ namespace Application.Services
             var paymentLinkRequest = new PaymentData(
                 orderCode: random.Next(),
                 amount: (int)payment.Amount,
-                description: "Payment",
+                description: "Subscription Payment",
                 items: itemDatas,
                 returnUrl: domain + $"?paymentId={payment.PaymentId}&success=true",
                 cancelUrl: domain + $"?paymentId={payment.PaymentId}&success=false"
@@ -376,7 +376,7 @@ namespace Application.Services
             var paymentLinkRequest = new PaymentData(
                 orderCode: random.Next(),
                 amount: (int)payment.Amount,
-                description: "Payment",
+                description: "Appoinment Payment",
                 items: itemDatas,
                 returnUrl: domain + $"?paymentId={payment.PaymentId}&success=true",
                 cancelUrl: domain + $"?paymentId={payment.PaymentId}&success=false"
@@ -420,7 +420,7 @@ namespace Application.Services
                 await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId, p => p.PaymentStatus, PaymentStatus.CANCELED);
                 if (payment.AppointmentId != null)
                 {
-                    await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId, p => p.AppointmentId, newValue: null);
+                    await _unitOfWorks.PaymentRepo.RemoveByIdAsync(paymentId);
                 }
                 PayOSResponse payOSResponse = new PayOSResponse
                 {
