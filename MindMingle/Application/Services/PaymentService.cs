@@ -256,7 +256,8 @@ namespace Application.Services
                 // Lấy danh sách với phân trang
                 var payments = await _unitOfWorks.PaymentRepo.GetAllAsync(
                     x=>x.PatientId.Equals(patientId) &&
-                    x.AppointmentId!=null
+                    x.AppointmentId!=null,
+                    x=>x.Include(a=>a.Appointment)
                     );
 
                 if (payments == null || payments.Count==0)
