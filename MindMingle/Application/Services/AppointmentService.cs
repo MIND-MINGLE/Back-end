@@ -76,7 +76,7 @@ namespace Application.Service
                     PaymentStatus = PaymentStatus.PENDING,
                     PaymentUrl = ""
                 };
-                var paymentResponse = await service.CreatePaymentHasAppointmentAsync(payment);
+                var paymentResponse = await service.PayWithPayOS(payment);
                 if (paymentResponse.IsSuccess)
                 {
                     return paymentResponse;

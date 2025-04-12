@@ -26,6 +26,13 @@ namespace API.Controllers
             string redirectUrl = $"https://mindmingle202.vercel.app/payment/{paymentId}?paymentStatus={success.ToString().ToLower()}";
             return Redirect(redirectUrl);
         }
+        [HttpGet("patient/{patientId}")]
+        public async Task<IActionResult> GetPaymentByPatientId([FromRoute]string patientId)
+        {
+            var response =  await _paymentService.GetPaymentHasAppointmentByPatientId(patientId);
+
+            return StatusCode((int)response.StatusCode, response);
+        }
         [HttpPost("create")]
         public async Task<IActionResult> CreatePayment([FromBody] PaymentRequest paymentRequest)
         {
