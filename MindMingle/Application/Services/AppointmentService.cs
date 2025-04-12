@@ -1,5 +1,6 @@
 ﻿using Application.Interface;
 using Application.Request.Appointment;
+using Application.Request.Payment;
 using Application.Response;
 using Application.Response.Appointment;
 using AutoMapper;
@@ -13,11 +14,13 @@ namespace Application.Service
     {
         private readonly IUnitOfWorks unitOfWorks;
         private readonly IMapper _mapper;
+        private readonly IPaymentService service;
 
-        public AppointmentService(IUnitOfWorks unitOfWorks, IMapper mapper)
+        public AppointmentService(IUnitOfWorks unitOfWorks, IMapper mapper, IPaymentService service)
         {
             this.unitOfWorks = unitOfWorks;
             _mapper = mapper;
+            this.service = service;
         }
         public async Task<int> GetTotalAppointmentsAsync()
         {
@@ -65,9 +68,24 @@ namespace Application.Service
                 {
                     await unitOfWorks.ChatGroupRepo.UpdateFieldAsync(chatgroupApp.GroupChatId, x => x.IsDisabled, chatgroupApp.IsDisabled = true);
                 }
+                PaymentRequestAppointment payment = new PaymentRequestAppointment() {
+                    AppointmentId = appointment.AppointmentId,
+                    PatientId = appointment.PatientId,
+                    Amount = appointment.TotalFee,
+                    PaymentMethod = PaymentMethod.PAYOS,
+                    PaymentStatus = PaymentStatus.PENDING,
+                    PaymentUrl = ""
+                };
+                var paymentResponse = await service.PayWithPayOS(payment);
+                if (paymentResponse.IsSuccess)
+                {
+                    return paymentResponse;
+                }
+                else
+                {
+                    return new ApiResponse().SetBadRequest("Ended Appointment Failed");
+                }
             }
-            var response = _mapper.Map<AppointmentResponse>(appointment);
-            return new ApiResponse().SetOk(response);
         }
         public async Task<ApiResponse> UpdateAppointmentStatusCanceled(string appointmentId)
         {

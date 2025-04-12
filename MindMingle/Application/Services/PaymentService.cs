@@ -25,7 +25,8 @@ namespace Application.Services
         private readonly IUnitOfWorks _unitOfWorks;
         private readonly IMapper _mapper;
         private readonly IConfiguration configuration;
-        
+        readonly string domain = "https://mindmingleexe202.azurewebsites.net/api/Payment/receiveTransaction";
+
         public PaymentService(IUnitOfWorks unitOfWorks, IMapper mapper, IConfiguration configuration)
         {
             this.configuration = configuration;
@@ -245,9 +246,36 @@ namespace Application.Services
             }
         }
 
-        public Task<IEnumerable<ApiResponse>> GetPaymentHasAppointmentByPatientId(string patientId)
+        public async Task<ApiResponse> GetPaymentHasAppointmentByPatientId(string patientId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // Lấy tổng số bản ghi trước khi phân trang
+                var totalCount = await _unitOfWorks.PaymentRepo.CountAsync();
+
+                // Lấy danh sách với phân trang
+                var payments = await _unitOfWorks.PaymentRepo.GetAllAsync(
+                    x => x.PatientId.Equals(patientId) &&
+                    x.AppointmentId != null,
+                    x => x.Include(a => a.Appointment)
+                    );
+
+                if (payments == null || payments.Count == 0)
+                {
+                    return new ApiResponse().SetNotFound(message: "No payments found");
+                }
+
+                var response = _mapper.Map<List<PaymentResponse>>(payments);
+                return new ApiResponse().SetOk(response);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse().SetApiResponse(
+                    statusCode: HttpStatusCode.InternalServerError,
+                    isSuccess: false,
+                    message: $"Error retrieving payments: {ex.Message}. Inner exception: {ex.InnerException?.Message ?? "No inner exception"}"
+                );
+            }
         }
 
         public async Task<ApiResponse> CreatePaymentHasAppointmentAsync(PaymentRequestAppointment paymentRequest)
@@ -303,8 +331,8 @@ namespace Application.Services
             var checksumKey = configuration.GetSection("PayOS").GetSection("PayOSChecksumKey").Value;
             var random = new Random(); // generate a order code
             // Redirect to here, the API to confirm payment
-            var domain = "https://mindmingle202.azurewebsites.net/api/Payment/receiveTransaction";
-            if(clientId==null|| apiKey==null||checksumKey==null){
+            if (clientId == null || apiKey == null || checksumKey == null)
+            {
                 return apiResponse.SetBadRequest("Cannot create PayOS url");
             }
             var payOS = new PayOS(clientId, apiKey, checksumKey);
@@ -315,7 +343,7 @@ namespace Application.Services
             var paymentLinkRequest = new PaymentData(
                 orderCode: random.Next(),
                 amount: (int)payment.Amount,
-                description: "Payment",
+                description: "Subscription Payment",
                 items: itemDatas,
                 returnUrl: domain + $"?paymentId={payment.PaymentId}&success=true",
                 cancelUrl: domain + $"?paymentId={payment.PaymentId}&success=false"
@@ -338,7 +366,6 @@ namespace Application.Services
             var apiKey = configuration.GetSection("PayOS").GetSection("PayOSAPIKey").Value;
             var checksumKey = configuration.GetSection("PayOS").GetSection("PayOSChecksumKey").Value;
             var random = new Random(); // generate a order code
-            var domain = "https://mindmingleexe202.azurewebsites.net/api/Payment/receiveTransaction";
             if (clientId == null || apiKey == null || checksumKey == null)
             {
                 return apiResponse.SetBadRequest("Cannot create PayOS url");
@@ -351,10 +378,10 @@ namespace Application.Services
             var paymentLinkRequest = new PaymentData(
                 orderCode: random.Next(),
                 amount: (int)payment.Amount,
-                description: "Payment",
+                description: "Appoinment Payment",
                 items: itemDatas,
-                returnUrl: domain + $"?success=true&transactionId={payment.PaymentId}",
-                cancelUrl: domain + $"?success=false&transactionId={payment.PaymentId}"
+                returnUrl: domain + $"?paymentId={payment.PaymentId}&success=true",
+                cancelUrl: domain + $"?paymentId={payment.PaymentId}&success=false"
             );
             var response = await payOS.createPaymentLink(paymentLinkRequest);
 
@@ -362,37 +389,39 @@ namespace Application.Services
         }
 
 
-        public async Task<ApiResponse> ConfirmPayment(string paymentId,bool success)
+        public async Task<ApiResponse> ConfirmPayment(string paymentId, bool success)
         {
             ApiResponse apiResponse = new ApiResponse();
-            var payment = await _unitOfWorks.PaymentRepo.GetAsync(p=>p.PaymentId.Equals(paymentId));
-                if (success)
-                {
-                    await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId,p=>p.PaymentStatus, PaymentStatus.PAID);
+            var payment = await _unitOfWorks.PaymentRepo.GetAsync(p => p.PaymentId.Equals(paymentId));
+            if (success)
+            {
+                await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId, p => p.PaymentStatus, PaymentStatus.PAID);
                 // For Checking Subscription Data
-                var now = DateTime.UtcNow; 
+                var now = DateTime.UtcNow;
                 // Fetch all matching subscriptions and sort by proximity to now
                 var subscriptions = await _unitOfWorks.PurchasedPackageRepo
                     .GetAllAsync(pu => pu.PatientId == payment.PatientId && pu.IsDisabled == true);
-                if (subscriptions.Count> 0)
+                if (subscriptions.Count > 0)
                 {
                     var closestSubscription = subscriptions
                     .OrderBy(pu => Math.Abs((pu.StartDate - now).TotalSeconds))
                     .FirstOrDefault();
                     await _unitOfWorks.PurchasedPackageRepo.UpdateFieldAsync(closestSubscription?.PurchasedPackageId, p => p.IsDisabled, false);
                 }
-                // For Checking Appointment Data TODO
-
                 PayOSResponse payOSResponse = new PayOSResponse
                 {
                     PaymentId = paymentId,
                     PaymentStatus = true
                 };
                 return apiResponse.SetOk(payOSResponse);
-                }
-                else
-                {
+            }
+            else
+            {
                 await _unitOfWorks.PaymentRepo.UpdateFieldAsync(paymentId, p => p.PaymentStatus, PaymentStatus.CANCELED);
+                if (payment.AppointmentId != null)
+                {
+                    await _unitOfWorks.PaymentRepo.RemoveByIdAsync(paymentId);
+                }
                 PayOSResponse payOSResponse = new PayOSResponse
                 {
                     PaymentId = paymentId
@@ -401,7 +430,7 @@ namespace Application.Services
                 };
                 return apiResponse.SetOk(payOSResponse);
             }
-                
+
         }
     }
 }

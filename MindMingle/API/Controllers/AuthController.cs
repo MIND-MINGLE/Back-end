@@ -21,8 +21,14 @@ namespace API.Controllers
 			var result = await _service.LoginAsync(user);
 			return result.IsSuccess ? Ok(result) : BadRequest(result);
 		}
+        [HttpPost("Googlelogin")]
+        public async Task<IActionResult> GoogleLogin(GoogleLoginRequest user)
+        {
+            var result = await _service.GoogleLoginAsync(user);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
 
-		[HttpPost("register")]
+        [HttpPost("register")]
 		public async Task<IActionResult> Register(UserRegisterRequest user, [FromQuery] string roleId)
 		{
 			if (!ModelState.IsValid)

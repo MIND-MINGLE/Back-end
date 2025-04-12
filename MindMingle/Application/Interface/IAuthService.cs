@@ -14,6 +14,7 @@ namespace Application.Interface
         Task<ApiResponse> RegisterAsync(UserRegisterRequest userRequest, string roleId);
         Task<ApiResponse> ActivateAccountAsync(string accountId);
         Task<ApiResponse> LoginAsync(LoginRequest request);
+        Task<ApiResponse> GoogleLoginAsync(GoogleLoginRequest request);
         Task<ApiResponse> VerifyEmailAsync(string userId, string verificationCode);
 
         //Task<ApiResponse> LoginForDriverAsync(LoginRequest request);
