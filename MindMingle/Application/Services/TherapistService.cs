@@ -45,19 +45,18 @@ namespace Application.Services
             return response;
         }
 
-        public async Task<ApiResponse> ApproveToBecomeTherapist(string therapistId)
+        public async Task<ApiResponse> ApproveToBecomeTherapist(string accountId)
         {
             ApiResponse response = new ApiResponse();
-            var therapist = await unitOfWorks.TherapistRepo.GetAsync(x => x.TherapistId == therapistId);
-            if (therapist == null)
+            var account = await unitOfWorks.AccountRepo.GetAsync(x => x.AccountId == accountId);
+            if (account == null)
             {
-                return response.SetNotFound(therapistId);
+                return response.SetNotFound(accountId);
             }
             else
             {
-                therapist.IsDisabled = false;
-                await unitOfWorks.SaveChangeAsync();
-                return response.SetOk(therapist);
+                await unitOfWorks.AccountRepo.UpdateFieldAsync(accountId, a => a.IsDisabled,false);
+                return response.SetOk("Update Completed!");
             }
         }
         public async Task<ApiResponse> GetTherapistByAccountIdAsync(string accountId)

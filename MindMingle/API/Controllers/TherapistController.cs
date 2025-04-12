@@ -53,10 +53,10 @@ namespace API.Controllers
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 
-        [HttpPut("approve/{therapistId}")]
-        public async Task<IActionResult> ApproveToBecomeTherapist([FromRoute] string therapistId)
+        [HttpPatch("approve/{accountId}")]
+        public async Task<IActionResult> ApproveToBecomeTherapist([FromRoute] string accountId)
         {
-            var response = await therapistservice.ApproveToBecomeTherapist(therapistId);
+            var response = await therapistservice.ApproveToBecomeTherapist(accountId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }

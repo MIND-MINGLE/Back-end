@@ -13,8 +13,8 @@ namespace Application.Interface
         Task<ApiResponse> GetTherapistByAccountIdAsync(string accountId);
         Task<ApiResponse> GetTherapistByTherapistIdAsync(string therapistId);
         Task<ApiResponse> UpdateTherapistAsync(UpdateTherapistRequest request);
-        Task<ApiResponse> GetAllTherapistAsync( );
-        Task<ApiResponse> ApproveToBecomeTherapist(string therapistId);
+        Task<ApiResponse> GetAllTherapistAsync();
+        Task<ApiResponse> ApproveToBecomeTherapist(string accountId);
         
     }
 }
