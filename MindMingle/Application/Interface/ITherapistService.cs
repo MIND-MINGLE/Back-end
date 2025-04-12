@@ -14,6 +14,7 @@ namespace Application.Interface
         Task<ApiResponse> GetTherapistByTherapistIdAsync(string therapistId);
         Task<ApiResponse> UpdateTherapistAsync(UpdateTherapistRequest request);
         Task<ApiResponse> GetAllTherapistAsync( );
+        Task<ApiResponse> ApproveToBecomeTherapist(string therapistId);
         
     }
 }
