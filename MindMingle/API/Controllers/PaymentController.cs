@@ -36,7 +36,7 @@ namespace API.Controllers
         [HttpPost("create-has-appointment")]
         public async Task<IActionResult> CreatePaymentHasAppointment([FromBody] PaymentRequestAppointment paymentRequest)
         {
-            var response = await _paymentService.CreatePaymentHasAppointmentAsync(paymentRequest);
+            var response = await _paymentService.PayWithPayOS(paymentRequest);
             return StatusCode((int)response.StatusCode, response);
         }
         [HttpPatch("{paymentId}/status/paid")]

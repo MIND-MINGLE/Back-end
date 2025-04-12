@@ -13,7 +13,7 @@ namespace Application.Request.Payment
         public string AppointmentId { get; set; } = null!;
         public double Amount { get; set; }
         public double? TherapistReceive { get; set; }
-        public string? PaymentUrl { get; set; } = null!;
+        public string? PaymentUrl { get; set; }
         public PaymentMethod PaymentMethod { get; set; } // Thêm PaymentMethod
         public PaymentStatus PaymentStatus { get; set; }
     }

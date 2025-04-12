@@ -83,7 +83,7 @@ namespace Application.Service
                 }
                 else
                 {
-                    return new ApiResponse().SetNotFound("Ended Appointment Failed");
+                    return new ApiResponse().SetBadRequest("Ended Appointment Failed");
                 }
             }
         }
