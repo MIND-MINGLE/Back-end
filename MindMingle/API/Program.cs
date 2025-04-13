@@ -78,7 +78,7 @@ builder.Services.AddScoped<IPatientSurveyService, PatientSurveyService>();
 builder.Services.AddScoped<IPatientResponseService, PatientResponseService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton(configuration!);
-
+builder.Services.AddLogging();
 //
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -120,6 +120,7 @@ app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 // This middleware must be AFTER UseAuthentication and BEFORE UseAuthorization
+app.UseMiddleware<FilterExpiredDateAppointment>();
 app.UseMiddleware<TokenValidationMiddleware>();
 app.UseAuthorization();
 

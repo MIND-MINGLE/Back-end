@@ -68,6 +68,8 @@ namespace Domain.Entity
         DECLINED,
         [EnumMember(Value = "Canceled")]
         CANCELED,
+        [EnumMember(Value = "Overdue")]
+        OVERDUE,
 
     }
 }
