@@ -86,13 +86,13 @@ namespace Application.Services
 
         private async Task<decimal> CalculateTotalRevenue()
         {
-            var paymentsResponse = await _paymentService.GetAllPayments();
+            var paymentsResponse = await _paymentService.GetAllPaymentsWithoutPagination();
             if (!paymentsResponse.IsSuccess)
             {
                 return 0;
             }
 
-            var payments = (paymentsResponse.Result as PagedResponse<PaymentResponse>)?.Items;
+            var payments = paymentsResponse.Result as IEnumerable<PaymentResponse>;
             if (payments == null)
             {
                 return 0;
@@ -106,14 +106,15 @@ namespace Application.Services
         // Phương thức mới thay thế CalculateRevenueByMonth
         private async Task<List<RevenueByMonthResponse>> CalculateRevenueByTimeRange(string timeRange)
         {
-            var paymentsResponse = await _paymentService.GetAllPayments();
+            var paymentsResponse = await _paymentService.GetAllPaymentsWithoutPagination();
             if (!paymentsResponse.IsSuccess)
             {
                 return new List<RevenueByMonthResponse>();
             }
 
-            var payments = (paymentsResponse.Result as PagedResponse<PaymentResponse>)?.Items;
-            if (payments == null)
+
+            var payments = paymentsResponse.Result as IEnumerable<PaymentResponse>;
+            if (payments == null || !payments.Any())
             {
                 return new List<RevenueByMonthResponse>();
             }

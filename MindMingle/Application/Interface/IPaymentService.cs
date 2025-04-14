@@ -22,6 +22,7 @@ namespace Application.Interface
         Task<ApiResponse> UpdateToCanceledAsync(string paymentId);
         Task<ApiResponse> GetPaymentsByPendingStatus(int pageIndex = 1, int pageSize = 10);
         Task<ApiResponse> GetAllPayments(int pageIndex = 1, int pageSize = 10);
+        Task<ApiResponse> GetAllPaymentsWithoutPagination();
         Task DeletePaymentAsync(string paymentId);
         Task<ApiResponse> GetPaymentHasAppointmentByPatientId(string patientId);
         Task<ApiResponse> CreatePaymentHasAppointmentAsync(PaymentRequestAppointment paymentRequest);

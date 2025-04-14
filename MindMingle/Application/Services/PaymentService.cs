@@ -245,6 +245,34 @@ namespace Application.Services
                 );
             }
         }
+        public async Task<ApiResponse> GetAllPaymentsWithoutPagination()
+        {
+            try
+            {
+                // Lấy danh sách không phân trang
+                var payments = await _unitOfWorks.PaymentRepo.GetAllAsync(
+                                       null,
+                                                          x => x.Include(p => p.Patient)
+                                                                             );
+
+                if (payments == null || !payments.Any())
+                {
+                    return new ApiResponse().SetNotFound(message: "No payments found");
+                }
+
+                var response = _mapper.Map<IEnumerable<PaymentResponse>>(payments);
+
+                return new ApiResponse().SetOk(response);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse().SetApiResponse(
+                                       statusCode: HttpStatusCode.InternalServerError,
+                                                          isSuccess: false,
+                                                                             message: $"Error retrieving payments: {ex.Message}. Inner exception: {ex.InnerException?.Message ?? "No inner exception"}"
+                                                                                            );
+            }
+        }
 
         public async Task<ApiResponse> GetPaymentHasAppointmentByPatientId(string patientId)
         {
