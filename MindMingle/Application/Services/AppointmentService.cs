@@ -201,7 +201,7 @@ namespace Application.Service
                 return apiResponse.SetBadRequest(message: "TherapistId is required");
             try
             {
-                var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.TherapistId == therapistId && a.PatientId == patientId && !a.Status.Equals("Declined") && !a.Status.Equals("Canceled"),
+                var appointments = await unitOfWorks.AppointmentRepo.GetAsync(a => a.TherapistId == therapistId && a.PatientId == patientId && a.Status == Status.PENDING || a.Status == Status.APPROVED,
                    s=>s.Include(a=>a.Session)
                 );
                 var response = _mapper.Map<AppointmentResponse>(appointments);
